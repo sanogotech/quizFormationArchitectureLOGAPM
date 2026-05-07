@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Jour Zéro · Évaluation Architecte Logiciel · 30 cas pratiques</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --archi-dark: #0f2b3d; --archi-accent: #f97316; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #eef2f5; padding: 1.5rem; }
+        .quiz-container { max-width: 1100px; margin: auto; background: white; border-radius: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2); overflow: hidden; }
+        .quiz-header { background: linear-gradient(135deg, var(--archi-dark), #1f4e6e); color: white; padding: 1.8rem; text-align: center; }
+        .badge-jourzero { background: rgba(249,115,22,0.2); border: 1px solid var(--archi-accent); border-radius: 40px; padding: 0.2rem 1rem; display: inline-block; }
+        .option-btn { display: block; width: 100%; text-align: left; padding: 0.8rem 1rem; margin-bottom: 0.75rem; border: 2px solid #e2e8f0; border-radius: 1rem; background: white; transition: 0.2s; }
+        .option-btn:hover:not([disabled]) { border-color: var(--archi-accent); transform: translateY(-2px); background: #fff7ed; }
+        .option-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-btn.incorrect { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
+        .feedback-correct { background: #ecfdf5; border-left: 6px solid #10b981; }
+        .feedback-incorrect { background: #fef2f2; border-left: 6px solid #dc2626; }
+        .tip-box { background: #fff7ed; border-left: 4px solid var(--archi-accent); padding: 0.8rem; border-radius: 0.8rem; margin-top: 0.8rem; }
+        .rex-box { background: #f1f5f9; border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.5rem; border-left: 3px solid #3b82f6; }
+        .btn-archi { background: linear-gradient(95deg, var(--archi-accent), #dc2626); border: none; color: white; font-weight: 600; }
+        .progress-bar { background: linear-gradient(90deg, var(--archi-accent), #f97316); }
+        .final-score { font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, #f97316, #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    </style>
+</head>
+<body>
+<div class="container py-3">
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1><i class="fas fa-calendar-day"></i> Jour Zéro · Évaluation des architectes</h1>
+            <p>30 cas pratiques · Architecture logicielle · 3 phrases par cas</p>
+            <div class="mt-2"><span class="badge-jourzero"><i class="fas fa-lightbulb"></i> Positionnement initial</span></div>
+        </div>
+
+        <!-- Configuration -->
+        <div id="settings-panel" class="p-4">
+            <h4 class="text-center mb-3"><i class="fas fa-sliders-h"></i> Lancement du quiz</h4>
+            <div class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <p class="text-muted">30 questions · Temps estimé : 20-30 minutes · Chaque réponse est suivie d’un commentaire détaillé.</p>
+                </div>
+                <div class="col-md-4">
+                    <button id="start-quiz-btn" class="btn btn-archi w-100 py-2"><i class="fas fa-play"></i> Démarrer l’évaluation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone quiz -->
+        <div id="quiz-content" class="d-none p-4 pt-2">
+            <div class="d-flex justify-content-between mb-2 flex-wrap"><span id="question-counter" class="fw-bold"></span><span id="current-score" class="badge bg-dark fs-6 px-3 py-2">Score: 0</span></div>
+            <div class="progress mb-3" style="height: 10px;"><div id="progress-bar" class="progress-bar" style="width:0%"></div></div>
+            <div class="card border-0 shadow-sm p-3">
+                <div><span id="thematic-badge" class="badge bg-secondary mb-2">Cas pratique</span></div>
+                <h3 id="question-text" class="fs-4 fw-semibold"></h3>
+                <div id="options-container" class="mt-3"></div>
+                <div id="feedback-box" class="d-none mt-4 p-3 rounded-3"></div>
+            </div>
+            <div class="d-flex justify-content-between gap-2 mt-4">
+                <button id="prev-btn" class="btn btn-outline-secondary px-4" disabled><i class="fas fa-arrow-left"></i> Précédent</button>
+                <button id="next-btn" class="btn btn-archi px-4">Suivant <i class="fas fa-arrow-right"></i></button>
+                <button id="finish-btn" class="btn btn-success px-4 d-none"><i class="fas fa-trophy"></i> Terminer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal résultats -->
+<div class="modal fade" id="resultsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-dark text-white"><h5 class="modal-title"><i class="fas fa-chart-line"></i> Résultats · Jour Zéro</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <div class="text-center"><p class="final-score" id="final-score-percentage">0%</p><p><span id="final-score-correct">0</span> / <span id="final-score-total">30</span></p></div>
+                <div class="row"><div class="col-md-6"><h6>🏗️ Architecture générale</h6><div class="progress"><div id="archi-skill" class="progress-bar bg-warning" style="width:0%"></div></div><p id="archi-text"></p></div>
+                <div class="col-md-6"><h6>⚡ Résilience & décisions</h6><div class="progress"><div id="decision-skill" class="progress-bar bg-info" style="width:0%"></div></div><p id="decision-text"></p></div></div>
+                <hr><div id="final-recommendations"></div>
+                <div class="mt-3"><h6>📌 Plan de progression</h6><p id="short-term" class="alert alert-primary"></p><p id="long-term" class="alert alert-secondary"></p></div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button><button id="restart-quiz-btn" class="btn btn-archi">Recommencer</button></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// *********************** 30 QUESTIONS : CAS PRATIQUES (3 phrases chacun) ***********************
+const FULL_QUESTIONS = [
+    { thematic:"Cas", question:"Une startup doit augmenter les commandes de son e‑commerce de 10x en 3 mois. L’architecture actuelle est un monolithe PHP/MySQL. Que proposez‑vous comme première action architecturale ?", options:["Passer immédiatement aux microservices","Ajouter un cache Redis pour les pages produits","Réécrire en Node.js","Migrer la base vers MongoDB"], correctAnswer:"Ajouter un cache Redis pour les pages produits", explanation:"Un cache Redis réduit la charge sur la base et le monolithe, permettant de supporter plus de trafic sans refonte lourde.", tip:"Toujours commencer par optimiser les goulots avant de réarchitecturer.", rex:"REX: Une startup a tenu 5x plus de charge avec Redis avant de passer en microservices." },
+    { thematic:"Cas", question:"Une API critique a des temps de réponse > 5s lors des pics. Les logs montrent des appels synchrones à 3 services externes. Quelle amélioration prioritaire ?", options:["Remplacer les appels synchrones par des événements asynchrones","Ajouter un load balancer","Multiplier les instances","Passer en HTTP/3"], correctAnswer:"Remplacer les appels synchrones par des événements asynchrones", explanation:"Découpler les appels via une file (Kafka/RabbitMQ) évite l'attente et réduit la latence perçue.", tip:"Utilisez des patterns asynchrones pour les tâches non critiques en temps réel.", rex:"REX: Une fintech a divisé sa latence par 4 en asynchronisant les notifications." },
+    { thematic:"Cas", question:"Vous devez concevoir une solution de paiement où la cohérence finale est acceptable, mais pas la perte de transaction. Quel pattern choisir ?", options:["Saga avec compensation","2PC (two-phase commit)","Transaction locale unique","ACID distribué"], correctAnswer:"Saga avec compensation", explanation:"La Saga assure la cohérence finale via des transactions locales et des compensations en cas d'échec.", tip:"Utilisez un orchestrateur pour simplifier la gestion.", rex:"REX: Uber utilise Saga pour ses réservations et paiements." },
+    { thematic:"Cas", question:"Une équipe a développé 20 microservices. Les déploiements deviennent complexes et les appels synchrones se multiplient. Quel antipattern est en train de se former ?", options:["Distributed monolith","Silo organisationnel","Inner‑platform effect","Magic button"], correctAnswer:"Distributed monolith", explanation:"Des services trop couplés qui doivent être déployés ensemble perdent l’intérêt des microservices.", tip:"Cartographiez les dépendances et introduisez des événements.", rex:"REX: 70% des projets finissent en distributed monolith après 18 mois." },
+    { thematic:"Cas", question:"Un système legacy doit être remplacé sans interruption de service. Quelle approche est la plus adaptée ?", options:["Strangler Fig pattern","Big bang rewrite","Migration weekend","Dockeriser l’existant"], correctAnswer:"Strangler Fig pattern", explanation:"On étrangle progressivement l'ancien système en redirigeant les fonctionnalités une par une.", tip:"Mettez un reverse proxy devant pour router le trafic.", rex:"REX: Amazon a modernisé son monolithe en 3 ans avec cette méthode." },
+    { thematic:"Cas", question:"Une base de données PostgreSQL devient le goulot car trop de lectures. Les écritures sont rares. Quelle solution technique la plus efficace ?", options:["Ajouter un réplica de lecture","Passer à CockroachDB","Sharder la table","Ajouter un cache Redis"], correctAnswer:"Ajouter un réplica de lecture", explanation:"Un réplica de lecture décharge la base primaire des requêtes SELECT, améliorant les performances.", tip:"Utilisez pgBouncer pour gérer les connexions.", rex:"REX: Une plateforme de contenu a divisé la charge DB par 3 avec 2 réplicas." },
+    { thematic:"Cas", question:"Une application doit notifier les utilisateurs par email après une action. L’envoi d’email ralentit la réponse HTTP. Que faire ?", options:["Envoyer les emails de manière asynchrone via une file","Augmenter le timeout","Mettre les emails en BCC","Supprimer les emails"], correctAnswer:"Envoyer les emails de manière asynchrone via une file", explanation:"Une file d’attente (RabbitMQ, SQS) permet de répondre rapidement et de traiter les emails en arrière‑plan.", tip:"Assurez-vous que la file est persistante pour ne pas perdre de messages.", rex:"REX: Une startup a réduit sa latence API de 2s à 50ms." },
+    { thematic:"Cas", question:"Deux microservices doivent échanger des données en temps réel avec un faible couplage. Quel protocole privilégier ?", options:["Message broker asynchrone (Kafka)","REST synchrone","gRPC synchrone","WebSocket permanent"], correctAnswer:"Message broker asynchrone (Kafka)", explanation:"Kafka découple les producteurs et consommateurs, permet la rejouabilité et la scalabilité.", tip:"Utilisez des topics par type d’événement.", rex:"REX: LinkedIn traite des milliards d’événements par jour avec Kafka." },
+    { thematic:"Cas", question:"Une équipe doit gérer des secrets (API keys, mots de passe) pour 50 microservices. Quelle pratique est la plus sécurisée ?", options:["Utiliser un gestionnaire de secrets (Vault)","Fichier .env versionné","Variables d’environnement en clair","Chiffrement base64"], correctAnswer:"Utiliser un gestionnaire de secrets (Vault)", explanation:"Vault ou AWS Secrets Manager centralise, tourne les clés et trace les accès.", tip:"Intégrez Vault à votre CI/CD pour injecter les secrets à la volée.", rex:"REX: HashiCorp Vault a empêché une fuite de secrets chez une fintech." },
+    { thematic:"Cas", question:"Un client demande une architecture capable de traiter 100 000 requêtes par seconde avec une disponibilité 99,999%. Quelle recommandation ?", options:["Design for failure, réplication multi‑région, auto‑scaling","Monolithe sur un gros serveur","Base de données unique en cache","Un seul load balancer"], correctAnswer:"Design for failure, réplication multi‑région, auto‑scaling", explanation:"La haute disponibilité impose des redondances, des basculements automatiques et des tests de résilience.", tip:"Utilisez des health checks et des blue/green deployments.", rex:"REX: Netflix a conçu son architecture pour tolérer la perte d’une zone AWS." },
+    { thematic:"Cas", question:"Lors d’une revue d’architecture, vous constatez qu’un service A appelle B, qui appelle C, qui rappelle A (cycle). Quel problème de conception cela révèle‑t‑il ?", options:["Dépendances cycliques","Manque de cache","Absence de circuit breaker","Problème de base de données"], correctAnswer:"Dépendances cycliques", explanation:"Les cycles créent un couplage fort, rendent le système fragile et difficile à déployer.", tip:"Introduisez un événement ou un service de médiation pour briser le cycle.", rex:"REX: Un cycle a causé un effet domino lors d’une panne chez une banque." },
+    { thematic:"Cas", question:"Une API REST renvoie trop de données inutiles (ex: 50 champs alors que 5 suffisent). Quel antipattern est responsable ?", options:["Overfetching / sous‑spécification","Underposting","Magic button","Golden hammer"], correctAnswer:"Overfetching / sous‑spécification", explanation:"L’API renvoie plus que nécessaire, gaspillant bande passante et temps de traitement.", tip:"Implémentez le principe de champs sélectionnables (GraphQL) ou des endpoints spécialisés.", rex:"REX: Une migration vers GraphQL a réduit la taille des réponses de 80%." },
+    { thematic:"Cas", question:"Un service de recommandation ML prend 2 secondes. L’utilisateur n’a pas besoin du résultat immédiat pour afficher la page. Comment améliorer la perception ?", options:["Afficher un contenu par défaut puis charger les reco en AJAX","Augmenter le timeout","Mettre en cache la recommandation","Changer de langage"], correctAnswer:"Afficher un contenu par défaut puis charger les reco en AJAX", explanation:"Le chargement asynchrone évite de bloquer l’affichage de la page principale.", tip:"Utilisez des skeletons ou des spinners.", rex:"REX: Amazon charge les recommandations après le rendu, améliorant le temps perçu." },
+    { thematic:"Cas", question:"Un nouveau CTO veut mesurer la maturité architecturale. Quel indicateur clé donne la meilleure vision de la résilience ?", options:["MTTR (Mean Time To Repair)","Nombre de microservices","Taux de couverture de code","Vélocité"], correctAnswer:"MTTR", explanation:"Le MTTR mesure le temps de récupération après incident, reflet direct de la résilience opérationnelle.", tip:"Visez MTTR < 1 heure.", rex:"REX: Google maintient un MTTR de quelques minutes." },
+    { thematic:"Cas", question:"Vous devez stocker des logs centralisés pour 100 services. Quelle stack open source est la plus adaptée ?", options:["ELK (Elasticsearch, Logstash, Kibana)","MySQL","MongoDB","Redis"], correctAnswer:"ELK", explanation:"ELK est spécialisé dans l’indexation, la recherche et la visualisation de logs massifs.", tip:"Ajoutez Filebeat pour la collecte.", rex:"REX: Une DSI a réduit le temps de recherche de logs de 30 min à 5 secondes." },
+    { thematic:"Cas", question:"Une architecture serverless (Lambda) entraîne des cold starts gênantes pour les utilisateurs. Que faire ?", options:["Provisionner des concurrents (provisioned concurrency)","Passer sur EC2","Ignorer le problème","Augmenter la mémoire"], correctAnswer:"Provisionner des concurrents (provisioned concurrency)", explanation:"Provisioned Concurrency maintient des instances chaudes, éliminant les cold starts.", tip:"Réservez quelques environnements pour les endpoints critiques.", rex:"REX: Une API de paiement a maintenu 10ms de latence grâce aux concurrents provisionnés." },
+    { thematic:"Cas", question:"Vous devez garantir l’intégrité des messages entre deux microservices (pas de perte, pas de doublon). Quel niveau de QoS Kafka choisir ?", options:["Exactly‑once semantics","At‑most‑once","At‑least‑once","Best effort"], correctAnswer:"Exactly‑once semantics", explanation:"Exactly‑once (idempotence + transactions) garantit qu’un message est traité une seule fois.", tip:"Activez enable.idempotence=true et utilisez des transactions.", rex:"REX: Les systèmes bancaires utilisent exactly‑once pour les virements." },
+    { thematic:"Cas", question:"Une base de données relationnelle doit évoluer pour des écritures massives. Quelle technique horizontale est la plus efficace ?", options:["Sharding horizontal","Réplication maître‑esclave","Partitionnement vertical","Index composites"], correctAnswer:"Sharding horizontal", explanation:"Le sharding distribue les données sur plusieurs nœuds selon une clé, augmentant la capacité d’écriture.", tip:"Choisissez une clé de sharding uniforme (ex: user_id).", rex:"REX: Instagram utilise sharding sur user_id pour gérer des milliards de posts." },
+    { thematic:"Cas", question:"Une application doit pouvoir être déployée sur AWS, Azure et on‑prem sans modification. Que recommandez‑vous ?", options:["Kubernetes + conteneurs","Cloud‑native spécifique","Terraform uniquement","Docker Compose"], correctAnswer:"Kubernetes + conteneurs", explanation:"Kubernetes est supporté par tous les clouds et on‑prem (via kubeadm, Rancher).", tip:"Utilisez des Helm charts paramétrables.", rex:"REX: Une startup a migré de GCP à Azure en 2 semaines grâce à K8s." },
+    { thematic:"Cas", question:"Vous héritez d’un code où une classe de 5000 lignes contient 80% des règles métier. Quel antipattern est‑ce ?", options:["God object","Distributed monolith","Spaghetti code","Lava flow"], correctAnswer:"God object", explanation:"God object concentre trop de responsabilités, rendant le code difficile à maintenir et à tester.", tip:"Appliquez le principe de responsabilité unique pour refactorer.", rex:"REX: Le découpage d’un God object a divisé le temps de correction de bugs par 4." },
+    { thematic:"Cas", question:"Une API doit être exposée à des partenaires avec des quotas différents et une authentification. Quelle brique technique est indispensable ?", options:["API Gateway","Service Mesh","Base de données NoSQL","Cache distribué"], correctAnswer:"API Gateway", explanation:"L’API Gateway gère le rate limiting, l’authentification, le routage, et les quotas.", tip:"Utilisez Kong, APISIX ou AWS API Gateway.", rex:"REX: Une place de marché a sécurisé 200 partenaires avec Kong." },
+    { thematic:"Cas", question:"Un incident de production a été causé par une variable d’environnement mal configurée. Quelle pratique aurait pu l’éviter ?", options:["Utiliser un fichier de configuration versionné avec validation","Hardcoder la variable","Laisser la valeur par défaut","Utiliser un secret en clair"], correctAnswer:"Utiliser un fichier de configuration versionné avec validation", explanation:"Des fichiers de config (YAML) validés et stockés dans Git permettent la traçabilité et la relecture.", tip:"Ajoutez des tests de validation de configuration dans le pipeline.", rex:"REX: Une DSI a réduit les incidents de config de 90%." },
+    { thematic:"Cas", question:"Votre équipe doit livrer une nouvelle fonctionnalité toutes les deux semaines, mais l’environnement de staging est différent de la production. Quel risque majeur ?", options:["Problèmes inattendus en production","Temps de build augmenté","Conflits de code","Manque de monitoring"], correctAnswer:"Problèmes inattendus en production", explanation:"Les différences d’environnement provoquent des bugs qui n’apparaissent qu’en prod.", tip:"Assurez la parfaite identité entre dev, staging et prod (Infra as Code).", rex:"REX: La non‑parité a causé 3 outages majeurs chez un éditeur SaaS." },
+    { thematic:"Cas", question:"Un microservice Java consomme trop de mémoire à cause d’une fuite. Quel outil utiliser pour diagnostiquer ?", options:["JProfiler / VisualVM","Prometheus","Kibana","Nagios"], correctAnswer:"JProfiler / VisualVM", explanation:"Ces outils de profilage montrent l’allocation mémoire, les objets persistants et les fuites potentielles.", tip:"Profilez en environnement de staging avec charge réelle.", rex:"REX: VisualVM a identifié un cache non vidé qui causait une fuite." },
+    { thematic:"Cas", question:"Une équipe veut adopter les microservices mais n’a qu’une petite base de code et 4 développeurs. Que conseillez‑vous ?", options:["Commencer par un modulith","Passer à 20 microservices","Utiliser des fonctions serverless","Tout refaire en Go"], correctAnswer:"Commencer par un modulith", explanation:"Un modulith (monolithe modulaire) permet de séparer les domaines sans la complexité des microservices.", tip:"Extrayez les microservices uniquement lorsque la scalabilité ou l’équipe l’exige.", rex:"REX: Shopify a démarré modulith avant d’évoluer." },
+    { thematic:"Cas", question:"Un système doit garantir l’ordre strict des événements (ex: transactions bancaires). Quel outil de messaging est le plus adapté ?", options:["Kafka avec partition unique par clé","RabbitMQ","SQS FIFO","Redis Pub/Sub"], correctAnswer:"Kafka avec partition unique par clé", explanation:"Kafka garantit l’ordre des messages à l’intérieur d’une partition. En utilisant une clé (ex: account_id), l’ordre est préservé.", tip:"Utilisez un nombre suffisant de partitions pour la scalabilité.", rex:"REX: Une banque utilise Kafka pour l’ordre des virements." },
+    { thematic:"Cas", question:"Vous devez tracer une requête HTTP à travers 5 microservices. Quelle technique est la plus standardisée ?", options:["OpenTelemetry avec correlation ID","Logs avec timestamp","Metrics Prometheus","Zipkin seul"], correctAnswer:"OpenTelemetry avec correlation ID", explanation:"OpenTelemetry propage un identifiant de trace (Traceparent) entre services, permettant de reconstituer le chemin complet.", tip:"Instrumentez tous vos services avec la même bibliothèque.", rex:"REX: Adidas a réduit son MTTR de 60% avec OpenTelemetry." },
+    { thematic:"Cas", question:"Un site e‑commerce subit un pic de trafic inattendu, et le cache Redis sature la mémoire. Quelle solution permet d’éviter les évictions intempestives ?", options:["Configurer une politique d’éviction LRU et augmenter la mémoire","Passer en cache local","Vider le cache manuellement","Désactiver le cache"], correctAnswer:"Configurer une politique d’éviction LRU et augmenter la mémoire", explanation:"LRU (Least Recently Used) évince les clés les moins récentes, et l’augmentation de mémoire réduit la pression.", tip:"Surveillez le ratio cache hit.", rex:"REX: Un pic de trafic a été absorbé grâce à un passage à 16 Go de Redis." },
+    { thematic:"Cas", question:"Une équipe signale que ses tests unitaires sont longs et cassent souvent. Que peut‑il se passer ?", options:["Des tests non isolés qui dépendent de l’ordre ou de ressources externes","Trop de mocks","Pas assez d’assertions","Tests de charge mal configurés"], correctAnswer:"Des tests non isolés qui dépendent de l’ordre ou de ressources externes", explanation:"Des tests qui partagent l’état ou appellent de vraies bases de données deviennent flaky.", tip:"Utilisez des bases de données en mémoire et réinitialisez l’état avant chaque test.", rex:"REX: Une équipe a réduit les flaky tests de 90% en isolant les bases." },
+    { thematic:"Cas", question:"Vous devez choisir une base de données pour des données de séries temporelles (IoT, millions de points par seconde). Quel type est le mieux adapté ?", options:["Base temporelle (TimescaleDB, InfluxDB)","PostgreSQL classique","MongoDB","Redis"], correctAnswer:"Base temporelle (TimescaleDB, InfluxDB)", explanation:"Les bases temporelles optimisent l’insertion massive, les agrégations dans le temps et la rétention.", tip:"Utilisez la compression et les politiques de rétention automatique.", rex:"REX: Une usine a dix foldé ses performances avec TimescaleDB." },
+    { thematic:"Cas", question:"Un développeur propose d’écrire son propre ORM pour ‘mieux contrôler’ les requêtes. Que lui répondez‑vous ?", options:["Utilisez un ORM standard (Hibernate, Entity Framework) sauf besoin extrême","C’est une bonne idée","Faites un POC de 3 mois","Recodez également le driver JDBC"], correctAnswer:"Utilisez un ORM standard (Hibernate, Entity Framework) sauf besoin extrême", explanation:"Réinventer la roue (antipattern) coûte cher en maintenance et en bugs, et les ORM matures sont éprouvés.", tip:"Préférez des solutions comme jOOQ si vous voulez plus de contrôle.", rex:"REX: Une ESN a perdu 6 mois à réécrire un ORM buggé." }
+];
+
+// Vérification : 30 questions
+console.assert(FULL_QUESTIONS.length === 30, "Nombre de questions : " + FULL_QUESTIONS.length);
+
+// ======================== LOGIQUE QUIZ (identique au modèle robuste) ========================
+let currentIndex = 0, score = 0, userAnswers = [], questionsList = [], selectedCount = 30; // Fixe 30 questions
+let resultsModal = null;
+
+const settingsPanel = document.getElementById('settings-panel');
+const quizContent = document.getElementById('quiz-content');
+const startBtn = document.getElementById('start-quiz-btn');
+const nextBtn = document.getElementById('next-btn');
+const prevBtn = document.getElementById('prev-btn');
+const finishBtn = document.getElementById('finish-btn');
+const questionCounterSpan = document.getElementById('question-counter');
+const currentScoreSpan = document.getElementById('current-score');
+const progressBar = document.getElementById('progress-bar');
+const questionText = document.getElementById('question-text');
+const thematicBadgeSpan = document.getElementById('thematic-badge');
+const optionsDiv = document.getElementById('options-container');
+const feedbackBox = document.getElementById('feedback-box');
+const restartBtn = document.getElementById('restart-quiz-btn');
+
+function initModal() {
+    if (typeof bootstrap !== 'undefined') {
+        const modalEl = document.getElementById('resultsModal');
+        if (modalEl) resultsModal = new bootstrap.Modal(modalEl);
+    } else {
+        setTimeout(initModal, 100);
+    }
+}
+initModal();
+
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function startQuiz() {
+    let all = [...FULL_QUESTIONS];
+    // On garde les 30 questions, éventuellement mélangées
+    questionsList = shuffle(all).slice(0, 30);
+    currentIndex = 0;
+    score = 0;
+    userAnswers = new Array(questionsList.length).fill(null);
+    settingsPanel.classList.add('d-none');
+    quizContent.classList.remove('d-none');
+    displayQuestion(0);
+    updateScore();
+}
+
+function updateScore() {
+    currentScoreSpan.innerText = `Score: ${score}/${questionsList.length}`;
+}
+
+function displayQuestion(index) {
+    feedbackBox.classList.add('d-none');
+    const q = questionsList[index];
+    questionText.innerText = q.question;
+    thematicBadgeSpan.innerText = "Cas pratique";
+    thematicBadgeSpan.className = "badge bg-info mb-2";
+    optionsDiv.innerHTML = '';
+    const shuffledOpts = shuffle([...q.options]);
+    shuffledOpts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.innerText = opt;
+        btn.className = 'btn option-btn';
+        btn.onclick = () => selectAnswer(btn, opt, index);
+        optionsDiv.appendChild(btn);
+    });
+    if (userAnswers[index]) showFeedback(index);
+    const progress = ((index + 1) / questionsList.length) * 100;
+    progressBar.style.width = `${progress}%`;
+    questionCounterSpan.innerText = `Question ${index + 1} / ${questionsList.length}`;
+    prevBtn.disabled = index === 0;
+    nextBtn.classList.toggle('d-none', index === questionsList.length - 1);
+    finishBtn.classList.toggle('d-none', index !== questionsList.length - 1);
+}
+
+function selectAnswer(btn, selected, idx) {
+    if (userAnswers[idx] !== null) return;
+    const q = questionsList[idx];
+    const isCorrect = (selected === q.correctAnswer);
+    if (isCorrect) score++;
+    userAnswers[idx] = { selected, correct: q.correctAnswer, isCorrect };
+    updateScore();
+    document.querySelectorAll('.option-btn').forEach(b => {
+        b.disabled = true;
+        if (b.innerText === q.correctAnswer) b.classList.add('correct');
+        if (b.innerText === selected && !isCorrect) b.classList.add('incorrect');
+    });
+    showFeedback(idx);
+}
+
+function showFeedback(idx) {
+    const ua = userAnswers[idx];
+    if (!ua) return;
+    const q = questionsList[idx];
+    const isUserCorrect = ua.isCorrect;
+    const feedbackHtml = `
+        <div class="${isUserCorrect ? 'feedback-correct' : 'feedback-incorrect'} p-3 rounded-3">
+            <h5>${isUserCorrect ? '✅ Bonne réponse !' : '❌ Mauvaise réponse'}</h5>
+            <p><strong>Réponse exacte :</strong> ${q.correctAnswer}</p>
+            <p><strong>📘 Explication :</strong> ${q.explanation}</p>
+            <div class="tip-box"><i class="fas fa-lightbulb"></i> <strong>Conseil pratique :</strong> ${q.tip}</div>
+            <div class="rex-box"><i class="fas fa-history"></i> <strong>Retour d’expérience (REX) :</strong> ${q.rex}</div>
+        </div>
+    `;
+    feedbackBox.innerHTML = feedbackHtml;
+    feedbackBox.classList.remove('d-none');
+}
+
+function handleNext() { if (currentIndex < questionsList.length - 1) { currentIndex++; displayQuestion(currentIndex); } }
+function handlePrev() { if (currentIndex > 0) { currentIndex--; displayQuestion(currentIndex); } }
+
+function showFinal() {
+    const percent = (score / questionsList.length) * 100;
+    // Catégories improvisées : architecture générale (questions paires) vs décision (questions impaires)
+    let archiCount = 0, archiScore = 0, decisionCount = 0, decisionScore = 0;
+    questionsList.forEach((q, i) => {
+        if (i % 2 === 0) {
+            archiCount++;
+            if (userAnswers[i]?.isCorrect) archiScore++;
+        } else {
+            decisionCount++;
+            if (userAnswers[i]?.isCorrect) decisionScore++;
+        }
+    });
+    const archiPercent = archiCount ? (archiScore / archiCount) * 100 : 0;
+    const decisionPercent = decisionCount ? (decisionScore / decisionCount) * 100 : 0;
+    document.getElementById('archi-skill').style.width = `${archiPercent}%`;
+    document.getElementById('decision-skill').style.width = `${decisionPercent}%`;
+    document.getElementById('archi-text').innerText = `Architecture : ${archiPercent.toFixed(0)}% (${archiScore}/${archiCount})`;
+    document.getElementById('decision-text').innerText = `Décisions : ${decisionPercent.toFixed(0)}% (${decisionScore}/${decisionCount})`;
+    document.getElementById('final-score-correct').innerText = score;
+    document.getElementById('final-score-total').innerText = questionsList.length;
+    document.getElementById('final-score-percentage').innerText = `${percent.toFixed(0)}%`;
+    let recos = percent >= 80 ? "Excellent ! Vous avez un très bon niveau en architecture. Vous pouvez passer aux ateliers avancés." : percent >= 60 ? "Bonnes bases, mais certains sujets (résilience, asynchrone, antipatterns) sont à renforcer." : "Des lacunes importantes identifiées. Nous vous conseillons de suivre l’intégralité de la formation et de revoir les fondamentaux.";
+    document.getElementById('final-recommendations').innerHTML = `<p><i class="fas fa-gem"></i> ${recos}</p>`;
+    document.getElementById('short-term').innerHTML = "📘 Prochaine étape : identifier les 3 sujets les plus faibles et faire des fiches de révision.";
+    document.getElementById('long-term').innerHTML = "🎯 Objectif : savoir justifier chaque choix architectural avec des motifs (patterns) et des REX.";
+    if (resultsModal) resultsModal.show();
+    else alert(`Résultats : ${percent.toFixed(0)}% - ${recos}`);
+}
+
+function restart() {
+    settingsPanel.classList.remove('d-none');
+    quizContent.classList.add('d-none');
+    if (resultsModal) resultsModal.hide();
+}
+
+startBtn.addEventListener('click', startQuiz);
+nextBtn.addEventListener('click', handleNext);
+prevBtn.addEventListener('click', handlePrev);
+finishBtn.addEventListener('click', showFinal);
+restartBtn.addEventListener('click', restart);
+</script>
+</body>
+</html>

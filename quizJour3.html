@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jour 3 · Architecture & 2TUP en Y · 40 questions expert</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --archi-dark: #0f2b3d; --archi-accent: #f97316; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #eef2f5; padding: 1.5rem; }
+        .quiz-container { max-width: 1100px; margin: auto; background: white; border-radius: 2rem; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2); overflow: hidden; }
+        .quiz-header { background: linear-gradient(135deg, var(--archi-dark), #1f4e6e); color: white; padding: 1.8rem; text-align: center; }
+        .badge-jour3 { background: rgba(249,115,22,0.2); border: 1px solid var(--archi-accent); border-radius: 40px; padding: 0.2rem 1rem; display: inline-block; }
+        .option-btn { display: block; width: 100%; text-align: left; padding: 0.8rem 1rem; margin-bottom: 0.75rem; border: 2px solid #e2e8f0; border-radius: 1rem; background: white; transition: 0.2s; }
+        .option-btn:hover:not([disabled]) { border-color: var(--archi-accent); transform: translateY(-2px); background: #fff7ed; }
+        .option-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .option-btn.incorrect { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
+        .feedback-correct { background: #ecfdf5; border-left: 6px solid #10b981; }
+        .feedback-incorrect { background: #fef2f2; border-left: 6px solid #dc2626; }
+        .tip-box { background: #fff7ed; border-left: 4px solid var(--archi-accent); padding: 0.8rem; border-radius: 0.8rem; margin-top: 0.8rem; }
+        .rex-box { background: #f1f5f9; border-radius: 0.8rem; padding: 0.8rem; margin-top: 0.5rem; border-left: 3px solid #3b82f6; }
+        .btn-archi { background: linear-gradient(95deg, var(--archi-accent), #dc2626); border: none; color: white; font-weight: 600; }
+        .progress-bar { background: linear-gradient(90deg, var(--archi-accent), #f97316); }
+        .final-score { font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, #f97316, #8b5cf6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    </style>
+</head>
+<body>
+<div class="container py-3">
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1><i class="fas fa-calendar-week"></i> Jour 3 · Architecture & 2TUP en Y · Expert</h1>
+            <p>30 nouveaux cas d’étude + 10 questions 2TUP · Maîtrise des patterns et de la méthode Y</p>
+            <div class="mt-2"><span class="badge-jour3"><i class="fas fa-brain"></i> Résilience · Event‑driven · Décisions critiques</span></div>
+        </div>
+
+        <!-- Configuration -->
+        <div id="settings-panel" class="p-4">
+            <h4 class="text-center mb-3"><i class="fas fa-sliders-h"></i> Lancement du quiz Jour 3</h4>
+            <div class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <p class="text-muted">40 questions · Temps estimé : 40-50 minutes · Commentaires détaillés, REX et conseils.</p>
+                </div>
+                <div class="col-md-4">
+                    <button id="start-quiz-btn" class="btn btn-archi w-100 py-2"><i class="fas fa-play"></i> Démarrer l’évaluation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone quiz -->
+        <div id="quiz-content" class="d-none p-4 pt-2">
+            <div class="d-flex justify-content-between mb-2 flex-wrap"><span id="question-counter" class="fw-bold"></span><span id="current-score" class="badge bg-dark fs-6 px-3 py-2">Score: 0</span></div>
+            <div class="progress mb-3" style="height: 10px;"><div id="progress-bar" class="progress-bar" style="width:0%"></div></div>
+            <div class="card border-0 shadow-sm p-3">
+                <div><span id="thematic-badge" class="badge bg-secondary mb-2"></span></div>
+                <h3 id="question-text" class="fs-4 fw-semibold"></h3>
+                <div id="options-container" class="mt-3"></div>
+                <div id="feedback-box" class="d-none mt-4 p-3 rounded-3"></div>
+            </div>
+            <div class="d-flex justify-content-between gap-2 mt-4">
+                <button id="prev-btn" class="btn btn-outline-secondary px-4" disabled><i class="fas fa-arrow-left"></i> Précédent</button>
+                <button id="next-btn" class="btn btn-archi px-4">Suivant <i class="fas fa-arrow-right"></i></button>
+                <button id="finish-btn" class="btn btn-success px-4 d-none"><i class="fas fa-trophy"></i> Terminer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal résultats -->
+<div class="modal fade" id="resultsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-dark text-white"><h5 class="modal-title"><i class="fas fa-chart-line"></i> Résultats Jour 3</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <div class="text-center"><p class="final-score" id="final-score-percentage">0%</p><p><span id="final-score-correct">0</span> / <span id="final-score-total">40</span></p></div>
+                <div class="row"><div class="col-md-6"><h6>🏗️ Architecture experte</h6><div class="progress"><div id="archi-skill" class="progress-bar bg-warning" style="width:0%"></div></div><p id="archi-text"></p></div>
+                <div class="col-md-6"><h6>📐 2TUP & modélisation</h6><div class="progress"><div id="tupskill" class="progress-bar bg-info" style="width:0%"></div></div><p id="tuptext"></p></div></div>
+                <hr><div id="final-recommendations"></div>
+                <div class="mt-3"><h6>📌 Plan de progression</h6><p id="short-term" class="alert alert-primary"></p><p id="long-term" class="alert alert-secondary"></p></div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button><button id="restart-quiz-btn" class="btn btn-archi">Recommencer</button></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// *********************** 40 QUESTIONS JOUR 3 : 30 nouveaux cas + 10 questions 2TUP expert ***********************
+const FULL_QUESTIONS = [
+    // ========== PARTIE 1 : 30 CAS PRATIQUES INÉDITS (architecture avancée) ==========
+    { thematic:"Architecture", question:"Une plateforme de trading doit garantir l’ordre des transactions avec une latence < 10 ms. Quel compromis architectural est le plus adapté ?", options:["Base de données en mémoire avec log séquentiel","Base relationnelle distribuée","Event sourcing avec projections lentes","Kafka avec exactly‑once"], correctAnswer:"Base de données en mémoire avec log séquentiel", explanation:"Une base en mémoire (ex: Redis avec persistence AOF) ou une queue séquentielle (Kafka avec 1 partition) donne l’ordre et la rapidité.", tip:"Utilisez VoltDB ou Aerospike pour des cas extrêmes.", rex:"REX: Les bourses utilisent des bases en mémoire pour les carnets d’ordres." },
+    { thematic:"Architecture", question:"Un système doit autoriser des mises à jour conflictuelles sur des données partagées avec une résolution automatique. Quel mécanisme est recommandé ?", options:["CRDT (Conflict‑free replicated data type)","Verrouillage pessimiste","2PC","Saga"], correctAnswer:"CRDT", explanation:"Les CRDTs permettent des mises à jour concurrentes sans verrou et se résolvent mathématiquement.", tip:"Implémentez avec des structures commutatives.", rex:"REX: Les apps collaboratives (Google Docs) utilisent des CRDT." },
+    { thematic:"Architecture", question:"Vous devez choisir une base pour un catalogue produit avec des recherches full‑text et des filtres facettés. Quelle technologie domine le marché ?", options:["Elasticsearch / OpenSearch","PostgreSQL","MongoDB","Redis"], correctAnswer:"Elasticsearch / OpenSearch", explanation:"Elasticsearch est optimisé pour la recherche textuelle, les agrégations et les facettes.", tip:"Utilisez des index inversés et des requêtes booléennes.", rex:"REX: Une marketplace a divisé le temps de recherche par 10." },
+    { thematic:"Architecture", question:"Un microservice doit limiter le nombre d’appels entrants à 1000 par seconde pour éviter la saturation. Quel pattern côté serveur implémenter ?", options:["Rate limiting (token bucket)","Circuit breaker","Bulkhead","Retry"], correctAnswer:"Rate limiting", explanation:"Le rate limiting contrôle le débit, le token bucket est flexible.", tip:"Utilisez Redis + Lua pour un compteur distribué.", rex:"REX: Google impose des quotas via rate limiting." },
+    { thematic:"Architecture", question:"Une application mobile a besoin d’un accès hors ligne aux données et d’une synchronisation ultérieure. Quelle architecture coté client est adaptée ?", options:["Local First (PouchDB, WatermelonDB)","Appel API en temps réel","Cache HTTP","Stockage session"], correctAnswer:"Local First", explanation:"Les bases locales (PouchDB, SQLite) permettent de travailler hors ligne et de synchroniser via le réseau.", tip:"Utilisez des merge‑strategies pour les conflits.", rex:"REX: Notion utilise Local First pour une expérience fluide." },
+    { thematic:"Architecture", question:"Vous devez déployer 200 microservices. Quel outil de service mesh est le plus mature pour la sécurité mTLS et l’observabilité ?", options:["Istio","Linkerd","Consul Connect","AWS App Mesh"], correctAnswer:"Istio", explanation:"Istio est le plus complet (mTLS, trafic splitting, metrics, tracing).", tip:"Commencez avec Istio en mode sidecar.", rex:"REX: Airbnb utilise Istio à grande échelle." },
+    { thematic:"Architecture", question:"Une équipe utilise des fonctions serverless (Lambda) pour des traitements longs (5 minutes). Que risquent‑ils ?", options:["Timeout et coût élevé","RAS","Sécurité","Latence"], correctAnswer:"Timeout et coût élevé", explanation:"La plupart des FaaS ont un timeout (15 min max) et deviennent chères pour les longs traitements.", tip:"Utilisez des conteneurs (ECS/Fargate) pour les jobs longs.", rex:"REX: Une startup a migré ses ETL vers ECS pour économiser." },
+    { thematic:"Architecture", question:"Un système doit exposer une API à des dizaines de partenaires, chacun avec des contrats différents. Quelle approche évite de multiplier les endpoints ?", options:["API Gateway avec transformation de requêtes (adaptateur)","GraphQL central","Une API pour tous","Fichiers de mapping manuels"], correctAnswer:"API Gateway avec transformation de requêtes", explanation:"L’API Gateway peut adapter dynamiquement les requêtes/réponses selon le partenaire (ex: Kong plugins).", tip:"Utilisez des templates de transformation.", rex:"REX: Une banque a intégré 50 partenaires avec Kong." },
+    { thematic:"Architecture", question:"Une base de données relationnelle a des requêtes analytiques lentes qui impactent les transactions. Que faire sans passer en Data Warehouse ?", options:["Créer des réplicas de lecture dédiés à l’analyse","Index tous les champs","Passer en NoSQL","Augmenter la mémoire"], correctAnswer:"Créer des réplicas de lecture", explanation:"Les réplicas isolent la charge analytique des écritures transactionnelles.", tip:"Utilisez des index différents sur les réplicas.", rex:"REX: Une plateforme de réservation a séparé les rapports sans perte de performance." },
+    { thematic:"Architecture", question:"Un incident a montré qu’un service de notification a saturé la base de données avec des tentatives de reprise infinies. Quel pattern manquait ?", options:["Retry avec backoff exponentiel et jitter","Timeout fixe","Circuit breaker simple","Cache"], correctAnswer:"Retry avec backoff exponentiel", explanation:"L’exponential backoff avec jitter évite les effets de meute et les surcharges.", tip:"Limitez le nombre de tentatives.", rex:"REX: L’absence de backoff a causé un effet domino chez une banque." },
+    { thematic:"Architecture", question:"Vous devez orchestrer un workflow de 15 étapes métier avec des compensations. Quel outil est le plus adapté ?", options:["Temporal / Cadence (workflow engine)","Kafka Streams","Cron job","AWS Step Functions"], correctAnswer:"Temporal / Cadence", explanation:"Les workflow engines gèrent durablement les états, les timeouts et les sagas.", tip:"Utilisez Temporal pour des workflows réactifs.", rex:"REX: Uber utilise Cadence pour les courses multi‑étapes." },
+    { thematic:"Architecture", question:"Une application web doit charger des données paginées. L’approche OFFSET/LIMIT devient lente sur de grands ensembles. Quelle alternative ?", options:["Keyset pagination (curseur)","Cache complet","Pas de pagination","Limiter à 100 pages"], correctAnswer:"Keyset pagination", explanation:"Le curseur (WHERE id > last_id) utilise l’index primaire, stable et rapide.", tip:"Utilisez des curseurs encodés en base64.", rex:"REX: Twitter utilise des curseurs pour ses timelines." },
+    { thematic:"Architecture", question:"Un développeur propose d’écrire tous les logs dans une base de données relationnelle. Pourquoi est‑ce déconseillé ?", options:["Volume élevé et requêtes non adaptées","Sécurité","Coût","Complexité"], correctAnswer:"Volume élevé et requêtes non adaptées", explanation:"Les bases relationnelles sont mauvaises pour les logs massifs (insertions, recherche plein‑texte).", tip:"Utilisez Loki, ELK ou CloudWatch.", rex:"REX: Une DB s’est arrêtée à cause de 5 millions de logs/jour." },
+    { thematic:"Architecture", question:"Une équipe veut adopter K8s mais a peur de la complexité. Quelle solution intermédiaire leur conseiller ?", options:["K3s ou des PaaS comme Heroku","Ignorer K8s","Tout mettre sur VM","Docker Swarm"], correctAnswer:"K3s ou PaaS", explanation:"K3s est une distribution K8s allégée, et les PaaS (Render, Railway) cachent la complexité.", tip:"Commencez par minikube puis évoluez.", rex:"REX: Une startup a migré de Heroku à K8s en 6 mois." },
+    { thematic:"Architecture", question:"Un système nécessite des transactions ACID sur plusieurs régions avec une faible latence. Quelle base de données choisir ?", options:["CockroachDB","PostgreSQL réplication asynchrone","MongoDB","Cassandra"], correctAnswer:"CockroachDB", explanation:"CockroachDB est SQL, distribué, ACID, avec une forte tolérance aux pannes.", tip:"Testez Spanner ou Yugabyte aussi.", rex:"REX: Un retailer utilise CockroachDB pour son inventaire mondial." },
+    { thematic:"Architecture", question:"Un microservice A appelle B de manière synchrone. B appelle C, qui appelle A. Quel problème critique cela crée‑t‑il ?", options:["Cycle de dépendance et risque de deadlock","Plus de mémoire","Latence normale","Sécurité"], correctAnswer:"Cycle de dépendance et risque de deadlock", explanation:"Un cycle d’appels peut bloquer tout le système si les timeouts sont mal configurés.", tip:"Brisez le cycle avec des événements asynchrones.", rex:"REX: Un cycle a fait crash une plateforme lors d’un pic." },
+    { thematic:"Architecture", question:"Vous devez archiver des pétaoctets de données historiques à faible coût. Quelle solution cloud est la plus économique ?", options:["Stockage froid (Glacier, S3 Glacier Deep Archive)","Redshift","DynamoDB","EBS"], correctAnswer:"Stockage froid", explanation:"Glacier Deep Archive coûte $0.00099/Go/mois, idéal pour données rarement lues.", tip:"Prévoyez des délais de récupération.", rex:"REX: Une entreprise a réduit ses coûts d’archivage de 90%." },
+    { thematic:"Architecture", question:"Un développeur a codé une boucle infinie dans un worker asynchrone. Comment s’en protéger ?", options:["Mettre un timeout et une limite de tentatives","Surveiller manuellement","Augmenter la mémoire","Docker restart"], correctAnswer:"Timeout et limite de tentatives", explanation:"Les workers doivent avoir une durée de vie maximale (ex: 5 min) avant d’être tués.", tip:"Utilisez des health checks.", rex:"REX: Un worker a saturé 10 nœuds en production." },
+    { thematic:"Architecture", question:"Une application doit compter le nombre de vues d’une page en temps réel (millions de clics). Quel composant est adapté pour les compteurs incrémentaux ?", options:["Redis avec incr","Base SQL","Files logs","Kafka"], correctAnswer:"Redis avec incr", explanation:"Redis `INCR` est atomique et très rapide pour les compteurs.", tip:"Utilisez des pipelines pour la performance.", rex:"REX: Un site média gère des milliards de vues via Redis." },
+    { thematic:"Architecture", question:"Vous devez mettre en place un mécanisme d’idempotence sur une API de paiement. Quelle clé utiliser ?", options:["Idempotency key générée par le client","Timestamp","IP du client","Montant"], correctAnswer:"Idempotency key du client", explanation:"Le client fournit une clé unique (UUID) ; le serveur la stocke pour refuser les doublons.", tip:"Conservez la clé 24h avec le résultat.", rex:"REX: Stripe impose une idempotency key." },
+    { thematic:"Architecture", question:"Un service externe change son API sans prévenir. Votre système se casse. Quel test aurait pu éviter cela ?", options:["Test de contrat (Pact)","Test unitaire","Test de charge","Test de sécurité"], correctAnswer:"Test de contrat", explanation:"Le test de contrat valide que votre code respecte le contrat attendu de l’API fournisseur.", tip:"Exécutez les tests de contrat dans le pipeline.", rex:"REX: Une rupture d’API a été détectée 2 jours avant la release." },
+    { thematic:"Architecture", question:"Une startup veut scaler son MVP rapidement. Elle hésite entre microservices et modulith. Quel conseil donner ?", options:["Modulith d’abord, puis extraction progressive","Microservices dès le jour 1","Big bang rewrite","Tout en serverless"], correctAnswer:"Modulith d’abord", explanation:"Le modulith permet de faire évoluer la logique métier sans la complexité réseau.", tip:"Séparez en packages/modules.", rex:"REX: Shopify a survécu à la scale avec un modulith." },
+    { thematic:"Architecture", question:"Un système de notification doit garantir qu’un utilisateur reçoive bien chaque message, même en cas de panne temporaire. Quel pattern de messaging utiliser ?", options:["At‑least‑once + accusé de réception","At‑most‑once","Exactly‑once sans accusé","Fire and forget"], correctAnswer:"At‑least‑once + accusé", explanation:"L’accusé de réception (ack) garantit que le message est traité, et au moins une livraison assure la réception.", tip:"Gérez la déduplication côté consommateur.", rex:"REX: Les systèmes bancaires utilisent at‑least‑once avec idempotence." },
+    { thematic:"Architecture", question:"Vous devez tracer des requêtes à travers 10 microservices. Quelle norme d’en‑tête propage le contexte ?", options:["W3C Trace‑Context (traceparent)","X‑Request‑Id","Correlation‑ID maison","User‑Agent"], correctAnswer:"W3C Trace‑Context", explanation:"`traceparent` standardise le format de propagation des traces.", tip:"Utilisez OpenTelemetry SDK.", rex:"REX: Jaeger et Zipkin supportent W3C." },
+    { thematic:"Architecture", question:"Un fournisseur cloud vous facture un coût élevé de transfert de données entre services. Quelle architecture permet de réduire ?", options:["Consolider les services qui échangent beaucoup de données","Ajouter des caches","Compresser les réponses","Passer en HTTP/3"], correctAnswer:"Consolider les services", explanation:"Regrouper les services qui discutent massivement réduit le trafic inter‑service.", tip:"Utilisez le principe de colocalisation.", rex:"REX: La fusion de deux services a économisé 40% de coûts réseau." },
+    { thematic:"Architecture", question:"Un système de recommandation doit s’adapter en temps réel à des clics utilisateurs. Quelle architecture est la plus adaptée ?", options:["River (machine learning en ligne)","Batch nightly","Spark Streaming avec fenêtre","TensorFlow Serving"], correctAnswer:"River (ML en ligne)", explanation:"River est conçu pour l’apprentissage en ligne sur flux, avec mise à jour incrémentale du modèle.", tip:"Utilisez des features en temps réel avec Redis.", rex:"REX: Une marketplace a amélioré ses CTR de 30% grâce à ML en ligne." },
+    { thematic:"Architecture", question:"Un incident de sécurité a montré qu’un attaquant a pu accéder à des données via une injection de commande. Quelle pratique de codage l’aurait évité ?", options:["Utilisation de requêtes paramétrées et validation des entrées","WAF seul","Chiffrement au repos","Logs détaillés"], correctAnswer:"Requêtes paramétrées et validation", explanation:"Les injections de commandes (SQL, OS) se préviennent en ne jamais concaténer des entrées utilisateur.", tip:"Utilisez des ORM ou des bibliothèques d’échappement.", rex:"REX: La faille Log4Shell a montré l’importance de la validation." },
+    { thematic:"Architecture", question:"Vous devez concevoir un système de vote en ligne avec anonymat et vérifiabilité. Quelle technologie est prometteuse ?", options:["Blockchain (ex: Hyperledger)","Base SQL simple","Redis","Fichiers CSV"], correctAnswer:"Blockchain", explanation:"La blockchain offre l’immuabilité, la traçabilité et l’anonymat par clés.", tip:"Utilisez un consensus tolérant aux fautes.", rex:"REX: Des élections pilotes ont utilisé la blockchain." },
+    { thematic:"Architecture", question:"Une équipe a des temps de build de 45 minutes pour un monolithe. Comment accélérer sans changer l’architecture ?", options:["Parallelisation des tests, cache des dépendances","Passer en microservices","Acheter des serveurs","Réduire les tests"], correctAnswer:"Parallelisation + cache", explanation:"Les outils CI comme GitHub Actions permettent de paralléliser les tests et de mettre en cache les dépendances et les binaires.", tip:"Utilisez Gradle build cache ou sccache.", rex:"REX: Le build est passé de 45 min à 12 min." },
+    { thematic:"Architecture", question:"Un système distribué doit fournir des horodatages causals sans synchro NTP. Quel algorithme utiliser ?", options:["Horloge vectorielle (Vector clock)","Horloge Lamport","Timestamps physiques","Sequence ID"], correctAnswer:"Horloge vectorielle", explanation:"Les horloges vectorielles capturent les relations de causalité sans synchronisation externe.", tip:"Implémentez avec des compteurs par nœud.", rex:"REX: Les bases de données distribué comme DynamoDB les utilisent." },
+    { thematic:"Architecture", question:"Une application doit être déployée sur des kiosques dans 500 magasins (edge). Comment mettre à jour le logiciel sans connexion internet stable ?", options:["Update asynchrone via USB ou réseau local","Cloud centralisé","Pas de mise à jour","Rebuild physique"], correctAnswer:"Update asynchrone via USB ou réseau local", explanation:"On utilise un mécanisme de dépot local (ex: jfrog edge) ou des mises à jour par bluetooth.", tip:"Chiffrez les mises à jour.", rex:"REX: Des chaînes de supermarché mettent à jour via bornes locales." },
+    // ========== PARTIE 2 : 10 NOUVELLES QUESTIONS 2TUP EN Y (expert) ==========
+    { thematic:"2TUP en Y", question:"Dans la branche spécification technique, comment qualifie‑t‑on un besoin comme 'le temps de réponse doit être < 200 ms pour 99% des requêtes' ?", options:["Exigence non fonctionnelle mesurable (SLO)","Cas d’utilisation technique","Contrainte métier","User story"], correctAnswer:"Exigence non fonctionnelle mesurable", explanation:"C’est une NFR quantitative, transformable en SLO (Service Level Objective).", tip:"Utilisez des SLI pour la mesurer.", rex:"REX: Un SLO bien défini évite des dérives de performance." },
+    { thematic:"2TUP en Y", question:"Quel artefact de la branche conception logicielle décrit l’enchaînement des interactions entre objets ?", options:["Diagramme de séquence UML","Diagramme de classes","Diagramme de composants","Diagramme de déploiement"], correctAnswer:"Diagramme de séquence", explanation:"Les diagrammes de séquence montrent la chronologie des échanges entre instances.", tip:"Utilisez des fragments alt/loop pour la complexité.", rex:"REX: Le séquencier a révélé une boucle infinie avant le codage." },
+    { thematic:"2TUP en Y", question:"En 2TUP, la branche 'spécification technique' produit un document qui sert à :", options:["Alimenter la conception logicielle et les tests NFR","Remplacer le code","Décrire l’interface utilisateur","Calculer le budget"], correctAnswer:"Alimenter la conception logicielle et les tests NFR", explanation:"Les specs techniques guident le développement et la validation non fonctionnelle.", tip:"Versionnez ce document avec le code.", rex:"REX: Les tests de charge ont été écrits directement à partir des NFR." },
+    { thematic:"2TUP en Y", question:"Lors d’une itération, la branche conception logicielle propose un pattern CQRS. La branche spécification technique doit‑elle s’y adapter ?", options:["Non, la branche technique décrit le ‘quoi’, CQRS est un ‘comment’","Oui, les deux branches doivent être synchronisées","Seule la branche logicielle compte","Le tronc commun arbitre"], correctAnswer:"Non, la branche technique décrit le ‘quoi’", explanation:"La séparation permet de changer de pattern (CQRS, Event sourcing) sans impacter les exigences techniques (latence, volumes).", tip:"Gardez les branches indépendantes.", rex:"REX: Le passage à CQRS n’a pas modifié les NFR." },
+    { thematic:"2TUP en Y", question:"Quel diagramme UML est le plus utile pour découper un monolithe en microservices ?", options:["Diagramme de composants","Diagramme de cas d’utilisation","Diagramme d’états","Diagramme d’objets"], correctAnswer:"Diagramme de composants", explanation:"Le diagramme de composants montre les dépendances et interfaces, idéal pour identifier les frontières.", tip:"Ajoutez des stéréotypes <<microservice>>.", rex:"REX: Un découpage réussi a été validé avec un diagramme de composants." },
+    { thematic:"2TUP en Y", question:"Dans 2TUP, qui valide que le tronc commun (architecture cible) est cohérent ?", options:["À la fois l’analyste technique et le développeur lead","Seul le client","Seul le commercial","L’équipe de test"], correctAnswer:"À la fois l’analyste technique et le développeur lead", explanation:"Le tronc commun est une synthèse qui doit être acceptée par les deux branches pour garantir la faisabilité et la réponse aux besoins.", tip:"Organisez une revue d’architecture avec les deux rôles.", rex:"REX: Une revue croisée a évité 3 mois de dérive." },
+    { thematic:"2TUP en Y", question:"En 2TUP, comment évolue la documentation technique face à un changement de base de données (MySQL → PostgreSQL) ?", options:["Seule la partie ‘stockage’ de la branche spécification technique est mise à jour","Toute la documentation est réécrite","Seule la branche conception change","La base n’apparaît pas"], correctAnswer:"Seule la partie ‘stockage’ de la branche spécification technique est mise à jour", explanation:"La spécification technique décrit le besoin de stockage (ACID, volume), pas la technologie exacte. Un changement de fournisseur peut n’avoir aucun impact sur les autres sections.", tip:"Évitez de mentionner des produits dans les specs.", rex:"REX: Le passage d’Oracle à PostgreSQL n’a pas changé les cas d’utilisation technique." },
+    { thematic:"2TUP en Y", question:"Quel outil de modélisation textuelle est souvent associé à la branche conception logicielle pour générer du code ?", options:["PlantUML / Mermaid","BPMN","ArchiMate","Draw.io"], correctAnswer:"PlantUML / Mermaid", explanation:"Ces langages textuels permettent de versionner les diagrammes et de les intégrer dans le pipeline CI.", tip:"Utilisez des scripts pour exporter en images.", rex:"REX: Une équipe a généré des squelettes de classes à partir de PlantUML." },
+    { thematic:"2TUP en Y", question:"La méthode 2TUP recommande de traiter les exigences de sécurité dans quelle branche ?", options:["Branche spécification technique","Branche conception logicielle","Les deux","Une branche séparée"], correctAnswer:"Branche spécification technique", explanation:"Les exigences de sécurité (chiffrement, anti‑injection, MFA) sont des NFR capturées dans la branche technique.", tip:"Quantifiez le niveau de sécurité (ex: OWASP ASVS).", rex:"REX: La spécification de chiffrement a permis une architecture zero trust." },
+    { thematic:"2TUP en Y", question:"Dans une approche 2TUP itérative, que signifie ‘faire un aller‑retour’ entre les deux branches ?", options:["Ajuster les spécifications techniques quand une conception logicielle révèle une impossibilité","Livrer le code","Faire une réunion","Changer d’équipe"], correctAnswer:"Ajuster les spécifications techniques", explanation:"Si un pattern choisi (conception) ne permet pas d’atteindre une NFR, on revisite la branche technique pour assouplir ou réexprimer le besoin.", tip:"Documentez ces itérations dans un journal.", rex:"REX: Une aller‑retour a évité une architecture irréaliste." }
+];
+
+// Vérification : 40 questions
+console.assert(FULL_QUESTIONS.length === 40, "Nombre de questions Jour 3 : " + FULL_QUESTIONS.length);
+
+// ======================== LOGIQUE QUIZ (identique robuste) ========================
+let currentIndex = 0, score = 0, userAnswers = [], questionsList = [], selectedCount = 40;
+let resultsModal = null;
+
+const settingsPanel = document.getElementById('settings-panel');
+const quizContent = document.getElementById('quiz-content');
+const startBtn = document.getElementById('start-quiz-btn');
+const nextBtn = document.getElementById('next-btn');
+const prevBtn = document.getElementById('prev-btn');
+const finishBtn = document.getElementById('finish-btn');
+const questionCounterSpan = document.getElementById('question-counter');
+const currentScoreSpan = document.getElementById('current-score');
+const progressBar = document.getElementById('progress-bar');
+const questionText = document.getElementById('question-text');
+const thematicBadgeSpan = document.getElementById('thematic-badge');
+const optionsDiv = document.getElementById('options-container');
+const feedbackBox = document.getElementById('feedback-box');
+const restartBtn = document.getElementById('restart-quiz-btn');
+
+function initModal() {
+    if (typeof bootstrap !== 'undefined') {
+        const modalEl = document.getElementById('resultsModal');
+        if (modalEl) resultsModal = new bootstrap.Modal(modalEl);
+    } else {
+        setTimeout(initModal, 100);
+    }
+}
+initModal();
+
+function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function startQuiz() {
+    let all = [...FULL_QUESTIONS];
+    questionsList = shuffle(all).slice(0, 40);
+    currentIndex = 0;
+    score = 0;
+    userAnswers = new Array(questionsList.length).fill(null);
+    settingsPanel.classList.add('d-none');
+    quizContent.classList.remove('d-none');
+    displayQuestion(0);
+    updateScore();
+}
+
+function updateScore() {
+    currentScoreSpan.innerText = `Score: ${score}/${questionsList.length}`;
+}
+
+function displayQuestion(index) {
+    feedbackBox.classList.add('d-none');
+    const q = questionsList[index];
+    questionText.innerText = q.question;
+    thematicBadgeSpan.innerText = q.thematic;
+    thematicBadgeSpan.className = `badge ${q.thematic === '2TUP en Y' ? 'bg-info' : 'bg-secondary'} mb-2`;
+    optionsDiv.innerHTML = '';
+    const shuffledOpts = shuffle([...q.options]);
+    shuffledOpts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.innerText = opt;
+        btn.className = 'btn option-btn';
+        btn.onclick = () => selectAnswer(btn, opt, index);
+        optionsDiv.appendChild(btn);
+    });
+    if (userAnswers[index]) showFeedback(index);
+    const progress = ((index + 1) / questionsList.length) * 100;
+    progressBar.style.width = `${progress}%`;
+    questionCounterSpan.innerText = `Question ${index + 1} / ${questionsList.length}`;
+    prevBtn.disabled = index === 0;
+    nextBtn.classList.toggle('d-none', index === questionsList.length - 1);
+    finishBtn.classList.toggle('d-none', index !== questionsList.length - 1);
+}
+
+function selectAnswer(btn, selected, idx) {
+    if (userAnswers[idx] !== null) return;
+    const q = questionsList[idx];
+    const isCorrect = (selected === q.correctAnswer);
+    if (isCorrect) score++;
+    userAnswers[idx] = { selected, correct: q.correctAnswer, isCorrect };
+    updateScore();
+    document.querySelectorAll('.option-btn').forEach(b => {
+        b.disabled = true;
+        if (b.innerText === q.correctAnswer) b.classList.add('correct');
+        if (b.innerText === selected && !isCorrect) b.classList.add('incorrect');
+    });
+    showFeedback(idx);
+}
+
+function showFeedback(idx) {
+    const ua = userAnswers[idx];
+    if (!ua) return;
+    const q = questionsList[idx];
+    const isUserCorrect = ua.isCorrect;
+    const feedbackHtml = `
+        <div class="${isUserCorrect ? 'feedback-correct' : 'feedback-incorrect'} p-3 rounded-3">
+            <h5>${isUserCorrect ? '✅ Bonne réponse !' : '❌ Mauvaise réponse'}</h5>
+            <p><strong>Réponse exacte :</strong> ${q.correctAnswer}</p>
+            <p><strong>📘 Explication :</strong> ${q.explanation}</p>
+            <div class="tip-box"><i class="fas fa-lightbulb"></i> <strong>Conseil pratique :</strong> ${q.tip}</div>
+            <div class="rex-box"><i class="fas fa-history"></i> <strong>Retour d’expérience (REX) :</strong> ${q.rex}</div>
+        </div>
+    `;
+    feedbackBox.innerHTML = feedbackHtml;
+    feedbackBox.classList.remove('d-none');
+}
+
+function handleNext() { if (currentIndex < questionsList.length - 1) { currentIndex++; displayQuestion(currentIndex); } }
+function handlePrev() { if (currentIndex > 0) { currentIndex--; displayQuestion(currentIndex); } }
+
+function showFinal() {
+    const percent = (score / questionsList.length) * 100;
+    let archiCount = 0, archiScore = 0, tupCount = 0, tupScore = 0;
+    questionsList.forEach((q, i) => {
+        if (q.thematic === "2TUP en Y") {
+            tupCount++;
+            if (userAnswers[i]?.isCorrect) tupScore++;
+        } else {
+            archiCount++;
+            if (userAnswers[i]?.isCorrect) archiScore++;
+        }
+    });
+    const archiPercent = archiCount ? (archiScore / archiCount) * 100 : 0;
+    const tupPercent = tupCount ? (tupScore / tupCount) * 100 : 0;
+    document.getElementById('archi-skill').style.width = `${archiPercent}%`;
+    document.getElementById('tupskill').style.width = `${tupPercent}%`;
+    document.getElementById('archi-text').innerText = `Architecture experte : ${archiPercent.toFixed(0)}% (${archiScore}/${archiCount})`;
+    document.getElementById('tuptext').innerText = `2TUP & modélisation : ${tupPercent.toFixed(0)}% (${tupScore}/${tupCount})`;
+    document.getElementById('final-score-correct').innerText = score;
+    document.getElementById('final-score-total').innerText = questionsList.length;
+    document.getElementById('final-score-percentage').innerText = `${percent.toFixed(0)}%`;
+    let recos = percent >= 80 ? "Niveau expert validé ! Vous êtes prêt pour des architectures critiques." : percent >= 60 ? "Bonne maîtrise, renforcez la compréhension des patterns avancés et des contre‑exemples." : "Des lacunes importantes. Reprenez les fondamentaux et pratiquez les études de cas.";
+    document.getElementById('final-recommendations').innerHTML = `<p><i class="fas fa-gem"></i> ${recos}</p>`;
+    document.getElementById('short-term').innerHTML = "📘 Prochaine étape : réalisez une revue d’architecture sur un système existant avec la grille 2TUP.";
+    document.getElementById('long-term').innerHTML = "🎯 Objectif : devenir référent architecture et mener des ateliers 2TUP pour des projets complexes.";
+    if (resultsModal) resultsModal.show();
+    else alert(`Résultats : ${percent.toFixed(0)}% - ${recos}`);
+}
+
+function restart() {
+    settingsPanel.classList.remove('d-none');
+    quizContent.classList.add('d-none');
+    if (resultsModal) resultsModal.hide();
+}
+
+startBtn.addEventListener('click', startQuiz);
+nextBtn.addEventListener('click', handleNext);
+prevBtn.addEventListener('click', handlePrev);
+finishBtn.addEventListener('click', showFinal);
+restartBtn.addEventListener('click', restart);
+</script>
+</body>
+</html>
