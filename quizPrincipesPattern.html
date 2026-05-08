@@ -1,0 +1,1332 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Princides et Bonnes Pratiques Arch·Light · 16 piliers du code maintenable · 80 questions</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding-top: 1rem;
+        }
+        .quiz-container {
+            max-width: 1000px;
+            margin: auto;
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            color: var(--dark);
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        .quiz-header h1 {
+            font-weight: 800;
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        .quiz-header p {
+            font-size: 1.2rem;
+            color: #475569;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .year-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 1rem;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .progress-container {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+        #question-counter, #current-score {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        #question-card {
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid var(--primary);
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 15px;
+        }
+        .thematic-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            background-color: #eff6ff;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            border: 2px solid #e2e8f0;
+            background-color: white;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+        .option-btn:hover:not([disabled]) {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+            transform: translateY(-2px);
+        }
+        .option-btn.correct {
+            background-color: #f0fdf4;
+            border-color: var(--accent);
+            color: #065f46;
+        }
+        .option-btn.incorrect {
+            background-color: #fef2f2;
+            border-color: #ef4444;
+            color: #7f1d1d;
+        }
+        #explanation-box {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            border-left: 4px solid;
+            background-color: #f8fafc;
+        }
+        .explanation-correct { border-left-color: var(--accent); }
+        .explanation-incorrect { border-left-color: #ef4444; }
+        .tip-box {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+        .btn-archi {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            border: none;
+        }
+        .final-score {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        @media (max-width: 768px) {
+            .quiz-container { padding: 1rem; }
+            .quiz-header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1><i class="fas fa-code"></i> Les Princides et Bonnes Pratiques :Arch·Light · 16 piliers</h1>
+                <p>SOLID, DRY, KISS, YAGNI, styles d'architecture & patterns de déploiement – 80 questions inspirées de l'article IONOS (01/2025)</p>
+                <div class="year-badge">Code maintenable · Clean Architecture</div>
+            </div>
+
+            <!-- Configuration panel -->
+            <div id="settings-panel">
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <label for="question-count" class="form-label">Nombre de questions :</label>
+                        <select id="question-count" class="form-select">
+                            <option value="20">20 questions (essentiel)</option>
+                            <option value="40" selected>40 questions (standard)</option>
+                            <option value="60">60 questions (approfondi)</option>
+                            <option value="80">80 questions (expert)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button id="start-quiz-btn" class="btn btn-archi w-100">
+                            <i class="fas fa-rocket"></i> Démarrer
+                        </button>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Chaque question explore un principe ou un style architectural. Lisez les explications pour une compréhension durable.
+                </div>
+            </div>
+
+            <!-- Quiz content -->
+            <div id="quiz-content" class="d-none">
+                <div class="progress-container">
+                    <div class="d-flex justify-content-between">
+                        <span id="question-counter">Question 1 / 40</span>
+                        <span id="current-score">Score: 0</span>
+                    </div>
+                    <div class="progress mt-2">
+                        <div id="progress-bar" class="progress-bar" style="width: 2.5%"></div>
+                    </div>
+                </div>
+
+                <div id="question-card">
+                    <div class="thematic-badge" id="thematic-badge">SOLID</div>
+                    <h2 id="question-text">Chargement...</h2>
+                    <div id="options-container"></div>
+                    <div id="explanation-box" class="d-none">
+                        <h5 id="explanation-title"></h5>
+                        <p id="explanation-text"></p>
+                        <div id="tip-box" class="tip-box d-none">
+                            <h6><i class="fas fa-lightbulb"></i> Conseil</h6>
+                            <p id="tip-text"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-navigation">
+                    <button id="prev-btn" class="btn btn-outline-secondary" disabled><i class="fas fa-arrow-left"></i> Précédent</button>
+                    <button id="next-btn" class="btn btn-archi">Suivant <i class="fas fa-arrow-right"></i></button>
+                    <button id="finish-btn" class="btn btn-success d-none">Terminer <i class="fas fa-trophy"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal fade" id="resultsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title"><i class="fas fa-chart-pie me-2"></i>Résultats – Arch·Light</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <h4>Score final</h4>
+                        <p class="final-score" id="final-score-percentage">0%</p>
+                        <p><span id="final-score-correct">0</span> bonnes réponses sur <span id="final-score-total">0</span></p>
+                    </div>
+                    <hr>
+                    <div id="final-recommendations"></div>
+                    <div class="mt-3">
+                        <h6>Prochaines étapes suggérées</h6>
+                        <p id="short-term">Approfondissez chaque principe en les appliquant dans vos projets quotidiens.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button class="btn btn-archi" id="restart-quiz-btn">Recommencer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      
+	  const quizData = [
+
+  // ======================================================
+  // 🔷 SOLID PRINCIPLES
+  // ======================================================
+
+  {
+    thematic: "SOLID",
+    question: "Selon le principe SRP, qu'est-ce qu'une 'raison de changer' ?",
+    options: [
+      "Un acteur métier qui demande une modification",
+      "Un bug technique",
+      "Une nouvelle fonctionnalité",
+      "Une mise à jour framework"
+    ],
+    correctAnswer: "Un acteur métier qui demande une modification",
+    explanation: `
+SRP (Single Responsibility Principle - Principe de Responsabilité Unique) :
+
+👉 Une classe doit avoir une seule responsabilité métier.
+
+Une "raison de changer" correspond à un acteur métier (finance, RH, logistique)
+qui demande une évolution fonctionnelle.
+
+💡 Si plusieurs métiers modifient la même classe → violation SRP.
+    `,
+    tip: "Une classe = un seul métier + un seul cycle de changement. Sinon refactor immédiat."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe stipule qu'une classe doit être ouverte à l'extension mais fermée à la modification ?",
+    options: ["OCP", "LSP", "ISP", "DIP"],
+    correctAnswer: "OCP",
+    explanation: `
+OCP (Open/Closed Principle - Principe Ouvert/Fermé) :
+
+👉 Le code doit être extensible sans modification du code existant.
+
+📌 Objectif :
+- Ajouter des comportements
+- Sans casser l'existant
+
+💡 Basé sur :
+- polymorphisme
+- interfaces
+- patterns (Strategy, Decorator)
+    `,
+    tip: "Si tu modifies du code stable → tu violes OCP."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Le problème du carré et du rectangle viole quel principe ?",
+    options: ["LSP", "SRP", "OCP", "DIP"],
+    correctAnswer: "LSP",
+    explanation: `
+LSP (Liskov Substitution Principle) :
+
+👉 Une sous-classe doit pouvoir remplacer sa classe mère sans changer le comportement.
+
+📌 Problème classique :
+Square vs Rectangle → violation de contrat.
+
+💡 Si substitution casse la logique → mauvaise abstraction.
+    `,
+    tip: "Une hiérarchie d'héritage doit respecter le contrat métier."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Une interface trop large viole quel principe ?",
+    options: ["ISP", "LSP", "SRP", "OCP"],
+    correctAnswer: "ISP",
+    explanation: `
+ISP (Interface Segregation Principle) :
+
+👉 Une classe ne doit pas dépendre de méthodes qu’elle n’utilise pas.
+
+📌 Solution :
+Interfaces petites et spécialisées.
+
+💡 Évite les interfaces "fourre-tout".
+    `,
+    tip: "Petites interfaces = faible couplage + meilleure maintenabilité."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Le principe DIP recommande de :",
+    options: [
+      "Dépendre d'abstractions",
+      "Dépendre de classes concrètes",
+      "Supprimer les interfaces",
+      "Utiliser uniquement l'héritage"
+    ],
+    correctAnswer: "Dépendre d'abstractions",
+    explanation: `
+DIP (Dependency Inversion Principle) :
+
+👉 Les modules haut niveau ne doivent pas dépendre de modules bas niveau.
+
+📌 Tous doivent dépendre d’abstractions.
+
+💡 Base de l’injection de dépendances.
+    `,
+    tip: "Injection de dépendances = application directe du DIP."
+  },
+
+  // ======================================================
+  // 🔷 PRINCIPES GÉNÉRAUX
+  // ======================================================
+
+  {
+    thematic: "Principes",
+    question: "Que signifie DRY ?",
+    options: [
+      "Don't Repeat Yourself",
+      "Do Repeat Yourself",
+      "Data Redundancy Yield",
+      "Design Reusable Yield"
+    ],
+    correctAnswer: "Don't Repeat Yourself",
+    explanation: `
+DRY (Don't Repeat Yourself) :
+
+👉 Une seule source de vérité pour chaque logique métier.
+
+📌 Objectif :
+- éviter duplication
+- réduire bugs
+- améliorer maintenance
+    `,
+    tip: "Si tu modifies 2 endroits pour 1 règle → violation DRY."
+  },
+
+  {
+    thematic: "Principes",
+    question: "Que signifie KISS ?",
+    options: [
+      "Keep It Simple, Stupid",
+      "Kernel Interface Simple System",
+      "Keep Internal Service Secure",
+      "Knowledge Is Simple Structure"
+    ],
+    correctAnswer: "Keep It Simple, Stupid",
+    explanation: `
+KISS :
+
+👉 La simplicité est un facteur clé de qualité logicielle.
+
+💡 Moins de complexité = moins de bugs.
+    `,
+    tip: "Commence simple, complexifie seulement si nécessaire."
+  },
+
+  {
+    thematic: "Principes",
+    question: "Que signifie YAGNI ?",
+    options: [
+      "You Aren't Gonna Need It",
+      "You Always Generate New Interfaces",
+      "Yet Another Generic Node Implementation",
+      "Your Application Grows Naturally"
+    ],
+    correctAnswer: "You Aren't Gonna Need It",
+    explanation: `
+YAGNI :
+
+👉 Ne développe pas une fonctionnalité avant d’en avoir réellement besoin.
+
+💡 Principe Agile fondamental.
+    `,
+    tip: "Ne code pas pour un futur hypothétique."
+  },
+
+  {
+    thematic: "Principes",
+    question: "Que signifie la loi de Déméter ?",
+    options: [
+      "Limiter les chaînes d'appels",
+      "Utiliser des getters partout",
+      "Exposer tous les objets",
+      "Multiplier les dépendances"
+    ],
+    correctAnswer: "Limiter les chaînes d'appels",
+    explanation: `
+LoD (Law of Demeter) :
+
+👉 Un objet doit parler uniquement à ses dépendances directes.
+
+❌ a.getB().getC().do()
+
+✔ a.do()
+    `,
+    tip: "Réduit fortement le couplage entre objets."
+  },
+
+  {
+    thematic: "Principes",
+    question: "Que signifie SoC ?",
+    options: [
+      "Separation of Concerns",
+      "System of Components",
+      "Service Oriented Code",
+      "Secure Object Communication"
+    ],
+    correctAnswer: "Separation of Concerns",
+    explanation: `
+SoC :
+
+👉 Séparer les responsabilités en modules indépendants.
+
+📌 Exemple :
+MVC = séparation UI / logique / données.
+    `,
+    tip: "Chaque module doit avoir une responsabilité unique."
+  },
+
+  // ======================================================
+  // 🔷 ARCHITECTURE
+  // ======================================================
+
+  {
+    thematic: "Architecture",
+    question: "Que signifie une architecture Layered ?",
+    options: [
+      "Architecture en couches",
+      "Architecture événementielle",
+      "Microservices",
+      "Serverless"
+    ],
+    correctAnswer: "Architecture en couches",
+    explanation: `
+Layered Architecture :
+
+👉 Organisation en couches :
+- Présentation
+- Métier
+- Données
+
+💡 Chaque couche dépend uniquement de celle du dessous.
+    `,
+    tip: "Ne mélange jamais UI et logique métier."
+  },
+
+  {
+    thematic: "Architecture",
+    question: "Les microservices signifient :",
+    options: [
+      "Services indépendants déployables séparément",
+      "Monolithe modulaire",
+      "Base de données unique",
+      "Un seul déploiement global"
+    ],
+    correctAnswer: "Services indépendants déployables séparément",
+    explanation: `
+Microservices :
+
+👉 Architecture distribuée de services autonomes.
+
+📌 Chaque service :
+- a sa base de données
+- est déployé indépendamment
+- communique via API/events
+    `,
+    tip: "Attention à la complexité distribuée."
+  },
+
+  {
+    thematic: "Architecture",
+    question: "Que signifie EDA ?",
+    options: [
+      "Event Driven Architecture",
+      "Enterprise Data Access",
+      "External Data API",
+      "Execution Driven App"
+    ],
+    correctAnswer: "Event Driven Architecture",
+    explanation: `
+EDA :
+
+👉 Architecture basée sur événements asynchrones.
+
+Producer → Event → Broker → Consumer
+    `,
+    tip: "Kafka / RabbitMQ = outils classiques EDA."
+  },
+
+  {
+    thematic: "Architecture",
+    question: "Que signifie Hexagonal Architecture ?",
+    options: [
+      "Ports & Adapters",
+      "Layered System",
+      "Microkernel",
+      "Pipeline"
+    ],
+    correctAnswer: "Ports & Adapters",
+    explanation: `
+Hexagonal Architecture :
+
+👉 Le domaine métier est isolé des frameworks.
+
+📌 Structure :
+- Core (métier)
+- Ports (interfaces)
+- Adapters (tech)
+
+💡 Objectif : indépendance technologique.
+    `,
+    tip: "Le domaine ne dépend jamais de l’infrastructure."
+  },
+
+  // ======================================================
+  // 🔷 DEPLOYMENT
+  // ======================================================
+
+  {
+    thematic: "Deployment",
+    question: "Que signifie Blue/Green Deployment ?",
+    options: [
+      "Deux environnements avec bascule",
+      "Déploiement progressif",
+      "Rollback automatique",
+      "Batch deployment"
+    ],
+    correctAnswer: "Deux environnements avec bascule",
+    explanation: `
+Blue/Green :
+
+👉 Deux environnements identiques :
+- Blue = production
+- Green = nouvelle version
+
+Switch trafic après validation.
+    `,
+    tip: "Rollback = instantané."
+  },
+
+  {
+    thematic: "Deployment",
+    question: "Que signifie Canary Deployment ?",
+    options: [
+      "Déploiement progressif utilisateur",
+      "Déploiement global direct",
+      "Rollback automatique",
+      "Offline deployment"
+    ],
+    correctAnswer: "Déploiement progressif utilisateur",
+    explanation: `
+Canary Deployment :
+
+👉 Nouvelle version déployée sur petit % utilisateurs.
+
+💡 Objectif :
+- détecter bugs tôt
+- réduire risque production
+    `,
+    tip: "Toujours surveiller les métriques."
+  },
+
+  {
+    thematic: "Deployment",
+    question: "Que signifie Circuit Breaker ?",
+    options: [
+      "Isolation d'un service défaillant",
+      "Optimisation CPU",
+      "Load balancing",
+      "Compression réseau"
+    ],
+    correctAnswer: "Isolation d'un service défaillant",
+    explanation: `
+Circuit Breaker :
+
+👉 Empêche appels vers un service en panne.
+
+États :
+- CLOSED
+- OPEN
+- HALF-OPEN
+    `,
+    tip: "Évite les cascades de pannes en microservices."
+  },{
+  thematic: "SOLID",
+  question: "Quel principe SOLID est le plus lié à la testabilité du code ?",
+  options: ["DIP", "SRP", "OCP", "ISP"],
+  correctAnswer: "DIP",
+  explanation: `
+DIP (Dependency Inversion Principle) :
+
+👉 En dépendant d’abstractions, on peut injecter des mocks en test.
+
+📌 Résultat :
+- tests unitaires faciles
+- faible couplage
+  `,
+  tip: "Si ton code est difficile à mocker → DIP violé."
+},
+
+{
+  thematic: "SOLID",
+  question: "Quel problème indique une violation du SRP ?",
+  options: [
+    "Une classe change pour plusieurs raisons métiers",
+    "Une classe est trop petite",
+    "Une interface est utilisée",
+    "Une méthode est privée"
+  ],
+  correctAnswer: "Une classe change pour plusieurs raisons métiers",
+  explanation: `
+SRP :
+
+👉 Une classe doit évoluer pour une seule raison métier.
+
+💡 Si finance + RH modifient la même classe → problème d’architecture.
+  `,
+  tip: "Plusieurs équipes touchent la même classe = signal d’alerte."
+},
+
+{
+  thematic: "SOLID",
+  question: "OCP est souvent implémenté avec quel pattern ?",
+  options: ["Strategy", "Singleton", "Factory simple", "Observer uniquement"],
+  correctAnswer: "Strategy",
+  explanation: `
+OCP :
+
+👉 Strategy pattern permet d’ajouter du comportement sans modifier le code existant.
+
+💡 Très utilisé en architecture propre.
+  `,
+  tip: "Quand tu vois des if/else → pense Strategy."
+},
+{
+  thematic: "Principes",
+  question: "Que signifie le principe POLA ?",
+  options: [
+    "Principe du comportement non surprenant",
+    "Principe de latence optimisée",
+    "Principe de liaison abstraite",
+    "Principe de logique avancée"
+  ],
+  correctAnswer: "Principe du comportement non surprenant",
+  explanation: `
+POLA (Principle of Least Astonishment) :
+
+👉 Le code doit se comporter comme l’utilisateur s’y attend.
+
+💡 Exemple :
+une méthode getTotal() ne doit pas modifier l’état.
+  `,
+  tip: "Un code surprenant est un bug latent."
+},
+
+{
+  thematic: "Principes",
+  question: "Le principe de composition signifie :",
+  options: [
+    "Assembler des objets plutôt qu'utiliser l'héritage",
+    "Toujours utiliser l'héritage",
+    "Créer des classes statiques",
+    "Éviter les interfaces"
+  ],
+  correctAnswer: "Assembler des objets plutôt qu'utiliser l'héritage",
+  explanation: `
+Composition over Inheritance :
+
+👉 Préférer l’assemblage dynamique d’objets.
+
+💡 Avantage :
+- flexibilité
+- moins de couplage
+  `,
+  tip: "Héritage = rigide, composition = flexible."
+},
+
+{
+  thematic: "Principes",
+  question: "Que signifie le principe Fail Fast ?",
+  options: [
+    "Détecter les erreurs immédiatement",
+    "Ignorer les erreurs",
+    "Reporter les erreurs",
+    "Masquer les exceptions"
+  ],
+  correctAnswer: "Détecter les erreurs immédiatement",
+  explanation: `
+Fail Fast :
+
+👉 On détecte les erreurs dès leur apparition.
+
+💡 Objectif :
+- éviter corruption d’état
+- faciliter debugging
+  `,
+  tip: "Une erreur tardive = coût élevé."
+},
+{
+  thematic: "Architecture",
+  question: "Quel est l’objectif principal du Modular Monolith ?",
+  options: [
+    "Structurer un monolithe en modules indépendants",
+    "Créer des microservices",
+    "Supprimer la base de données",
+    "Faire du serverless"
+  ],
+  correctAnswer: "Structurer un monolithe en modules indépendants",
+  explanation: `
+Modular Monolith :
+
+👉 Monolithe organisé en modules découplés.
+
+💡 Avantage :
+- simplicité déploiement
+- préparation migration microservices
+  `,
+  tip: "Meilleur choix pour startups."
+},
+
+{
+  thematic: "Architecture",
+  question: "Quel est le principal avantage des microservices ?",
+  options: [
+    "Scalabilité indépendante",
+    "Moins de code",
+    "Base de données unique",
+    "Pas de réseau"
+  ],
+  correctAnswer: "Scalabilité indépendante",
+  explanation: `
+Microservices :
+
+👉 Chaque service peut scaler indépendamment.
+
+💡 Idéal pour systèmes complexes à forte charge.
+  `,
+  tip: "Scaler intelligemment = optimiser coûts cloud."
+},
+
+{
+  thematic: "Architecture",
+  question: "Quel problème principal introduit les microservices ?",
+  options: [
+    "Complexité distribuée",
+    "Moins de code",
+    "Pas de logs",
+    "Pas de tests"
+  ],
+  correctAnswer: "Complexité distribuée",
+  explanation: `
+Microservices :
+
+👉 La communication réseau ajoute :
+- latence
+- pannes partielles
+- debugging difficile
+  `,
+  tip: "Sans observabilité → microservices dangereux."
+},
+
+{
+  thematic: "Architecture",
+  question: "Quel style utilise des fonctions déclenchées par événements ?",
+  options: [
+    "Serverless",
+    "Layered",
+    "Monolithique",
+    "Batch system"
+  ],
+  correctAnswer: "Serverless",
+  explanation: `
+Serverless :
+
+👉 Exécution à la demande via événements.
+
+💡 Ex : AWS Lambda, Azure Functions.
+  `,
+  tip: "Pas de serveur à gérer = focus business."
+},
+{
+  thematic: "Deployment",
+  question: "Quel est l’avantage principal du Rolling Update ?",
+  options: [
+    "Pas d’interruption de service",
+    "Déploiement instantané",
+    "Rollback automatique garanti",
+    "Moins de code"
+  ],
+  correctAnswer: "Pas d’interruption de service",
+  explanation: `
+Rolling Update :
+
+👉 Mise à jour progressive des instances.
+
+💡 Service toujours disponible pendant déploiement.
+  `,
+  tip: "Attention compatibilité versions."
+},
+
+{
+  thematic: "Deployment",
+  question: "Quel outil est souvent utilisé pour IaC ?",
+  options: ["Terraform", "Photoshop", "Dockerfile", "Nginx"],
+  correctAnswer: "Terraform",
+  explanation: `
+IaC (Infrastructure as Code) :
+
+👉 Infrastructure définie par du code.
+
+💡 Terraform = standard cloud multi-provider.
+  `,
+  tip: "Infra versionnée = reproductible."
+},
+
+{
+  thematic: "Deployment",
+  question: "Que permet le tracing distribué ?",
+  options: [
+    "Suivre une requête entre services",
+    "Compresser les logs",
+    "Scaler automatiquement",
+    "Déployer du code"
+  ],
+  correctAnswer: "Suivre une requête entre services",
+  explanation: `
+Distributed Tracing :
+
+👉 Suivre un appel dans toute l’architecture.
+
+💡 Outils : Jaeger, Zipkin
+  `,
+  tip: "Indispensable en microservices."
+},
+{
+    thematic: "SOLID",
+    question: "Selon le principe SRP, qu'est-ce qu'une 'raison de changer' ?",
+    options: [
+      "Un acteur métier qui demande une modification",
+      "Un bug technique",
+      "Une nouvelle fonctionnalité",
+      "Une mise à jour framework"
+    ],
+    correctAnswer: "Un acteur métier qui demande une modification",
+    explanation: `
+SRP (Single Responsibility Principle - Principe de Responsabilité Unique) :
+Une classe doit avoir une seule responsabilité, donc une seule raison de changer.
+
+Une "raison de changer" correspond à un acteur métier (finance, RH, logistique)
+qui demande une évolution sur la même classe.
+    `,
+    tip: "1 classe = 1 métier = 1 source de changement."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe stipule qu'une classe doit être ouverte à l'extension mais fermée à la modification ?",
+    options: ["OCP", "LSP", "ISP", "DIP"],
+    correctAnswer: "OCP",
+    explanation: `
+OCP (Open/Closed Principle) :
+Une entité logicielle doit pouvoir être étendue sans modifier son code existant.
+
+On ajoute du comportement via polymorphisme, interfaces ou composition.
+    `,
+    tip: "Ajoute du code sans toucher à l'existant."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Le problème du carré et du rectangle viole quel principe ?",
+    options: ["LSP", "SRP", "OCP", "DIP"],
+    correctAnswer: "LSP",
+    explanation: `
+LSP (Liskov Substitution Principle) :
+Une classe dérivée doit pouvoir remplacer sa classe mère sans casser le comportement.
+
+Le carré casse les règles du rectangle (largeur = hauteur).
+    `,
+    tip: "Une sous-classe doit rester compatible avec sa classe mère."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Une interface trop large viole quel principe ?",
+    options: ["ISP", "LSP", "SRP", "OCP"],
+    correctAnswer: "ISP",
+    explanation: `
+ISP (Interface Segregation Principle) :
+Il vaut mieux plusieurs petites interfaces spécialisées qu'une interface énorme.
+
+Une classe ne doit pas implémenter des méthodes inutiles.
+    `,
+    tip: "Interfaces fines = design propre."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Le principe DIP recommande de :",
+    options: [
+      "Dépendre d'abstractions",
+      "Dépendre de classes concrètes",
+      "Utiliser uniquement l'héritage",
+      "Éviter les interfaces"
+    ],
+    correctAnswer: "Dépendre d'abstractions",
+    explanation: `
+DIP (Dependency Inversion Principle) :
+Les modules doivent dépendre d'abstractions, pas de détails concrets.
+
+Cela réduit fortement le couplage.
+    `,
+    tip: "Injection de dépendances = DIP en pratique."
+  },
+
+  // ======================================================
+  // 🔥 10 NOUVELLES QUESTIONS SOLID AJOUTÉES
+  // ======================================================
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe SOLID est violé si une classe fait à la fois log, calcul et accès DB ?",
+    options: ["SRP", "OCP", "LSP", "DIP"],
+    correctAnswer: "SRP",
+    explanation: `
+SRP (Single Responsibility Principle) :
+Une classe doit avoir une seule responsabilité.
+
+Faire log + calcul + base de données = plusieurs raisons de changer.
+    `,
+    tip: "Séparer logiques métier, technique et persistance."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe permet d'ajouter un nouveau comportement sans modifier le code existant ?",
+    options: ["OCP", "ISP", "SRP", "LSP"],
+    correctAnswer: "OCP",
+    explanation: `
+OCP (Open/Closed Principle) :
+Le système doit être extensible sans modification.
+
+On utilise interfaces et polymorphisme.
+    `,
+    tip: "Prévoir des points d'extension dès la conception."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Si une sous-classe modifie le comportement attendu d'une méthode, quel principe est violé ?",
+    options: ["LSP", "SRP", "ISP", "OCP"],
+    correctAnswer: "LSP",
+    explanation: `
+LSP :
+Une sous-classe ne doit pas surprendre le comportement attendu.
+
+Elle doit respecter le contrat de la classe mère.
+    `,
+    tip: "Respect du contrat = substitution sûre."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Une interface 'Worker' avec work(), eat(), sleep() viole quel principe ?",
+    options: ["ISP", "SRP", "LSP", "OCP"],
+    correctAnswer: "ISP",
+    explanation: `
+ISP :
+Une interface doit être spécifique au besoin.
+
+Un robot ne devrait pas implémenter eat() ou sleep().
+    `,
+    tip: "Découper les interfaces par responsabilité."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe favorise l'utilisation d'interfaces dans les constructeurs ?",
+    options: ["DIP", "SRP", "LSP", "ISP"],
+    correctAnswer: "DIP",
+    explanation: `
+DIP :
+On injecte des abstractions dans les classes plutôt que des implémentations concrètes.
+
+Ex : Service dépend d'une interface Repository.
+    `,
+    tip: "Injection de dépendances = design flexible."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe est lié à la testabilité du code ?",
+    options: ["DIP", "OCP", "SRP", "ISP"],
+    correctAnswer: "DIP",
+    explanation: `
+DIP améliore la testabilité car on peut mocker les dépendances.
+
+On remplace les implémentations concrètes par des mocks.
+    `,
+    tip: "Code testable = dépendances abstraites."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe réduit les effets de bord dans une application ?",
+    options: ["SRP", "OCP", "LSP", "ISP"],
+    correctAnswer: "SRP",
+    explanation: `
+SRP :
+Moins de responsabilités = moins d'effets secondaires imprévus.
+
+Chaque changement est isolé.
+    `,
+    tip: "Isolation des responsabilités = stabilité."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe permet d'éviter les classes 'God Object' ?",
+    options: ["SRP", "OCP", "LSP", "DIP"],
+    correctAnswer: "SRP",
+    explanation: `
+SRP :
+Un God Object fait trop de choses.
+
+SRP force la séparation des responsabilités.
+    `,
+    tip: "Évite les classes trop grosses."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe favorise le remplacement transparent d'implémentations ?",
+    options: ["LSP", "SRP", "ISP", "OCP"],
+    correctAnswer: "LSP",
+    explanation: `
+LSP :
+Permet de remplacer une implémentation sans casser le système.
+
+Ex : paiement PayPal vs carte bancaire.
+    `,
+    tip: "Remplacement sans surprise."
+  },
+
+  {
+    thematic: "SOLID",
+    question: "Quel principe réduit le couplage entre modules ?",
+    options: ["DIP", "SRP", "ISP", "OCP"],
+    correctAnswer: "DIP",
+    explanation: `
+DIP :
+Les modules dépendent d'abstractions, pas de concret.
+
+Cela réduit fortement le couplage.
+    `,
+    tip: "Moins de dépendance = plus de flexibilité."
+  }
+
+  
+  
+
+];
+
+        // DOM elements
+        const settingsPanel = document.getElementById('settings-panel');
+        const quizContent = document.getElementById('quiz-content');
+        const questionCountEl = document.getElementById('question-count');
+        const startBtn = document.getElementById('start-quiz-btn');
+        const questionCounter = document.getElementById('question-counter');
+        const currentScoreEl = document.getElementById('current-score');
+        const progressBar = document.getElementById('progress-bar');
+        const questionText = document.getElementById('question-text');
+        const thematicBadge = document.getElementById('thematic-badge');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationTitle = document.getElementById('explanation-title');
+        const explanationText = document.getElementById('explanation-text');
+        const tipBox = document.getElementById('tip-box');
+        const tipText = document.getElementById('tip-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const finishBtn = document.getElementById('finish-btn');
+        const restartBtn = document.getElementById('restart-quiz-btn');
+        const resultsModal = new bootstrap.Modal(document.getElementById('resultsModal'));
+        const finalScoreCorrect = document.getElementById('final-score-correct');
+        const finalScoreTotal = document.getElementById('final-score-total');
+        const finalScorePercentage = document.getElementById('final-score-percentage');
+        const finalRecommendations = document.getElementById('final-recommendations');
+        const shortTerm = document.getElementById('short-term');
+
+        // State
+        let questions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function normalize(s) {
+            return s.trim().toLowerCase().replace(/\s+/g, ' ');
+        }
+
+        function startQuiz() {
+            const count = parseInt(questionCountEl.value);
+            const shuffledAll = shuffleArray([...quizData]);
+            questions = shuffledAll.slice(0, Math.min(count, quizData.length));
+            currentIndex = 0;
+            score = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            settingsPanel.classList.add('d-none');
+            quizContent.classList.remove('d-none');
+            displayQuestion();
+            updateScore();
+        }
+
+        function displayQuestion() {
+            const q = questions[currentIndex];
+            questionText.textContent = q.question;
+            thematicBadge.textContent = q.thematic;
+            thematicBadge.className = 'thematic-badge';
+
+            const shuffledOptions = shuffleArray([...q.options]);
+            optionsContainer.innerHTML = '';
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'btn option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => selectAnswer(btn, opt);
+                optionsContainer.appendChild(btn);
+            });
+
+            explanationBox.classList.add('d-none');
+            tipBox.classList.add('d-none');
+            updateNav();
+            updateProgress();
+
+            if (userAnswers[currentIndex]) {
+                showAnswerFeedback();
+            }
+        }
+
+        function selectAnswer(btn, selected) {
+            if (userAnswers[currentIndex] !== null) return;
+
+            const q = questions[currentIndex];
+            const isCorrect = normalize(selected) === normalize(q.correctAnswer);
+
+            userAnswers[currentIndex] = {
+                selected: selected,
+                correct: q.correctAnswer,
+                isCorrect: isCorrect
+            };
+
+            if (isCorrect) score++;
+            updateScore();
+
+            const btns = optionsContainer.querySelectorAll('.option-btn');
+            btns.forEach(b => {
+                b.disabled = true;
+                if (normalize(b.textContent) === normalize(q.correctAnswer)) {
+                    b.classList.add('correct');
+                } else if (normalize(b.textContent) === normalize(selected)) {
+                    b.classList.add('incorrect');
+                }
+            });
+
+            showAnswerFeedback();
+        }
+
+        function showAnswerFeedback() {
+            const ua = userAnswers[currentIndex];
+            const q = questions[currentIndex];
+            explanationText.textContent = q.explanation;
+            if (ua.isCorrect) {
+                explanationTitle.textContent = "✅ Bonne réponse !";
+                explanationBox.className = 'explanation-correct';
+            } else {
+                explanationTitle.textContent = "💡 Explication";
+                explanationBox.className = 'explanation-incorrect';
+            }
+            explanationBox.classList.remove('d-none');
+
+            if (q.tip) {
+                tipText.textContent = q.tip;
+                tipBox.classList.remove('d-none');
+            } else {
+                tipBox.classList.add('d-none');
+            }
+        }
+
+        function updateNav() {
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.classList.toggle('d-none', currentIndex === questions.length - 1);
+            finishBtn.classList.toggle('d-none', currentIndex !== questions.length - 1);
+        }
+
+        function updateProgress() {
+            const progress = ((currentIndex + 1) / questions.length) * 100;
+            progressBar.style.width = progress + '%';
+            questionCounter.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
+        }
+
+        function updateScore() {
+            currentScoreEl.textContent = `Score: ${score}/${questions.length}`;
+        }
+
+        function nextQuestion() {
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                displayQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            const total = questions.length;
+            const percent = (score / total) * 100;
+            finalScoreCorrect.textContent = score;
+            finalScoreTotal.textContent = total;
+            finalScorePercentage.textContent = percent.toFixed(0) + '%';
+
+            let rec = '';
+            if (percent >= 80) rec = 'Excellent ! Vous maîtrisez les 16 piliers du code maintenable.';
+            else if (percent >= 60) rec = 'Bonnes bases. Revenez sur les explications pour approfondir.';
+            else rec = 'Continuez à apprendre, ces principes sont fondamentaux. Les explications vous aideront.';
+            finalRecommendations.innerHTML = `<p>${rec}</p>`;
+            shortTerm.textContent = 'Relisez l’article IONOS et pratiquez en refactorisant du code legacy.';
+            resultsModal.show();
+        }
+
+        function restartQuiz() {
+            settingsPanel.classList.remove('d-none');
+            quizContent.classList.add('d-none');
+            resultsModal.hide();
+        }
+
+        startBtn.addEventListener('click', startQuiz);
+        prevBtn.addEventListener('click', prevQuestion);
+        nextBtn.addEventListener('click', nextQuestion);
+        finishBtn.addEventListener('click', finishQuiz);
+        restartBtn.addEventListener('click', restartQuiz);
+
+        settingsPanel.classList.remove('d-none');
+        quizContent.classList.add('d-none');
+    </script>
+</body>
+</html>
