@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patterns Quiz — Learn Mode Pro</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f1ec;
+  --surface: #ffffff;
+  --surface2: #f9f7f3;
+  --surface3: #eeeae2;
+  --border: #e0dbd0;
+  --border2: #ccc7ba;
+  --ink: #1a1714;
+  --ink2: #3d3830;
+  --ink3: #6b6459;
+  --ink4: #9c9489;
+  --accent: #c84b2f;
+  --accent2: #2a6bbf;
+  --accent3: #1a8a5a;
+  --accent4: #b5620a;
+  --correct: #1a8a5a;
+  --wrong: #c84b2f;
+  --tag1: #c84b2f;
+  --tag2: #2a6bbf;
+  --tag3: #1a8a5a;
+  --tag4: #b5620a;
+  --tag5: #7c3d8c;
+  --tag6: #c44f87;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(26,23,20,0.08);
+  --shadow-lg: 0 8px 32px rgba(26,23,20,0.14);
+}
+
+* { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8bfaa' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* HEADER */
+.quiz-header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 1.2rem 0;
+  position: sticky; top:0; z-index:100;
+  box-shadow: var(--shadow);
+}
+
+.logo-mark {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.logo-mark em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.header-badge {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.25em 0.7em;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.hb-learn { background: #fff3cd; color: var(--accent4); border: 1px solid #f5d78a; }
+.hb-qs    { background: #e8f0fb; color: var(--accent2); border: 1px solid #b3cdf5; }
+.hb-goal  { background: #e6f5ed; color: var(--accent3); border: 1px solid #8dd3b0; }
+
+/* SCORE ROW */
+.score-row {
+  display: flex; align-items: center; gap: 1.2rem;
+}
+.sc-item {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-family: 'Fira Code', monospace; font-size: 0.78rem;
+  font-weight: 600; color: var(--ink2);
+}
+.sc-dot { width:8px;height:8px;border-radius:50%; }
+
+/* PROGRESS */
+.prog-label { font-family:'Fira Code',monospace; font-size:0.7rem; color:var(--ink4); }
+.progress-track { background:var(--surface3); border-radius:100px; height:7px; overflow:hidden; border:1px solid var(--border); }
+.progress-bar-fill {
+  height:100%; border-radius:100px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent4) 50%, var(--accent3) 100%);
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+}
+
+/* MAIN */
+.quiz-main { max-width: 860px; margin: 0 auto; padding: 2rem 1rem 5rem; }
+
+/* INTRO */
+.intro-wrap {
+  max-width: 820px; margin:0 auto; padding: 2.5rem 1rem 4rem;
+}
+
+.intro-eyebrow {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.72rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:0.1em;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  display: flex; align-items:center; gap:0.5rem;
+}
+
+.intro-headline {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.intro-headline em { font-style: italic; color: var(--accent2); }
+
+.intro-sub {
+  font-size: 1rem; color: var(--ink3); line-height: 1.65;
+  max-width: 640px; margin-bottom: 2rem;
+}
+
+/* COVERAGE GRID */
+.coverage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+  gap: 0.85rem;
+  margin: 2rem 0;
+}
+
+.cov-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  transition: box-shadow .2s, border-color .2s;
+}
+.cov-card:hover { box-shadow: var(--shadow); border-color: var(--border2); }
+
+.cov-icon { font-size: 1.3rem; margin-bottom: 0.4rem; display:block; }
+.cov-title { font-weight: 700; font-size:0.88rem; color:var(--ink); margin-bottom:0.25rem; }
+.cov-list { font-size: 0.75rem; color: var(--ink3); line-height:1.55; }
+
+/* GOAL BANNER */
+.goal-banner {
+  background: linear-gradient(135deg, #fff8e6 0%, #fff 100%);
+  border: 1.5px solid #f5d78a;
+  border-left: 4px solid var(--accent4);
+  border-radius: 10px;
+  padding: 1rem 1.3rem;
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+.goal-icon { font-size: 1.8rem; }
+.goal-text strong { font-weight:700; color:var(--ink); font-size:0.95rem; }
+.goal-text p { font-size:0.82rem; color:var(--ink3); margin:0; margin-top:0.15rem; }
+
+.btn-start {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 0.85rem 2.8rem;
+  background: var(--accent);
+  color: #fff;
+  border: none; border-radius: 10px;
+  cursor: pointer;
+  transition: all .25s;
+  display: flex; align-items:center; gap:0.6rem;
+  box-shadow: 0 4px 14px rgba(200,75,47,0.25);
+}
+.btn-start:hover { background:#b03a22; transform:translateY(-2px); box-shadow:0 8px 24px rgba(200,75,47,0.3); }
+
+/* QUESTION CARD */
+.q-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem 2.2rem;
+  margin-bottom: 1.2rem;
+  box-shadow: var(--shadow);
+  animation: slideUp .35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.q-meta { display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.1rem; }
+
+.q-num {
+  font-family:'Fira Code',monospace; font-size:0.68rem; font-weight:600;
+  color:var(--ink4); background:var(--surface2); border:1px solid var(--border);
+  padding:0.2em 0.6em; border-radius:5px;
+}
+
+.q-tag {
+  font-family:'Fira Code',monospace; font-size:0.67rem; font-weight:600;
+  padding:0.22em 0.7em; border-radius:100px;
+  text-transform:uppercase; letter-spacing:0.04em;
+}
+
+.diff-badge {
+  font-size:0.67rem; font-weight:600;
+  padding:0.2em 0.6em; border-radius:100px;
+}
+.d-easy   { background:#e6f5ed; color:var(--correct); border:1px solid #8dd3b0; }
+.d-medium { background:#fff3cd; color:var(--accent4); border:1px solid #f5d78a; }
+.d-hard   { background:#fdecea; color:var(--wrong);   border:1px solid #f5b5ab; }
+
+.q-text {
+  font-size: 1.05rem; line-height: 1.7; color: var(--ink);
+  margin-bottom: 1.6rem; font-weight: 400;
+}
+.q-text code {
+  font-family:'Fira Code',monospace;
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 0.12em 0.45em; border-radius:5px;
+  font-size:0.88em; color: var(--accent2);
+}
+
+/* OPTIONS */
+.options-grid { display:grid; gap:0.6rem; }
+
+.opt-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.1rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all .22s;
+  display: flex; align-items:flex-start; gap:0.8rem;
+  text-align:left; width:100%;
+  font-size: 0.93rem; line-height:1.5;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--accent2);
+  background: #eef3fc;
+  transform: translateX(3px);
+}
+.opt-letter {
+  font-family:'Fira Code',monospace; font-size:0.68rem; font-weight:700;
+  width:22px; height:22px; min-width:22px; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  background: var(--surface); border:1.5px solid var(--border);
+  color:var(--ink4); margin-top:1px; transition:all .22s;
+}
+.opt-btn:hover:not(:disabled) .opt-letter {
+  background: var(--accent2); border-color:var(--accent2); color:#fff;
+}
+.opt-btn.correct {
+  background:#e6f5ed; border-color:var(--correct);
+  animation: popCorrect .4s ease;
+}
+.opt-btn.correct .opt-letter { background:var(--correct); border-color:var(--correct); color:#fff; }
+.opt-btn.wrong {
+  background:#fdecea; border-color:var(--wrong);
+  animation: shakeWrong .4s ease;
+}
+.opt-btn.wrong .opt-letter { background:var(--wrong); border-color:var(--wrong); color:#fff; }
+
+@keyframes popCorrect {
+  0%{transform:scale(1)} 40%{transform:scale(1.015)} 100%{transform:scale(1)}
+}
+@keyframes shakeWrong {
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-5px)} 75%{transform:translateX(5px)}
+}
+
+/* EXPLANATION */
+.exp-panel {
+  margin-top: 1.2rem; border-radius: 12px; overflow:hidden;
+  animation: fadeIn .35s ease;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+
+.exp-header {
+  padding: 0.8rem 1.2rem;
+  display:flex; align-items:center; gap:0.55rem;
+  font-weight:700; font-size:0.85rem;
+}
+.exp-ok  { background:#d4edda; color:#155724; border:1.5px solid #b8dacc; border-bottom:none; border-radius:12px 12px 0 0; }
+.exp-ko  { background:#fdecea; color:#842029; border:1.5px solid #f5b5ab; border-bottom:none; border-radius:12px 12px 0 0; }
+
+.exp-body {
+  background: var(--surface);
+  border: 1.5px solid var(--border); border-top:none;
+  border-radius: 0 0 12px 12px;
+  padding: 1.3rem 1.5rem;
+}
+.exp-section { margin-bottom: 1.1rem; }
+.exp-section:last-child { margin-bottom:0; }
+
+.exp-lbl {
+  font-family:'Fira Code',monospace; font-size:0.65rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.1em;
+  color:var(--ink4); margin-bottom:0.45rem;
+  display:flex; align-items:center; gap:0.35rem;
+}
+.exp-txt { font-size:0.88rem; line-height:1.65; color:var(--ink2); }
+.exp-txt code {
+  font-family:'Fira Code',monospace;
+  background:#eef3fc; border:1px solid #c5d8f7;
+  padding:.1em .4em; border-radius:4px; font-size:.85em; color:var(--accent2);
+}
+
+.tip-box {
+  background:#eff6ff; border:1.5px solid #bfdbfe;
+  border-left:3px solid var(--accent2);
+  border-radius:8px; padding:.75rem 1rem; margin-top:.5rem;
+}
+.tip-box p { font-size:.86rem; line-height:1.6; color:#1e40af; margin:0; }
+
+.rex-box {
+  background:#fffbeb; border:1.5px solid #fde68a;
+  border-left:3px solid var(--accent4);
+  border-radius:8px; padding:.75rem 1rem; margin-top:.5rem;
+}
+.rex-box p { font-size:.86rem; line-height:1.6; color:#92400e; margin:0; }
+
+/* NAV */
+.nav-bar { display:flex; gap:.7rem; margin-top:1.5rem; justify-content:flex-end; flex-wrap:wrap; }
+
+.btn-nav {
+  font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:.86rem;
+  padding:.6rem 1.3rem; border-radius:9px; border:none;
+  cursor:pointer; transition:all .22s;
+  display:flex; align-items:center; gap:.45rem;
+}
+.bn-primary { background:var(--accent); color:#fff; box-shadow:0 3px 10px rgba(200,75,47,.2); }
+.bn-primary:hover { background:#b03a22; transform:translateY(-1px); box-shadow:0 6px 18px rgba(200,75,47,.28); }
+.bn-secondary { background:var(--surface2); color:var(--ink3); border:1.5px solid var(--border); }
+.bn-secondary:hover { background:var(--surface3); color:var(--ink); }
+.bn-blue { background:var(--accent2); color:#fff; }
+.bn-blue:hover { background:#1a56a0; transform:translateY(-1px); }
+
+/* RESULTS */
+.results-wrap { max-width:800px; margin:0 auto; padding:2rem 1rem 4rem; }
+
+.results-card {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:18px; padding:2.5rem 2.2rem;
+  box-shadow:var(--shadow-lg);
+  animation: slideUp .45s ease;
+}
+
+.results-ring-wrap {
+  position:relative; width:150px; height:150px;
+  margin: 0 auto 1.5rem;
+}
+.results-ring {
+  width:150px; height:150px; border-radius:50%;
+  background: conic-gradient(var(--accent3) var(--ang), var(--surface3) var(--ang));
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 0 0 6px var(--surface), 0 8px 30px rgba(26,138,90,.15);
+}
+.results-ring::before {
+  content:''; position:absolute;
+  width:116px; height:116px; border-radius:50%;
+  background:var(--surface); top:17px; left:17px;
+}
+.ring-inner {
+  position:relative; z-index:1; text-align:center;
+}
+.ring-pct {
+  font-family:'Fraunces',serif; font-weight:700; font-size:2rem;
+  line-height:1; display:block;
+}
+.ring-lbl { font-size:.65rem; color:var(--ink4); font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
+
+.res-title {
+  font-family:'Fraunces',serif; font-weight:700; font-size:1.7rem;
+  letter-spacing:-.03em; text-align:center; color:var(--ink);
+}
+.res-sub { text-align:center; color:var(--ink3); font-size:.9rem; margin:.3rem 0 1.5rem; }
+
+.stats-row {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem; margin:1.5rem 0;
+}
+.stat-box {
+  background:var(--surface2); border:1.5px solid var(--border);
+  border-radius:10px; padding:1rem .8rem; text-align:center;
+}
+.stat-val {
+  font-family:'Fraunces',serif; font-weight:700; font-size:1.6rem;
+  line-height:1.1; display:block;
+}
+.stat-lbl { font-size:.7rem; color:var(--ink4); text-transform:uppercase; letter-spacing:.05em; margin-top:.2rem; }
+
+/* Breakdown bars */
+.breakdown { margin:1.8rem 0; }
+.bd-title {
+  font-family:'Fira Code',monospace; font-size:.7rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:.08em; color:var(--ink4); margin-bottom:.9rem;
+}
+.bd-row { display:flex; align-items:center; gap:.8rem; margin-bottom:.6rem; }
+.bd-label { font-size:.73rem; width:130px; min-width:130px; color:var(--ink2); font-weight:600; }
+.bd-bar-wrap { flex:1; background:var(--surface3); border-radius:100px; height:7px; overflow:hidden; border:1px solid var(--border); }
+.bd-bar-fill { height:100%; border-radius:100px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width 1.2s cubic-bezier(.4,0,.2,1); }
+.bd-pct { font-family:'Fira Code',monospace; font-size:.68rem; color:var(--ink4); width:33px; text-align:right; }
+
+/* Review nav */
+.review-map { display:flex; flex-wrap:wrap; gap:.4rem; margin:1.2rem 0; }
+.r-dot {
+  width:28px; height:28px; border-radius:6px;
+  border:1.5px solid var(--border); background:var(--surface2);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fira Code',monospace; font-size:.62rem; font-weight:600;
+  cursor:pointer; transition:all .18s; color:var(--ink4);
+}
+.r-dot:hover { transform:scale(1.1); }
+.r-dot.ok  { background:#d4edda; border-color:var(--correct); color:var(--correct); }
+.r-dot.ko  { background:#fdecea; border-color:var(--wrong); color:var(--wrong); }
+.r-dot.active { box-shadow:0 0 0 2px var(--accent2); }
+
+/* POPUP OVERLAY */
+.popup-overlay {
+  position:fixed; inset:0; z-index:9999;
+  background:rgba(26,23,20,.55);
+  backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  padding:1rem;
+  animation:fadeOverlay .4s ease;
+}
+@keyframes fadeOverlay { from{opacity:0} to{opacity:1} }
+.popup-overlay.hidden { display:none; }
+
+.popup-card {
+  background:var(--surface);
+  border:2px solid var(--border);
+  border-radius:20px;
+  padding:2.8rem 2.5rem;
+  max-width:480px; width:100%;
+  text-align:center;
+  box-shadow:0 24px 64px rgba(26,23,20,.25);
+  animation:popIn .5s cubic-bezier(.34,1.56,.64,1);
+  position:relative;
+}
+@keyframes popIn {
+  from{transform:scale(.8) translateY(20px); opacity:0}
+  to{transform:scale(1) translateY(0); opacity:1}
+}
+
+.popup-trophy { font-size:4rem; margin-bottom:1rem; display:block; animation:bounce 1s ease .3s; }
+@keyframes bounce {
+  0%,100%{transform:translateY(0)} 40%{transform:translateY(-16px)} 70%{transform:translateY(-8px)}
+}
+
+.popup-title {
+  font-family:'Fraunces',serif; font-weight:700; font-size:1.8rem;
+  letter-spacing:-.03em; color:var(--ink); margin-bottom:.5rem;
+}
+.popup-score {
+  font-family:'Fira Code',monospace; font-size:2.6rem; font-weight:600;
+  color:var(--accent3); line-height:1; margin:.5rem 0;
+  display:block;
+}
+.popup-msg { font-size:.95rem; color:var(--ink3); line-height:1.6; margin:1rem 0 1.8rem; }
+
+.popup-stars { font-size:1.5rem; letter-spacing:.2rem; margin-bottom:1rem; }
+
+.confetti-row {
+  position:absolute; top:0; left:0; right:0;
+  pointer-events:none; overflow:hidden; height:100%;
+  border-radius:20px;
+}
+.confetti-piece {
+  position:absolute;
+  width:8px; height:8px;
+  border-radius:2px;
+  animation:confettiFall 2.5s ease-in forwards;
+}
+@keyframes confettiFall {
+  0%{transform:translateY(-20px) rotate(0deg); opacity:1}
+  100%{transform:translateY(300px) rotate(720deg); opacity:0}
+}
+
+/* FAIL POPUP */
+.popup-fail .popup-trophy { animation:none; }
+.popup-fail .popup-title { color:var(--accent); }
+.popup-fail .popup-score { color:var(--accent4); }
+
+/* TAG COLORS */
+.tc1 { background:#fdecea; color:var(--tag1); border:1px solid #f5b5ab; }
+.tc2 { background:#e8f0fb; color:var(--tag2); border:1px solid #b3cdf5; }
+.tc3 { background:#e6f5ed; color:var(--tag3); border:1px solid #8dd3b0; }
+.tc4 { background:#fff3cd; color:var(--tag4); border:1px solid #f5d78a; }
+.tc5 { background:#f3e8ff; color:var(--tag5); border:1px solid #d8b4fe; }
+.tc6 { background:#fce7f3; color:var(--tag6); border:1px solid #f9a8d4; }
+
+.hidden { display:none !important; }
+
+/* Responsive */
+@media(max-width:600px) {
+  .q-card { padding:1.3rem 1.1rem; }
+  .exp-body { padding:1rem; }
+  .stats-row { grid-template-columns:repeat(2,1fr); }
+  .results-card { padding:1.8rem 1.2rem; }
+  .popup-card { padding:2rem 1.5rem; }
+  .coverage-grid { grid-template-columns:1fr 1fr; }
+}
+
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="quiz-header" id="mainHeader">
+  <div class="container-fluid px-3 px-md-4">
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
+      <div class="d-flex align-items-center gap-3">
+        <div class="logo-mark">Pattern<em>IQ</em></div>
+        <div class="d-flex gap-2 flex-wrap">
+          <span class="header-badge hb-learn">Learn Mode</span>
+          <span class="header-badge hb-qs">50 Questions</span>
+          <span class="header-badge hb-goal d-none" id="goalBadge">Objectif 80%</span>
+        </div>
+      </div>
+      <div class="score-row d-none" id="scoreRow">
+        <div class="sc-item"><span class="sc-dot" style="background:var(--correct)"></span><span id="scOk">0 ✓</span></div>
+        <div class="sc-item"><span class="sc-dot" style="background:var(--wrong)"></span><span id="scKo">0 ✗</span></div>
+        <div class="sc-item" style="color:var(--accent4)"><i class="bi bi-lightning-fill"></i><span id="scStreak">0</span></div>
+      </div>
+    </div>
+    <div class="d-none" id="progArea">
+      <div class="d-flex justify-content-between mb-1">
+        <span class="prog-label" id="progLbl">0 / 50</span>
+        <span class="prog-label" id="progPct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar-fill" id="progFill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- INTRO -->
+<div id="introScreen" class="intro-wrap">
+  <div class="intro-eyebrow"><i class="bi bi-grid-3x3-gap-fill"></i> Quiz Professionnel — Tous les Patterns</div>
+  <h1 class="intro-headline">Maîtrisez tous<br>les <em>Design Patterns</em></h1>
+  <p class="intro-sub">Un quiz complet sur les patterns de code, d'architecture, de déploiement, de haute disponibilité et de résilience. 50 questions pratiques avec explications détaillées et retours d'expérience terrain.</p>
+
+  <div class="goal-banner">
+    <span class="goal-icon">🎯</span>
+    <div class="goal-text">
+      <strong>Objectif à atteindre : 80% de bonnes réponses (40/50)</strong>
+      <p>Une popup de félicitations vous attendra si vous atteignez cet objectif. En dessous, un plan de révision personnalisé vous sera proposé.</p>
+    </div>
+  </div>
+
+  <!-- COVERAGE -->
+  <div class="mb-2" style="font-family:'Fira Code',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink4)">
+    📚 Sujets couverts dans ce quiz
+  </div>
+  <div class="coverage-grid">
+    <div class="cov-card">
+      <span class="cov-icon">🧩</span>
+      <div class="cov-title">Patterns de Code (GoF)</div>
+      <div class="cov-list">Singleton, Factory, Builder, Observer, Strategy, Decorator, Adapter, Command, Proxy, Facade, Iterator, Template Method</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">🏗️</span>
+      <div class="cov-title">Patterns d'Architecture</div>
+      <div class="cov-list">MVC, MVP, MVVM, Clean Architecture, Hexagonale, Event-Driven, CQRS, Event Sourcing, Saga, ORM, Repository</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">🚀</span>
+      <div class="cov-title">Patterns de Déploiement</div>
+      <div class="cov-list">Blue/Green, Canary, Rolling Update, Feature Flags, Immutable Infrastructure, GitOps, Sidecar, Service Mesh</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">🛡️</span>
+      <div class="cov-title">Haute Disponibilité & Résilience</div>
+      <div class="cov-list">Circuit Breaker, Bulkhead, Retry, Timeout, Rate Limiting, Health Check, Chaos Engineering, Graceful Degradation</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">☁️</span>
+      <div class="cov-title">Patterns Cloud & Microservices</div>
+      <div class="cov-list">API Gateway, BFF, Strangler Fig, Anti-Corruption Layer, Outbox Pattern, CQRS+ES, Service Discovery, Sidecar</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">🔒</span>
+      <div class="cov-title">Patterns de Sécurité & Data</div>
+      <div class="cov-list">Zero Trust, Vault Pattern, RBAC, JWT, OAuth2, Sharding, CQRS Projection, Event Store, Cache-Aside, Write-Through</div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-3 flex-wrap align-items-center mt-3">
+    <button class="btn-start" onclick="startQuiz()">
+      <i class="bi bi-play-fill"></i> Démarrer le Quiz
+    </button>
+    <div style="font-size:.8rem;color:var(--ink4)">⏱ Durée estimée : 30-40 min</div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quizScreen" class="quiz-main hidden"></div>
+<!-- RESULTS -->
+<div id="resultsScreen" class="results-wrap hidden"></div>
+<!-- REVIEW -->
+<div id="reviewScreen" class="quiz-main hidden"></div>
+
+<!-- SUCCESS POPUP -->
+<div class="popup-overlay hidden" id="successPopup">
+  <div class="popup-card">
+    <div class="confetti-row" id="confettiBox"></div>
+    <span class="popup-trophy">🏆</span>
+    <div class="popup-stars" id="popupStars">⭐⭐⭐⭐⭐</div>
+    <div class="popup-title">Félicitations !</div>
+    <span class="popup-score" id="popupScore">--</span>
+    <p class="popup-msg" id="popupMsg">Vous avez atteint l'objectif de 80% ! Vous maîtrisez les patterns professionnels.</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <button class="btn-nav bn-secondary" onclick="closePopup()"><i class="bi bi-eye-fill"></i> Voir le bilan</button>
+      <button class="btn-nav bn-blue" onclick="closeAndReview()"><i class="bi bi-book-fill"></i> Réviser</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAIL POPUP -->
+<div class="popup-overlay hidden" id="failPopup">
+  <div class="popup-card popup-fail">
+    <span class="popup-trophy">📚</span>
+    <div class="popup-title">Continuez !</div>
+    <span class="popup-score" id="failScore">--</span>
+    <p class="popup-msg" id="failMsg">Vous n'avez pas encore atteint l'objectif de 80%. Consultez les explications et réessayez !</p>
+    <div style="background:#fff8e6;border:1.5px solid #f5d78a;border-radius:10px;padding:.9rem 1rem;margin:1rem 0;font-size:.83rem;color:#92400e;text-align:left;">
+      <strong>💡 Plan de révision suggéré :</strong>
+      <div id="revisionPlan" style="margin-top:.5rem;line-height:1.8;"></div>
+    </div>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <button class="btn-nav bn-secondary" onclick="closePopup()"><i class="bi bi-bar-chart-fill"></i> Voir le bilan</button>
+      <button class="btn-nav bn-primary" onclick="resetQuiz()"><i class="bi bi-arrow-clockwise"></i> Réessayer</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const GOAL = 40; // 80% of 50
+
+const QUESTIONS = [
+  // ====== PATTERNS DE CODE (GoF) ======
+  {id:1,cat:'Code GoF',tag:'tc1',diff:'easy',
+   q:"Vous avez besoin d'une seule instance de connexion à la base de données dans toute l'application. Quel pattern utiliser ?",
+   opts:["Factory Method","Singleton","Prototype","Builder"],
+   ok:1,
+   exp:"Le <strong>Singleton</strong> garantit qu'une classe n'a qu'une seule instance et fournit un point d'accès global. Idéal pour les pools de connexions, les configurations, les registres.",
+   tip:"Attention : le Singleton est souvent qualifié d'anti-pattern car il introduit un état global et rend les tests unitaires difficiles (impossible de mocker facilement). Préférez l'injection de dépendances quand possible.",
+   rex:"REX : Un pool de connexions Singleton dans une app Spring. Après migration vers un bean @Scope('singleton') Spring, les tests d'intégration ont pu injecter des mocks de DB, réduisant le temps de test de 70%."
+  },
+  {id:2,cat:'Code GoF',tag:'tc1',diff:'easy',
+   q:"Un système doit créer différents types de documents (PDF, Word, Excel) sans que le code client sache quel type sera créé. Quel pattern ?",
+   opts:["Singleton","Abstract Factory","Factory Method","Builder"],
+   ok:2,
+   exp:"<strong>Abstract Factory</strong> fournit une interface pour créer des familles d'objets liés sans spécifier leurs classes concrètes. Factory Method crée un objet ; Abstract Factory crée des familles d'objets.",
+   tip:"Différence clé : Factory Method = 1 produit, Abstract Factory = famille de produits coordonnés. Ex : AbstractFactory UI peut créer Button + Checkbox + Input cohérents pour Windows ou macOS.",
+   rex:"REX : SDK multi-plateformes (iOS, Android, Web) avec AbstractFactory par plateforme. Ajouter le support Flutter = 1 nouvelle factory concrète, 0 modification du code client. Go-to-market réduit de 3 semaines."
+  },
+  {id:3,cat:'Code GoF',tag:'tc1',diff:'medium',
+   q:"Construire un objet <code>UserProfile</code> avec 15 paramètres optionnels (nom, email, avatar, bio, préférences...). Quel pattern évite le 'telescoping constructor' ?",
+   opts:["Factory Method","Prototype","Builder","Composite"],
+   ok:2,
+   exp:"Le <strong>Builder</strong> sépare la construction d'un objet complexe de sa représentation. Il permet de créer l'objet étape par étape avec une API fluente : <code>new UserProfile.Builder().name('Alice').email('...').bio('...').build()</code>.",
+   tip:"Builder vs Constructor : si > 4 paramètres optionnels, Builder gagne en lisibilité. En Java, Lombok @Builder génère automatiquement le pattern. En Python, dataclasses + keyword arguments couvrent beaucoup de cas.",
+   rex:"REX : API de création de commandes avec 22 champs. Migration vers Builder avec validation dans build() : les erreurs de construction (champs manquants) sont passées de production à compilation. 0 commande invalide depuis 14 mois."
+  },
+  {id:4,cat:'Code GoF',tag:'tc1',diff:'medium',
+   q:"Des widgets UI (boutons, cases à cocher) doivent être notifiés chaque fois qu'une valeur de données change. Quel pattern ?",
+   opts:["Command","Mediator","Observer","Chain of Responsibility"],
+   ok:2,
+   exp:"Le <strong>Observer</strong> (ou Publish-Subscribe) définit une dépendance un-à-plusieurs entre objets. Quand un objet change d'état, tous ses abonnés sont notifiés automatiquement. C'est la base de la réactivité (RxJS, EventEmitter).",
+   tip:"Observer vs Event Bus : Observer = couplage direct publisher-subscriber. Event Bus = découplage total via un bus central. Pour des systèmes distribués, préférez Event Bus ou Message Broker (Kafka, RabbitMQ).",
+   rex:"REX : Dashboard temps réel avec 12 widgets devant se mettre à jour. Implémentation Observer avec RxJS BehaviorSubject. Performance : 40% de re-renders en moins vs polling toutes les 500ms, et code 60% plus court."
+  },
+  {id:5,cat:'Code GoF',tag:'tc1',diff:'medium',
+   q:"Vous avez une ancienne bibliothèque de paiement avec une interface incompatible avec votre nouveau système. Quel pattern permet la compatibilité ?",
+   opts:["Decorator","Bridge","Adapter","Proxy"],
+   ok:2,
+   exp:"L'<strong>Adapter</strong> (Wrapper) convertit l'interface d'une classe en une autre interface attendue par les clients. Il permet à des classes avec des interfaces incompatibles de travailler ensemble. C'est un 'traducteur' d'interface.",
+   tip:"Adapter vs Facade : Adapter = adapter UNE interface existante. Facade = simplifier PLUSIEURS interfaces complexes en une interface unifiée plus simple. Adapter = compatibilité, Facade = simplification.",
+   rex:"REX : Migration de Stripe v1 vers v2 avec breaking changes. Adapter pattern : 0 ligne de code métier modifiée, seul l'adapter a changé. Migration transparente déployée en 1 sprint vs 3 mois estimés initialement."
+  },
+  {id:6,cat:'Code GoF',tag:'tc1',diff:'hard',
+   q:"Vous souhaitez ajouter dynamiquement des comportements (logging, caching, compression) à des objets existants sans modifier leurs classes. Quel pattern ?",
+   opts:["Strategy","Inheritance","Decorator","Composite"],
+   ok:2,
+   exp:"Le <strong>Decorator</strong> attache dynamiquement des responsabilités supplémentaires à un objet. Alternative flexible à l'héritage pour étendre les fonctionnalités. Chaque Decorator implémente la même interface que l'objet décoré.",
+   tip:"Decorator = empilement de comportements à l'exécution. Exemple classique : <code>new GzipStream(new BufferedStream(new FileStream()))</code>. En Python, les @decorators sont une implémentation syntaxique de ce pattern.",
+   rex:"REX : Middleware HTTP avec 6 préoccupations (auth, logging, rate-limit, cache, compression, CORS). Chaque middleware = 1 Decorator. Combinaisons configurables par endpoint. Test de chaque middleware isolément, 95% de coverage."
+  },
+  {id:7,cat:'Code GoF',tag:'tc1',diff:'easy',
+   q:"Vous voulez permettre à un objet de changer son algorithme de tri (tri rapide, tri par fusion, tri à bulles) à l'exécution. Quel pattern ?",
+   opts:["Template Method","Strategy","Command","State"],
+   ok:1,
+   exp:"Le <strong>Strategy</strong> définit une famille d'algorithmes, encapsule chacun d'eux et les rend interchangeables. Le client peut changer d'algorithme à l'exécution. C'est le pattern OCP par excellence.",
+   tip:"Strategy vs Template Method : Strategy = algorithme entier interchangeable (composition). Template Method = structure fixe de l'algorithme, étapes variables (héritage). Strategy = préféré pour la testabilité.",
+   rex:"REX : Moteur de recommandation e-commerce avec 5 algorithmes (collaborative, content-based, trending, A/B test). Strategy pattern : chaque algorithme testé indépendamment, switchable par feature flag en production."
+  },
+  {id:8,cat:'Code GoF',tag:'tc1',diff:'medium',
+   q:"Un sous-système complexe de traitement audio possède des dizaines de classes. Vous voulez exposer une interface simplifiée à l'application cliente. Quel pattern ?",
+   opts:["Adapter","Proxy","Facade","Mediator"],
+   ok:2,
+   exp:"La <strong>Facade</strong> fournit une interface simplifiée à un sous-système complexe. Elle ne cache pas les classes du sous-système (on peut toujours y accéder) mais offre un raccourci pour les cas d'usage courants.",
+   tip:"Facade vs API Gateway : même concept à différentes échelles. Facade = niveau librairie/module. API Gateway = niveau microservices (expose une interface unifiée devant plusieurs services backend).",
+   rex:"REX : SDK vidéo conférence avec 40 classes (codec, réseau, UI, crypto). Facade 'VideoCallSession' avec 5 méthodes. Les intégrateurs passaient de 3 jours à 2 heures pour intégrer le SDK. NPS développeur : +45 points."
+  },
+  {id:9,cat:'Code GoF',tag:'tc1',diff:'hard',
+   q:"Encapsuler une action (ex: clic bouton) comme un objet pour supporter : annulation (undo), replay, queuing, et logging des actions. Quel pattern ?",
+   opts:["Observer","Memento","Command","Chain of Responsibility"],
+   ok:2,
+   exp:"Le <strong>Command</strong> encapsule une requête comme un objet. Cela permet de paramétrer des méthodes avec différentes requêtes, de supporter l'annulation, le rejeu, la file d'attente et le logging. Chaque commande = une action réversible.",
+   tip:"Command + Event Sourcing = architecture puissante. Chaque commande devient un événement persisté. L'état est reconstruit en rejouant les commandes. Undo/Redo = pop de la pile de commandes.",
+   rex:"REX : Éditeur de documents collaboratif. Command pattern pour chaque modification. Undo/redo multi-niveaux. CRDT (Conflict-free Replicated Data Type) implémenté en combinant Commands + Event Sourcing. 0 conflit de données en prod."
+  },
+  // ====== PATTERNS D'ARCHITECTURE ======
+  {id:10,cat:'Architecture',tag:'tc2',diff:'easy',
+   q:"Dans le pattern MVC, une modification de données dans le Modèle doit automatiquement rafraîchir la Vue. Par quel mécanisme ?",
+   opts:["La Vue interroge le Modèle toutes les secondes (polling)","Le Modèle notifie la Vue via le pattern Observer","Le Contrôleur copie les données manuellement dans la Vue","La Vue lit directement la base de données"],
+   ok:1,
+   exp:"Dans <strong>MVC</strong>, le Modèle notifie la Vue de ses changements via <strong>Observer</strong>. La Vue s'abonne aux changements du Modèle. Le Contrôleur gère les interactions utilisateur et met à jour le Modèle. MVC = SoC entre données, présentation et logique.",
+   tip:"MVC vs MVP vs MVVM : MVC = Vue connaît le Modèle. MVP = Vue passive, Presenter orchestre tout, pas de lien direct Vue-Modèle. MVVM = ViewModel avec data binding bidirectionnel. MVVM domine les SPAs modernes (Vue.js, Angular, React+Redux).",
+   rex:"REX : Migration d'une app JSP (MVC serveur) vers Vue.js (MVVM). Le data binding bidirectionnel a éliminé 80% du code de synchronisation manuel Vue-Modèle. Productivité dev frontend : +35%."
+  },
+  {id:11,cat:'Architecture',tag:'tc2',diff:'medium',
+   q:"CQRS signifie Command Query Responsibility Segregation. Dans une app e-commerce à fort trafic, quel est le principal avantage ?",
+   opts:["Réduction du code grâce à une seule base de données","Scalabilité indépendante : scale le côté lecture séparément du côté écriture","Simplification du code en supprimant les DTOs","Suppression du besoin de cache"],
+   ok:1,
+   exp:"<strong>CQRS</strong> sépare les modèles de lecture et d'écriture. En e-commerce : 95% du trafic = lecture (catalogue, recherche). CQRS permet de scaler le read-side (Elasticsearch, Redis) indépendamment du write-side (PostgreSQL transactionnel).",
+   tip:"CQRS simple = 2 modèles dans la même DB. CQRS complet = bases de données séparées synchronisées par événements (éventuelle cohérence). Ne pas appliquer partout : pour le CRUD simple, CQRS est de l'over-engineering.",
+   rex:"REX : Marketplace avec 5M produits. Lectures catalogue : 2s avec modèle unifié. Après CQRS + Elasticsearch pour les lectures : 45ms. Séparation des concerns = scaling indépendant. Coût infra lecture réduit de 60% vs scaling global."
+  },
+  {id:12,cat:'Architecture',tag:'tc2',diff:'hard',
+   q:"Event Sourcing consiste à stocker les événements plutôt que l'état courant. Quel avantage unique offre-t-il qu'une BDD relationnelle classique ne peut pas fournir ?",
+   opts:["Requêtes plus rapides grâce à l'index des événements","Reconstruction complète de l'état à n'importe quel point dans le temps (time travel)","Schéma plus simple sans tables de jointure","Transactions ACID garanties"],
+   ok:1,
+   exp:"<strong>Event Sourcing</strong> : l'état est une projection des événements. Avantage unique = <strong>time travel</strong> : reconstruire l'état du système à n'importe quel instant passé en rejouant les événements jusqu'à ce point. Audit log complet natif.",
+   tip:"Event Sourcing complexité : les schémas d'événements évoluent (event versioning), la reconstruction peut être lente (snapshots nécessaires). Combine avec CQRS pour les projections de lecture performantes.",
+   rex:"REX : Système bancaire avec Event Sourcing. Débogage d'une anomalie comptable : reconstruction de l'état du compte client à J-30 en 3 commandes. Sans ES, investigation de 2 jours. Avec ES : 15 minutes."
+  },
+  {id:13,cat:'Architecture',tag:'tc2',diff:'medium',
+   q:"Dans une architecture microservices, le pattern <strong>Saga</strong> résout quel problème spécifique ?",
+   opts:["Routage des requêtes vers le bon microservice","Gestion des transactions distribuées sans verrou distribué (2PC)","Découverte automatique des services","Chiffrement des communications inter-services"],
+   ok:1,
+   exp:"Le <strong>Saga Pattern</strong> gère les transactions longues dans les systèmes distribués. Au lieu d'une transaction ACID globale (impossible à l'échelle), une Saga = séquence de transactions locales, chacune publiant un événement. En cas d'échec : transactions compensatrices.",
+   tip:"Saga Orchestration vs Choreography : Orchestration = un Saga Orchestrator central dirige les étapes (plus facile à déboguer). Choreography = chaque service réagit aux événements (moins couplé, plus difficile à tracer).",
+   rex:"REX : E-commerce avec Saga pour 'passer commande' (paiement + stock + livraison). Sans Saga, les pannes partielles laissaient des commandes payées sans stock réservé. Après Saga avec rollback compensatoire : 0 incohérence en 8 mois."
+  },
+  {id:14,cat:'Architecture',tag:'tc2',diff:'easy',
+   q:"Le pattern Repository abstrait la couche de persistance. Quelle affirmation le décrit le mieux ?",
+   opts:["Repository = classe qui contient la logique métier","Repository = collection en mémoire d'objets du domaine, abstrayant la source de données","Repository = connexion directe à la base de données","Repository = pattern de cache mémoire"],
+   ok:1,
+   exp:"Le <strong>Repository</strong> représente une collection d'objets du domaine (comme une liste en mémoire) et masque les détails de persistance. Le domaine utilise l'interface sans savoir si les données viennent de PostgreSQL, MongoDB ou d'un cache.",
+   tip:"Repository vs DAO : DAO = opérations CRUD bas niveau sur une table. Repository = abstraction de plus haut niveau, manipule des agrégats du domaine, peut composer plusieurs DAOs. DDD préconise Repository par agrégat.",
+   rex:"REX : Migration PostgreSQL → MongoDB pour une collection de documents. Zéro modification du code métier grâce au Repository. Seule l'implémentation concrète du Repository a changé. Migration en 1 sprint au lieu de 3 mois estimés."
+  },
+  {id:15,cat:'Architecture',tag:'tc2',diff:'hard',
+   q:"L'architecture hexagonale (Ports & Adapters) d'Alistair Cockburn définit 2 types de ports. Lesquels ?",
+   opts:["Ports entrants (primary) pour les acteurs qui utilisent l'app, et sortants (secondary) pour les services que l'app utilise","Ports HTTP et ports TCP uniquement","Ports de lecture et ports d'écriture (CQRS)","Ports synchrones et ports asynchrones"],
+   ok:0,
+   exp:"<strong>Architecture Hexagonale</strong> : ports <strong>entrants</strong> (driving/primary) = interfaces que le domaine expose aux acteurs utilisateurs (UI, API, tests). Ports <strong>sortants</strong> (driven/secondary) = interfaces que le domaine définit pour ses dépendances (DB, email, services externes).",
+   tip:"Conséquence clé : les tests d'intégration peuvent piloter l'application via les ports entrants, et simuler les dépendances via les ports sortants. Le domaine est testable à 100% sans infrastructure réelle.",
+   rex:"REX : Application de trading avec Clean Architecture. Suite de tests du domaine : 800 tests, 0 dépendance à une DB ou API externe. Exécution en 8 sec. Couverture métier : 92%. Bugs de régression : 0 depuis 12 mois."
+  },
+  {id:16,cat:'Architecture',tag:'tc2',diff:'medium',
+   q:"Le pattern ORM (Object-Relational Mapping) mappe des objets vers des tables. Quel est son principal inconvénient sur des requêtes complexes ?",
+   opts:["Il est plus lent qu'une connexion directe à la base","Le 'N+1 Query Problem' : chargement de N entités puis N requêtes supplémentaires pour chaque relation","Il ne supporte pas les transactions","Il ne fonctionne qu'avec PostgreSQL"],
+   ok:1,
+   exp:"Le <strong>problème N+1</strong> : pour afficher 100 commandes avec leurs clients, l'ORM exécute 1 requête (100 commandes) + 100 requêtes (1 par client) = 101 requêtes au lieu d'1 avec JOIN. Solution : eager loading (<code>include/join fetch</code>).",
+   tip:"N+1 detection : activer le logging SQL en dev et compter les requêtes. Outils : Bullet (Rails), Hibernate Statistics, EXPLAIN ANALYZE. Solution : JOIN FETCH, DataLoader (GraphQL), batch loading.",
+   rex:"REX : API GraphQL avec N+1 sur une liste de posts avec auteurs. 500 posts = 501 requêtes SQL = 4.2s de réponse. Après DataLoader (batch loading) : 2 requêtes = 45ms. Coût serveur DB réduit de 78%."
+  },
+  // ====== PATTERNS DE DÉPLOIEMENT ======
+  {id:17,cat:'Déploiement',tag:'tc3',diff:'easy',
+   q:"Le déploiement <strong>Blue/Green</strong> maintient deux environnements identiques. Quel est son avantage principal ?",
+   opts:["Économise 50% des ressources serveur","Rollback instantané : basculer le trafic vers l'ancien environnement en cas de problème","Permet de déployer sans interruption de service et de tester en production","Réduit le temps de build de l'application"],
+   ok:1,
+   exp:"<strong>Blue/Green</strong> : deux environnements identiques (Blue = actuel, Green = nouveau). Le déploiement se fait sur Green, les tests de smoke sont exécutés, puis le trafic bascule. En cas d'incident : rollback = 30 secondes (rebascule vers Blue).",
+   tip:"Blue/Green vs Rolling : Blue/Green = bascule instantanée, mais coût x2 en infrastructure. Rolling = mise à jour progressive instance par instance, moins de ressources mais pas de rollback instantané. Canary = entre les deux.",
+   rex:"REX : Fintech avec Blue/Green. Déploiement d'une migration critique de calcul d'intérêts. Bug détecté 5 min après déploiement : rollback en 23 secondes. Sans Blue/Green, rollback estimé à 2h de procédure manuelle."
+  },
+  {id:18,cat:'Déploiement',tag:'tc3',diff:'medium',
+   q:"Le déploiement <strong>Canary</strong> déroute d'abord 5% du trafic vers la nouvelle version. Quel problème résout-il que Blue/Green ne résout pas bien ?",
+   opts:["Réduction du coût d'infrastructure","Détection des problèmes de performance sous charge réelle avant exposition complète","Déploiement plus rapide","Simplicité de configuration"],
+   ok:1,
+   exp:"<strong>Canary</strong> = exposition progressive à du trafic réel. Permet de détecter : bugs qui n'apparaissent qu'en production (dépendances d'environnement, données réelles), problèmes de performance sous charge réelle, régression sur des segments spécifiques d'utilisateurs.",
+   tip:"Canary avec métriques : définir des 'canary analysis' automatiques (SLO sur latence p99, taux d'erreur, conversion). Si les métriques Canary dégradent vs Baseline → rollback automatique. Outils : Flagger, Argo Rollouts, Spinnaker.",
+   rex:"REX : Netflix utilise Canary à 1% avant chaque déploiement. Bug d'encoding video détecté sur 0.02% des streams en Canary. Sans Canary, aurait impacté 200M utilisateurs. Économie estimée : 15M$ de churn évité."
+  },
+  {id:19,cat:'Déploiement',tag:'tc3',diff:'medium',
+   q:"Les <strong>Feature Flags</strong> (feature toggles) permettent de désactiver une fonctionnalité en production sans redéployer. Dans quel scénario sont-ils indispensables ?",
+   opts:["Pour déboguer des erreurs en production","Pour le déploiement continu : merger du code non terminé sans l'activer (trunk-based development)","Pour la gestion des logs","Pour la configuration des bases de données"],
+   ok:1,
+   exp:"<strong>Feature Flags</strong> découplent <em>déploiement</em> et <em>activation</em>. En trunk-based development, tout le code est mergé sur main (même inachevé) derrière un flag. Activation progressive : 0% → 10% → 100% sans redéploiement. A/B testing natif.",
+   tip:"Types de flags : Release toggle (activation progressive), Ops toggle (kill switch), Experiment toggle (A/B), Permission toggle (features par plan). Attention : trop de flags = 'flag debt'. Supprimer les flags après activation complète.",
+   rex:"REX : Spotify déploie 100+ fois/jour. Feature Flags permettent de déployer le code de 'Spotify AI DJ' 3 mois avant l'activation. Test silencieux, ajustements sans pression de release. Rollback = 1 clic vs rollback de code."
+  },
+  {id:20,cat:'Déploiement',tag:'tc3',diff:'hard',
+   q:"Le pattern <strong>Immutable Infrastructure</strong> signifie que les serveurs ne sont jamais modifiés après déploiement. Quel avantage fondamental apporte-t-il ?",
+   opts:["Réduction du nombre de serveurs nécessaires","Élimination du 'configuration drift' : tous les serveurs d'un même groupe sont toujours identiques","Déploiements plus rapides car pas de tests","Réduction des coûts de bande passante"],
+   ok:1,
+   exp:"<strong>Immutable Infrastructure</strong> : au lieu de mettre à jour un serveur (mutable), on crée une nouvelle image (AMI, Docker), on déploie de nouvelles instances, et on détruit les anciennes. Résultat : aucun 'snowflake server', reproductibilité totale.",
+   tip:"Mise en œuvre : Docker + Kubernetes = immutable par design. Chaque deploy = nouvelle image Docker. GitOps + Terraform pour l'infra. Phœnix servers (recréés régulièrement) vs Snowflake servers (uniques et fragiles).",
+   rex:"REX : Équipe ops passant 30% de son temps à debugger des 'ça marche en staging, pas en prod'. Après immutable infra (Docker + Terraform + AMI par version) : le drift a disparu. MTTR (Mean Time To Recovery) : 45 min → 8 min."
+  },
+  {id:21,cat:'Déploiement',tag:'tc3',diff:'hard',
+   q:"Le pattern <strong>Sidecar</strong> dans Kubernetes déploie un conteneur auxiliaire à côté du conteneur principal dans le même Pod. Quel est l'usage principal ?",
+   opts:["Augmenter les ressources CPU disponibles","Ajouter des comportements cross-cutting (logging, monitoring, mTLS) sans modifier l'application principale","Remplacer le conteneur principal en cas de crash","Partager le storage entre plusieurs Pods"],
+   ok:1,
+   exp:"<strong>Sidecar</strong> : le conteneur auxiliaire partage le namespace réseau et storage du Pod. Usages : Envoy proxy pour mTLS et circuit breaking, Fluentd pour la collecte de logs, Jaeger pour le tracing — sans changer une ligne de l'app principale.",
+   tip:"Service Mesh (Istio, Linkerd) = Sidecar systématique. Envoy est injecté automatiquement dans chaque Pod. L'app ne sait rien du mTLS, du circuit breaking ou du tracing — tout est géré par le Sidecar. SoC au niveau infrastructure.",
+   rex:"REX : Migration vers mTLS (communications chiffrées entre microservices). Sans Sidecar : 3 mois pour modifier 40 services. Avec Istio Sidecar injection automatique : 1 semaine de configuration, 0 modification de code applicatif."
+  },
+  {id:22,cat:'Déploiement',tag:'tc3',diff:'medium',
+   q:"GitOps signifie que l'état souhaité de l'infrastructure est décrit dans Git et appliqué automatiquement. Quel problème résout-il ?",
+   opts:["Stockage des secrets de manière sécurisée","Dérive de configuration : divergence entre ce qui est décrit et ce qui est réellement déployé","Accélération des builds Docker","Réduction du nombre de branches Git"],
+   ok:1,
+   exp:"<strong>GitOps</strong> (Flux, Argo CD) : Git = source de vérité pour l'état de l'infrastructure. Un opérateur surveille Git et réconcilie l'état réel avec l'état désiré. Toute dérive est détectée et corrigée automatiquement. Audit trail = historique Git.",
+   tip:"GitOps vs CI/CD classique : CI/CD pousse (push) vers le cluster. GitOps tire (pull) depuis Git. Sécurité : le cluster n'a pas besoin de credentials CI/CD, l'opérateur GitOps a des permissions minimales depuis l'intérieur.",
+   rex:"REX : Incident production causé par une modification manuelle d'un ConfigMap (hotfix 3h du matin). Avec GitOps (Argo CD) : la dérive est détectée en 60 sec et revertée automatiquement. 0 modification manuelle possible sans PR."
+  },
+  // ====== HAUTE DISPONIBILITÉ & RÉSILIENCE ======
+  {id:23,cat:'Résilience',tag:'tc4',diff:'easy',
+   q:"Le pattern <strong>Circuit Breaker</strong> a 3 états : Closed, Open, Half-Open. À quoi sert l'état Half-Open ?",
+   opts:["Réduire le trafic de moitié","Tester si le service en aval s'est rétabli en laissant passer quelques requêtes","Fermer définitivement le circuit si le service est trop lent","Envoyer des alertes à l'équipe ops"],
+   ok:1,
+   exp:"<strong>Half-Open</strong> = état de sonde. Après une période de timeout (circuit Open), le Circuit Breaker laisse passer UN nombre limité de requêtes test. Si elles réussissent : retour à Closed. Si elles échouent : retour à Open. Évite les 'thundering herd' sur un service qui vient de redémarrer.",
+   tip:"Circuit Breaker paramètres clés : seuil d'ouverture (ex: 50% d'erreurs sur 10 requêtes), timeout Open, seuil de fermeture (ex: 3 succès en Half-Open). Librairies : Resilience4j (Java), Polly (.NET), opossum (Node.js).",
+   rex:"REX : Service de paiement qui tombait en cascade quand le service de fraude était lent. Circuit Breaker Resilience4j : en cas de service fraude indisponible, circuit ouvert, paiements basculés vers un mode dégradé (validation simplifiée). Disponibilité paiements : 99.2% → 99.97%."
+  },
+  {id:24,cat:'Résilience',tag:'tc4',diff:'medium',
+   q:"Le pattern <strong>Bulkhead</strong> (cloison) isole les ressources pour éviter qu'un composant défaillant n'épuise les ressources d'autres composants. Comment l'implémenter concrètement ?",
+   opts:["En utilisant un seul thread pool partagé pour toutes les requêtes","En assignant des thread pools ou connexions DB séparés par service/fonction","En augmentant la RAM totale du serveur","En réduisant le nombre de microservices"],
+   ok:1,
+   exp:"<strong>Bulkhead</strong> : inspiré des cloisons étanches d'un navire. Si un compartiment coule, les autres restent flottants. Implémentation : thread pools dédiés par service externe, connection pools séparés par BDD, limites de ressources par tenant (multi-tenancy).",
+   tip:"Bulkhead + Circuit Breaker = pattern de résilience complet. Bulkhead limite les ressources allouées à chaque dépendance. Circuit Breaker détecte les défaillances et court-circuite. Ensemble : aucune dépendance ne peut faire crasher le système entier.",
+   rex:"REX : API gateway avec 1 thread pool global. Quand le service 'Rapport' était lent (20s/req), il saturait tous les threads, rendant le service 'Auth' indisponible (timeout 30s). Bulkhead avec pool dédié par service : l'Auth reste opérationnel même si Rapport est saturé."
+  },
+  {id:25,cat:'Résilience',tag:'tc4',diff:'easy',
+   q:"Le pattern <strong>Retry with Exponential Backoff</strong> : pourquoi l'exponentiel plutôt qu'un retry immédiat ?",
+   opts:["L'exponentiel est plus simple à implémenter","Éviter le 'thundering herd' : des retries immédiats simultanés de milliers de clients aggravent la surcharge du service","Pour réduire le nombre de logs","Pour économiser de la bande passante"],
+   ok:1,
+   exp:"<strong>Exponential Backoff</strong> : délai entre retries = base^tentative + jitter aléatoire. Exemple : 1s, 2s, 4s, 8s. Sans exponential backoff, des milliers de clients réessayant simultanément (thundering herd) peuvent empêcher la récupération d'un service surchargé.",
+   tip:"Retry best practices : (1) exponential backoff avec jitter, (2) cap du délai max (ex: 60s), (3) retry uniquement sur erreurs retriables (5xx, timeout) pas les 4xx (erreurs client), (4) idempotence des opérations retryées.",
+   rex:"REX : Incident AWS S3 en 2017 amplifié par des retries immédiats en cascade. Après implémentation d'exponential backoff + jitter dans tous les SDK clients : le service S3 a pu récupérer 3x plus vite lors de l'incident suivant."
+  },
+  {id:26,cat:'Résilience',tag:'tc4',diff:'medium',
+   q:"Le <strong>Rate Limiting</strong> peut être implémenté par plusieurs algorithmes. Lequel permet de gérer des pics de trafic courts sans rejeter les requêtes ?",
+   opts:["Fixed Window Counter — compte les requêtes par fenêtre fixe","Token Bucket — accumule des tokens et les consomme, permettant des bursts","Sliding Window Log — log de chaque requête avec timestamp","Leaky Bucket — traite à vitesse constante"],
+   ok:1,
+   exp:"<strong>Token Bucket</strong> : un bucket se remplit de tokens à vitesse constante (ex: 10/sec). Chaque requête consomme 1 token. Si bucket plein : requêtes en burst autorisées jusqu'à épuisement. Idéal pour APIs qui tolèrent des bursts courts mais pas une surcharge soutenue.",
+   tip:"Comparaison : Fixed Window = simple mais 2x le trafic autorisé à la jonction des fenêtres. Sliding Window = précis, coûteux en mémoire. Token Bucket = bursts autorisés. Leaky Bucket = trafic régulier garanti. AWS API Gateway utilise Token Bucket.",
+   rex:"REX : API de génération de rapports. Fixed Window : les clients batch saturaient l'API à minuit (début de fenêtre). Token Bucket : les bursts de minuit sont absorbés, la génération se lisse sur 10 min. 0 erreur 429 sur les jobs batch."
+  },
+  {id:27,cat:'Résilience',tag:'tc4',diff:'hard',
+   q:"Le <strong>Chaos Engineering</strong> (popularisé par Netflix/Chaos Monkey) consiste à introduire délibérément des pannes en production. Quel est le principe directeur ?",
+   opts:["Tester si les développeurs réagissent vite aux incidents","Découvrir les faiblesses de résilience avant qu'elles causent de vraies pannes, dans des conditions contrôlées","Réduire le nombre de tests unitaires","Former les nouveaux développeurs aux incidents"],
+   ok:1,
+   exp:"<strong>Chaos Engineering</strong> : 'Hypothèse de résistance aux pannes' testée en production contrôlée. Principe : identifier les faiblesses (single points of failure, timeouts manquants, absence de Circuit Breaker) avant qu'une vraie panne les révèle de manière catastrophique.",
+   tip:"Chaos Engineering maturity : (1) Game Days en dev/staging, (2) Chaos expériences contrôlées en prod (hors heures de pointe), (3) Chaos automatisé continu en production. Outils : Chaos Monkey, Gremlin, LitmusChaos (Kubernetes), AWS Fault Injection Simulator.",
+   rex:"REX : Netflix tue aléatoirement des instances EC2 en production depuis 2011. Résultat : chaque équipe doit concevoir ses services pour être résilients par défaut. Disponibilité Netflix : 99.99%. L'industrie a adopté le Chaos Engineering comme standard."
+  },
+  {id:28,cat:'Résilience',tag:'tc4',diff:'medium',
+   q:"Le <strong>Health Check Pattern</strong> expose un endpoint /health. Quel est son rôle dans l'orchestration Kubernetes ?",
+   opts:["Afficher les métriques de performance pour le monitoring","Permettre au Kubelet de détecter et remplacer les pods défaillants via Liveness et Readiness probes","Logger toutes les requêtes entrantes","Calculer le score de santé de l'application"],
+   ok:1,
+   exp:"Kubernetes utilise 2 types de health checks : <strong>Liveness</strong> probe (le pod est-il vivant ? Si non : restart), <strong>Readiness</strong> probe (le pod est-il prêt à recevoir du trafic ? Si non : retiré du load balancer). Distinction critique : un pod peut être vivant mais pas prêt (ex: démarrage en cours).",
+   tip:"3 types de probes : HTTP (GET /health → 200), TCP (port ouvert), Exec (commande shell). Liveness trop sensible → restart loop. Readiness trop lente → trafic vers pods déjà morts. Tuning : initialDelaySeconds, periodSeconds, failureThreshold.",
+   rex:"REX : App Spring Boot avec Liveness probe mal configurée (vérifiait une BDD lente). La BDD timeout → Liveness échoue → Kubernetes restart → nouvelles connexions BDD → surcharge → restart en boucle (CrashLoopBackOff). Correction : Liveness = check app thread, Readiness = check DB."
+  },
+  {id:29,cat:'Résilience',tag:'tc4',diff:'hard',
+   q:"La <strong>Graceful Degradation</strong> (dégradation progressive) signifie qu'un système continue de fonctionner partiellement en cas de défaillance. Dans un e-commerce, quel exemple illustre ce pattern ?",
+   opts:["Afficher une page d'erreur 500 si le service de recommandations est indisponible","Afficher le produit sans les recommandations personnalisées si ce service est down","Annuler toutes les commandes en cours si une DB est lente","Bloquer tous les utilisateurs jusqu'à la résolution de l'incident"],
+   ok:1,
+   exp:"<strong>Graceful Degradation</strong> : dégrader fonctionnellement plutôt que planter complètement. L'utilisateur peut toujours acheter (fonctionnalité core) même si les recommandations, les avis ou le live chat sont indisponibles. Hiérarchie de criticité des features.",
+   tip:"Implémentation : classer les fonctionnalités par criticité (Critical, Important, Nice-to-have). Utiliser Circuit Breaker + fallback statique pour les fonctionnalités non-critiques. Fallback = cache, données par défaut, fonctionnalité désactivée.",
+   rex:"REX : Amazon : en cas d'indisponibilité du service de recommandations, la page produit s'affiche sans la section 'Vous aimerez aussi'. Taux de conversion baisse de 3% vs 100% si la page entière plante. Décision business : graceful degradation toujours."
+  },
+  // ====== PATTERNS CLOUD & MICROSERVICES ======
+  {id:30,cat:'Cloud/µServices',tag:'tc5',diff:'medium',
+   q:"Le pattern <strong>API Gateway</strong> est le point d'entrée unique d'une architecture microservices. Quelles fonctionnalités centralise-t-il ?",
+   opts:["Uniquement le routage des requêtes","Authentification, routage, rate limiting, logging, SSL termination, transformation de protocole","Stockage des données de chaque microservice","Compilation et déploiement des microservices"],
+   ok:1,
+   exp:"L'<strong>API Gateway</strong> centralise les préoccupations cross-cutting : (1) Auth/AuthZ, (2) Rate limiting, (3) SSL termination, (4) Load balancing, (5) Routing, (6) Request transformation, (7) Observabilité centralisée. Les microservices n'ont pas à réimplémenter ces fonctions.",
+   tip:"API Gateway vs Service Mesh : Gateway = entrée nord-sud (clients externes). Service Mesh = communications est-ouest (inter-services). Utilisez les deux ensemble : Gateway pour l'entrée publique, Service Mesh pour la sécurité interne.",
+   rex:"REX : Migration d'un monolithe vers microservices. L'API Gateway (Kong) a permis de migrer service par service (Strangler Fig) en redirigeant progressivement le trafic. 0 modification côté clients mobiles pendant la migration de 18 mois."
+  },
+  {id:31,cat:'Cloud/µServices',tag:'tc5',diff:'medium',
+   q:"Le pattern <strong>BFF (Backend for Frontend)</strong> crée un backend spécifique pour chaque type de frontend. Quel problème résout-il ?",
+   opts:["Réduction des coûts d'hébergement","Éviter que l'API générique soit sous-optimale pour tous les clients (mobile, web, TV ont des besoins différents)","Simplification de l'authentification","Réduction du nombre de microservices"],
+   ok:1,
+   exp:"<strong>BFF</strong> : chaque client (iOS, Android, Web, Smart TV) a son propre backend dédié optimisé pour ses besoins spécifiques. Le BFF Web peut renvoyer plus de données (grand écran), le BFF Mobile agrège et minimise les réponses (bande passante limitée).",
+   tip:"BFF est recommandé quand les clients ont des besoins radicalement différents. Si tous les clients ont les mêmes besoins, un seul API Gateway suffit. L'équipe BFF = même équipe que l'équipe frontend (Conway's Law en action).",
+   rex:"REX : SkyScanner avec BFF par plateforme. L'app mobile recevait les mêmes données que le web (5x plus lourdes). Après BFF Mobile : payload réduit de 80%, temps de chargement -60%, batterie mobile -15%. Score App Store : 4.2 → 4.7."
+  },
+  {id:32,cat:'Cloud/µServices',tag:'tc5',diff:'hard',
+   q:"Le pattern <strong>Strangler Fig</strong> migre progressivement un monolithe vers des microservices. Quelle est la stratégie de base ?",
+   opts:["Réécrire le monolithe entièrement avant de basculer","Intercepter les appels au monolithe et rediriger progressivement vers de nouveaux services, jusqu'à 'étrangler' le monolithe","Dupliquer le monolithe et en faire un microservice","Supprimer le monolithe et tout réécrire en 6 mois"],
+   ok:1,
+   exp:"<strong>Strangler Fig</strong> (Martin Fowler) : inspiré du figuier étrangleur qui pousse autour d'un arbre hôte jusqu'à le remplacer. Stratégie : (1) identifier un domaine à extraire, (2) créer le nouveau microservice, (3) rediriger le trafic via l'API Gateway, (4) répéter jusqu'à extinction du monolithe.",
+   tip:"Risques Strangler Fig : données dupliquées pendant la transition (synchronisation nécessaire), feature parity, performance de la couche de redirection. Anti-Corruption Layer entre monolithe et nouveaux services pour éviter la contagion du modèle legacy.",
+   rex:"REX : Booking.com : migration de leur monolithe PHP en 8 ans via Strangler Fig. Jamais de 'big bang rewrite'. Aujourd'hui : 1000+ microservices. Le monolithe original a été progressivement éteint sans interruption de service. 230M utilisateurs impactés 0 fois."
+  },
+  {id:33,cat:'Cloud/µServices',tag:'tc5',diff:'hard',
+   q:"Le pattern <strong>Outbox Pattern</strong> résout le problème de la double écriture. Quel problème adresse-t-il ?",
+   opts:["Comment écrire dans 2 bases de données simultanément","Comment garantir qu'un événement est publié si et seulement si la transaction DB réussit, sans transaction distribuée","Comment optimiser les requêtes de lecture","Comment synchroniser 2 caches Redis"],
+   ok:1,
+   exp:"<strong>Outbox Pattern</strong> : au lieu d'écrire en DB ET publier en Kafka (2 opérations qui peuvent être partiellement incomplètes), on écrit l'événement dans une table 'outbox' dans la MÊME transaction que la donnée. Un processus séparé lit l'outbox et publie les événements.",
+   tip:"Outbox + CDC (Change Data Capture) avec Debezium : Debezium lit le WAL (Write-Ahead Log) PostgreSQL et publie automatiquement les lignes de l'outbox vers Kafka. Garantie at-least-once delivery. Idempotence côté consommateur nécessaire.",
+   rex:"REX : Service de commandes publiant des événements Kafka après chaque commande créée. Crash après écriture DB mais avant publication Kafka = commandes sans événement = stock non décrémenté. Outbox Pattern : 0 événement perdu depuis 18 mois, 100% cohérence."
+  },
+  {id:34,cat:'Cloud/µServices',tag:'tc5',diff:'medium',
+   q:"Le pattern <strong>Service Discovery</strong> permet aux microservices de se trouver dynamiquement. Quelle est la différence entre Client-Side et Server-Side Discovery ?",
+   opts:["Client-Side = plus sécurisé, Server-Side = moins sécurisé","Client-Side = le client interroge le registre et choisit l'instance. Server-Side = un load balancer/proxy interroge le registre pour le client","Client-Side = pour les apps mobile, Server-Side = pour les serveurs","Il n'y a pas de différence fonctionnelle"],
+   ok:1,
+   exp:"<strong>Client-Side</strong> (Ribbon, Eureka client) : le client contient la logique de discovery et de load balancing. Plus de contrôle mais logique dupliquée dans chaque client. <strong>Server-Side</strong> (AWS ALB, Kubernetes Service) : le client appelle un endpoint stable, le routage est géré par l'infra.",
+   tip:"En Kubernetes : Service Discovery = Server-Side natif via kube-proxy et DNS cluster. Un Service Kubernetes = IP stable qui redirige vers les pods. Client-Side Discovery est plus courant hors-Kubernetes (Spring Cloud Netflix stack).",
+   rex:"REX : Migration de Eureka (client-side) vers Kubernetes Services (server-side). La logique de discovery retirée de 40 services. Déploiement simplifié, 0 config de service registry à maintenir, et les équipes peuvent utiliser n'importe quel langage sans SDK Eureka."
+  },
+  // ====== PATTERNS SÉCURITÉ & DATA ======
+  {id:35,cat:'Sécurité/Data',tag:'tc6',diff:'medium',
+   q:"Le pattern <strong>Zero Trust</strong> repose sur le principe 'Never trust, always verify'. Dans une architecture microservices, comment s'implémente-t-il ?",
+   opts:["En supprimant tous les pare-feux pour faire confiance au réseau interne","mTLS entre tous les services + authentification sur chaque appel, même interne, + accès minimal nécessaire","En utilisant un seul VPN pour tous les services","En désactivant l'auth sur le réseau interne pour des raisons de performance"],
+   ok:1,
+   exp:"<strong>Zero Trust</strong> : le réseau interne n'est pas de confiance par défaut. Chaque service s'authentifie mutuellement (mTLS), chaque appel est autorisé (RBAC/ABAC), le principe du moindre privilège s'applique partout. Implémenté par Service Mesh (Istio) ou SPIFFE/SPIRE.",
+   tip:"Zero Trust vs VPN : VPN = 'fait confiance une fois authentifié sur le réseau'. Zero Trust = 'authentifie et autorise CHAQUE requête individuelle'. Latéralisation d'attaque impossible si Zero Trust est bien implémenté.",
+   rex:"REX : Solarwinds breach (2020) : accès VPN compromis → mouvement latéral libre sur tout le réseau interne. Avec Zero Trust, chaque service aurait dû s'authentifier indépendamment → blast radius limité. Le secteur financier impose maintenant Zero Trust après cet incident."
+  },
+  {id:36,cat:'Sécurité/Data',tag:'tc6',diff:'easy',
+   q:"Le pattern <strong>Cache-Aside</strong> (Lazy Loading) : comment fonctionne-t-il ?",
+   opts:["L'application écrit toujours dans le cache ET la DB simultanément","L'application vérifie le cache ; si miss, lit la DB, met en cache, puis retourne la donnée","La DB écrit automatiquement dans le cache","Le cache remplace complètement la base de données"],
+   ok:1,
+   exp:"<strong>Cache-Aside</strong> : (1) GET cache → hit : retourner. Miss : (2) GET DB → (3) SET cache avec TTL → (4) retourner. Simple à implémenter. Risque : cache stampede si de nombreuses requêtes arrivent simultanément sur un même cache miss (dog-piling).",
+   tip:"Cache-Aside vs Read-Through : Cache-Aside = l'app gère le cache. Read-Through = le cache gère lui-même le rechargement depuis la DB. Write-Through = écriture synchrone cache + DB. Write-Behind = écriture async DB après cache. Chaque pattern a ses trade-offs.",
+   rex:"REX : API de catalogue produits avec 5M produits. Cache-Aside avec Redis, TTL 1h. Hit rate : 94%. Charge DB : divisée par 17. P99 latence : 450ms → 12ms. Coût RDS : -65%. Migration réalisée en 1 sprint avec 0 downtime."
+  },
+  {id:37,cat:'Sécurité/Data',tag:'tc6',diff:'medium',
+   q:"Le <strong>Database Sharding</strong> partitionne horizontalement les données. Quelle est la principale complexité introduite ?",
+   opts:["Réduction de la capacité de stockage totale","Les requêtes cross-shard (jointures sur plusieurs shards) deviennent très complexes ou impossibles","Augmentation de la latence de lecture simple","Impossibilité d'utiliser des index"],
+   ok:1,
+   exp:"<strong>Sharding</strong> scale horizontalement mais au prix de la complexité : les jointures cross-shard nécessitent de la logique applicative. Les transactions distribuées entre shards sont complexes. Le resharding (redistribution des données) est délicat.",
+   tip:"Clé de shard : choisir la clé avec soin. Une mauvaise clé → hotspot (un shard surchargé). Bonne clé = distribution uniforme des requêtes. MongoDB, Cassandra, DynamoDB gèrent le sharding nativement. Pour la plupart des apps, partitionnement vertical (read replicas) est suffisant.",
+   rex:"REX : Slack sharde ses messages par workspace_id. Chaque workspace = 1 shard. Les requêtes cross-workspace (analytics globaux) passent par une couche d'agrégation séparée. 12 ans d'hypercroissance sans migration de sharding nécessaire grâce au bon choix de clé."
+  },
+  {id:38,cat:'Sécurité/Data',tag:'tc6',diff:'hard',
+   q:"Le <strong>RBAC</strong> (Role-Based Access Control) vs <strong>ABAC</strong> (Attribute-Based Access Control) : dans quel cas ABAC est-il nécessaire ?",
+   opts:["Quand il y a moins de 10 utilisateurs","Quand les règles d'accès dépendent du contexte dynamique (heure, localisation, sensibilité des données, état du workflow)","ABAC est toujours meilleur que RBAC","RBAC et ABAC sont identiques"],
+   ok:1,
+   exp:"<strong>RBAC</strong> = accès basé sur le rôle (Admin, User, Viewer). Simple mais rigide. <strong>ABAC</strong> = accès basé sur des attributs multiples : qui (rôle, département), quoi (sensibilité doc), quand (heures de bureau), où (IP, pays). Nécessaire pour des règles complexes comme GDPR ou finance régulée.",
+   tip:"Évolution : RBAC pour les cas simples (80% des cas). ABAC pour les organisations avec des règles de conformité complexes (santé HIPAA, finance PCI-DSS). ReBAC (Relationship-Based) = Google Zanzibar = accès basé sur les relations entre objets (Google Docs partage).",
+   rex:"REX : Hôpital avec RBAC simple (médecin/infirmier/admin). Problème : un médecin pouvait voir les dossiers de patients d'autres services. Après ABAC : accès conditionnel au service du médecin + au consentement patient + aux heures de service. Conformité HIPAA atteinte."
+  },
+  // ====== QUESTIONS COMBINÉES / AVANCÉES ======
+  {id:39,cat:'Architecture',tag:'tc2',diff:'hard',
+   q:"Dans le pattern <strong>Event-Driven Architecture</strong>, quelle est la différence entre Event Notification et Event-Carried State Transfer ?",
+   opts:["Ce sont deux noms pour le même pattern","Event Notification = notifie qu'un changement a eu lieu (faible payload). Event-Carried State Transfer = transporte le nouvel état complet dans l'événement","Event Notification = synchrone, Event-Carried = asynchrone","Event Notification = pour la résilience, Event-Carried = pour la performance"],
+   ok:1,
+   exp:"<strong>Event Notification</strong> : 'UserUpdated(userId:123)' — le consommateur doit requêter l'état si nécessaire. Couplage minimal. <strong>Event-Carried State Transfer</strong> : 'UserUpdated{id:123, name:'Alice', email:'...'}'  — le consommateur a tout le nécessaire, autonome. Trade-off : taille des messages vs couplage.",
+   tip:"Choix : Event Notification si les consommateurs n'ont pas toujours besoin de l'état complet, et si la source est l'authorité absolue. Event-Carried State Transfer si les consommateurs ont besoin d'autonomie et si les requêtes aller-retour sont coûteuses.",
+   rex:"REX : Kafka avec Event-Carried State Transfer pour le service de notifications push. Aucun appel retour vers le service User nécessaire. Découplage total : panne du service User = 0 impact sur les notifications. Throughput : 500k événements/sec."
+  },
+  {id:40,cat:'Code GoF',tag:'tc1',diff:'medium',
+   q:"Le pattern <strong>Proxy</strong> peut être utilisé dans 3 contextes différents. Lequel correspond au 'Virtual Proxy' (proxy de virtualisation) ?",
+   opts:["Proxy qui contrôle l'accès selon les permissions utilisateur","Proxy qui crée un objet coûteux à la demande (lazy initialization)","Proxy qui logue toutes les opérations","Proxy qui distribue les appels sur plusieurs serveurs"],
+   ok:1,
+   exp:"<strong>Virtual Proxy</strong> = lazy initialization. L'objet coûteux (ex: image haute résolution, connexion DB) n'est créé que lorsqu'il est réellement nécessaire. Autres types : Protection Proxy (contrôle d'accès), Remote Proxy (objet distant), Logging Proxy (aspect logging).",
+   tip:"Proxy vs Decorator : tous deux wrappent un objet avec la même interface. Différence d'intention : Decorator = ajoute des comportements. Proxy = contrôle l'accès à l'objet. En pratique : AOP (Aspect-Oriented Programming) utilise des Proxies dynamiques pour injecter du comportement cross-cutting.",
+   rex:"REX : Service de génération de rapports PDF (2s de création). Virtual Proxy : l'objet Report est créé à la demande, pas au démarrage. Mémoire utilisée au boot : -60%. Temps de démarrage de l'app : 8s → 1.2s."
+  },
+  {id:41,cat:'Architecture',tag:'tc2',diff:'hard',
+   q:"Dans le pattern <strong>MVVM</strong> (Model-View-ViewModel), quel est le rôle central du ViewModel ?",
+   opts:["Gérer directement les requêtes HTTP vers l'API","Exposer des observables (état + commandes) et transformer les données du Modèle pour la Vue, sans référencer la Vue","Remplacer le Modèle pour les tests","Stocker les données en base de données locale"],
+   ok:1,
+   exp:"Le <strong>ViewModel</strong> expose l'état de la Vue sous forme d'observables (LiveData, State, Signal) et des commandes (fonctions). Il ne référence jamais la Vue directement (testabilité). Il transforme les données brutes du Modèle en données présentables pour la Vue.",
+   tip:"MVVM testabilité : le ViewModel est testé unitairement sans créer de Vue. La Vue est passive (réagit aux observables). MVI (Model-View-Intent) = évolution de MVVM avec état unidirectionnel — plus prédictible pour les UIs complexes. Redux, Vuex, Bloc (Flutter) sont des implémentations.",
+   rex:"REX : App Android migrant de MVP vers MVVM avec LiveData. Les Presenters avaient des références View = memory leaks. Après MVVM : 0 memory leak (ViewModel survit aux rotations d'écran), tests ViewModel sans Robolectric, couverture 78% → 91%."
+  },
+  {id:42,cat:'Déploiement',tag:'tc3',diff:'hard',
+   q:"Le pattern <strong>Service Mesh</strong> (Istio, Linkerd) décharge les microservices de certaines responsabilités. Lesquelles ?",
+   opts:["La logique métier et les calculs CPU","mTLS, circuit breaking, observabilité, retry, traffic shaping — tout sans modifier le code applicatif","Le stockage des données et les migrations de base","La découverte de ressources Kubernetes"],
+   ok:1,
+   exp:"Le <strong>Service Mesh</strong> via Sidecar Proxy (Envoy) gère automatiquement : mTLS (chiffrement inter-services), Circuit Breaker, Retry, Timeout, Rate Limiting, Distributed Tracing, Métriques. Tout cela sans 1 ligne de code dans les microservices.",
+   tip:"Service Mesh complexité : Istio ajoute ~100ms de latence au P99 et consomme des ressources significatives. Pour des petites architectures (< 20 services), Istio est de l'over-engineering. Linkerd est plus léger. Évaluer le trade-off complexité/bénéfices.",
+   rex:"REX : 120 microservices sans Service Mesh = 120 implémentations différentes de retry/timeout (certaines manquantes). Après Istio : politique uniforme, mTLS automatique, distributed tracing actif. MTTR incidents réduit de 68% grâce à la visibilité traçage."
+  },
+  {id:43,cat:'Résilience',tag:'tc4',diff:'medium',
+   q:"Le pattern <strong>Timeout</strong> est l'un des plus simples mais aussi l'un des plus négligés. Pourquoi son absence peut-elle causer une cascade de pannes ?",
+   opts:["Les timeouts ralentissent les applications","Sans timeout, un service lent bloque les threads de l'appelant indéfiniment, épuisant le pool de threads et rendant l'appelant lui-même indisponible","Les timeouts causent des erreurs 404","Les timeouts sont gérés automatiquement par le réseau"],
+   ok:1,
+   exp:"Sans <strong>Timeout</strong> : 1 service lent → threads de l'appelant bloqués indéfiniment → pool de threads épuisé → l'appelant devient indisponible → cascade vers ses propres appelants. C'est la 'cascade de défaillances'. Timeout = première ligne de défense de résilience.",
+   tip:"Règle : TOUJOURS configurer des timeouts sur tous les appels réseau. Timeout = connect timeout + read timeout. Valeurs raisonnables : 100-500ms pour les services internes, 1-5s pour les APIs externes. Trop bas = erreurs légitimes, trop haut = cascade de pannes.",
+   rex:"REX : Panne totale d'une plateforme de streaming (2019). Cause racine : 1 service d'analytics sans timeout appelait une DB lente. En 8 min : 2000 threads bloqués dans 12 services en cascade. Timeout manquant = panne de 47 min. Correction : 2 lignes de configuration."
+  },
+  {id:44,cat:'Cloud/µServices',tag:'tc5',diff:'medium',
+   q:"Le pattern <strong>Anti-Corruption Layer</strong> (ACL) dans DDD isole votre domaine d'un système externe. Quel problème résout-il ?",
+   opts:["Réduction du coût des appels API externes","Empêcher le modèle de domaine d'un système externe (legacy ou tiers) de polluer votre modèle de domaine interne","Amélioration des performances des appels réseau","Gestion des secrets et credentials d'APIs tierces"],
+   ok:1,
+   exp:"L'<strong>Anti-Corruption Layer</strong> = couche de traduction qui convertit les modèles du système externe en modèles de votre domaine. Le système externe peut changer ou avoir un modèle 'pollué' sans impacter votre code métier. Implémenté via Adapter + Translator.",
+   tip:"ACL est particulièrement important lors de l'intégration de systèmes legacy (SAP, Oracle ERP) dont les modèles de données sont dictés par l'outil, pas par votre métier. Sans ACL, les concepts du legacy contaminent votre architecture.",
+   rex:"REX : Intégration SAP pour la gestion des stocks. Sans ACL : les concepts SAP (Material Number, Storage Location, Movement Type) dans le code e-commerce. Avec ACL : traduction en 'Product', 'Warehouse', 'StockMovement'. Indépendance totale : migration SAP → autre ERP en 2 semaines."
+  },
+  {id:45,cat:'Code GoF',tag:'tc1',diff:'medium',
+   q:"Le pattern <strong>Template Method</strong> définit le squelette d'un algorithme dans une classe de base. Quelle est sa différence fondamentale avec Strategy ?",
+   opts:["Template Method utilise des interfaces, Strategy utilise l'héritage","Template Method = structure fixe de l'algorithme (héritage), étapes variables dans les sous-classes. Strategy = algorithme entier interchangeable (composition)","Template Method est pour les templates HTML uniquement","Strategy et Template Method sont identiques"],
+   ok:1,
+   exp:"<strong>Template Method</strong> utilise l'<em>héritage</em> : la classe abstraite définit le squelette, les sous-classes implémentent les étapes variables. <strong>Strategy</strong> utilise la <em>composition</em> : l'algorithme complet est encapsulé dans un objet injecté. Strategy = plus flexible et testable.",
+   tip:"Règle moderne : préférez Strategy (composition) à Template Method (héritage). Mais Template Method reste pertinent pour les frameworks (ex: Spring JdbcTemplate, TestCase JUnit) où le framework définit le squelette et vous implémentez les étapes.",
+   rex:"REX : Moteur ETL avec Template Method : extract() → transform() → load() définis dans la classe de base. 15 types de sources = 15 sous-classes implémentant extract(). Ajout d'une nouvelle source : 1 nouvelle sous-classe, 0 modification du squelette ETL."
+  },
+  {id:46,cat:'Architecture',tag:'tc2',diff:'hard',
+   q:"Le <strong>Choreography</strong> vs <strong>Orchestration</strong> dans les Sagas : quel est le principal avantage de la Choreography ?",
+   opts:["Plus facile à déboguer et tracer","Pas de point de défaillance unique (orchestrateur central), chaque service est autonome et découplé","Plus rapide à implémenter pour les workflows complexes","Meilleure gestion des erreurs et rollbacks"],
+   ok:1,
+   exp:"<strong>Choreography</strong> = pas d'orchestrateur central. Chaque service réagit aux événements et publie les siens. Avantage : pas de SPOF, couplage minimal, chaque service autonome. Inconvénient : 'qui fait quoi ?' difficile à visualiser, débogage complexe.",
+   tip:"En pratique : Orchestration pour les workflows complexes avec beaucoup de logique de gestion d'erreurs (easier to see the big picture). Choreography pour les workflows simples ou quand l'autonomie des équipes est prioritaire. EventStoreDB ou Temporal peuvent aider avec la visibilité en Choreography.",
+   rex:"REX : Workflow de commande avec 8 étapes. Choreography choisie initialement : bug de double débit indétectable pendant 3 semaines (événements sans traçage bout-en-bout). Migration vers Orchestration (Temporal) : visibilité complète du workflow, détection des anomalies en < 1 min."
+  },
+  {id:47,cat:'Résilience',tag:'tc4',diff:'hard',
+   q:"Le pattern <strong>Idempotency Key</strong> est crucial dans les systèmes distribués avec retry. Quel problème résout-il ?",
+   opts:["Réduction de la latence des requêtes répétées","Éviter les doublons lors des retries : même requête avec même clé = même résultat, exécutée une seule fois","Chiffrement des requêtes idempotentes","Réduction de la bande passante réseau"],
+   ok:1,
+   exp:"<strong>Idempotency Key</strong> : le client génère une clé unique par opération (UUID). Le serveur stocke le résultat associé à cette clé. Si la même clé est reçue à nouveau (retry), le serveur retourne le résultat cached sans réexécuter l'opération. Critique pour les paiements.",
+   tip:"Implémentation : header <code>Idempotency-Key: uuid</code> (Stripe). Le serveur stocke (key → response) en Redis avec TTL 24h. Toute opération non-idempotente (paiement, email, création d'entité) DOIT implémenter ce pattern dès qu'il y a un retry.",
+   rex:"REX : Bug Stripe (2012) : un client retail avait retryé une requête de paiement 3 fois suite à un timeout réseau. Sans idempotency key : 3 débitements. Depuis, Stripe impose les idempotency keys sur tous les endpoints de paiement. Standard de l'industrie fintech."
+  },
+  {id:48,cat:'Déploiement',tag:'tc3',diff:'medium',
+   q:"Le <strong>Rolling Update</strong> met à jour les instances une par une. Quel est son principal risque vs Blue/Green ?",
+   opts:["Rollback plus rapide que Blue/Green","Pendant la mise à jour, 2 versions cohabitent en production — nécessite une compatibilité descendante des APIs et des schémas","Utilise plus de ressources infra que Blue/Green","Ne fonctionne pas avec Kubernetes"],
+   ok:1,
+   exp:"<strong>Rolling Update</strong> : pendant la transition, v1 et v2 reçoivent du trafic simultanément. Problème : si v2 introduit un changement de schéma DB ou un breaking change d'API, les v1 encore actives plancheront. Nécessite une période de compatibilité (expand/contract migrations).",
+   tip:"Expand/Contract pattern pour les migrations DB : (1) Expand = ajouter la nouvelle colonne (compatible v1 et v2), (2) Migrer les données, (3) Contract = supprimer l'ancienne colonne (une fois v1 disparue). Jamais de breaking change en 1 étape avec Rolling Update.",
+   rex:"REX : Migration de colonne 'user_id' integer → UUID. Déployé en Rolling Update sans expand/contract. V1 (integer) et V2 (UUID) cohabitaient = erreurs de cast. 23 min de dégradation. Rollback manuel de 45 min. Leçon : always expand/contract avec Rolling."
+  },
+  {id:49,cat:'Code GoF',tag:'tc1',diff:'medium',
+   q:"Le pattern <strong>Iterator</strong> fournit un moyen séquentiel d'accéder aux éléments d'une collection sans exposer sa représentation interne. Quel avantage principal offre-t-il ?",
+   opts:["Amélioration des performances de tri","Le code client est découplé de la structure de données (tableau, liste chaînée, arbre, graphe) — même interface d'itération","Réduction de l'utilisation mémoire","Accès aléatoire plus rapide aux éléments"],
+   ok:1,
+   exp:"<strong>Iterator</strong> : le client utilise <code>hasNext()</code> et <code>next()</code> sans savoir si c'est un tableau, un arbre ou un stream. En Java : <code>Iterable</code> interface + for-each. En Python : <code>__iter__</code>. Permet de changer la structure de données sans modifier le code client.",
+   tip:"Iterator + Lazy Evaluation = pattern puissant. Les streams Java, les générateurs Python, les observables RxJS sont tous des iterators paresseux. Ils permettent de traiter des données potentiellement infinies sans charger tout en mémoire.",
+   rex:"REX : API de pagination avec Iterator pattern. Changement de MySQL vers Elasticsearch comme store de recherche. 0 modification du code de pagination côté API — l'Iterator cachait la source. Migration transparente, 0 régression côté clients."
+  },
+  {id:50,cat:'Résilience',tag:'tc4',diff:'hard',
+   q:"Synthèse : un système haute disponibilité (99.99% = 52 min/an de downtime max) doit combiner plusieurs patterns. Quelle combinaison est la plus complète ?",
+   opts:["Singleton + Factory + Observer — patterns GoF suffisent pour la HA","Circuit Breaker + Bulkhead + Retry + Timeout + Health Check + Graceful Degradation + Multiple AZ deployement","Blue/Green uniquement — déploiements sans downtime = HA","Monitoring + Alerting uniquement — réagir vite suffit"],
+   ok:1,
+   exp:"La <strong>HA à 99.99%</strong> requiert une défense en profondeur : (1) Circuit Breaker contre les pannes en cascade, (2) Bulkhead pour l'isolation, (3) Retry + Backoff pour les erreurs transitoires, (4) Timeout pour éviter les blocages, (5) Health Checks pour la détection rapide, (6) Graceful Degradation pour la continuité partielle, (7) Multi-AZ pour la redondance géographique.",
+   tip:"Le CAP theorem limite la HA absolue : Consistency + Availability + Partition Tolerance — choisissez 2. La HA favorise AP (Available + Partition Tolerant) avec eventual consistency. Les 4 nœuds de défaillance à surveiller : réseau, serveur, logiciel, données.",
+   rex:"REX : AWS S3 = 99.999999999% (11 nines) de durabilité via réplication multi-AZ + erasure coding + automatic healing. 99.99% de disponibilité via Route 53 health checks + automatic failover + circuit breakers internes. Référence de l'industrie pour la HA."
+  }
+];
+
+// Category stats
+const CATS = ['Code GoF','Architecture','Déploiement','Résilience','Cloud/µServices','Sécurité/Data'];
+
+// State
+let cur=0, score=0, wrong=0, streak=0, bestStreak=0;
+let answered = new Array(50).fill(null);
+let userAns   = new Array(50).fill(null);
+let mode = 'quiz';
+
+function startQuiz() {
+  document.getElementById('introScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  document.getElementById('scoreRow').classList.remove('d-none');
+  document.getElementById('progArea').classList.remove('d-none');
+  document.getElementById('goalBadge').classList.remove('d-none');
+  renderQ();
+}
+
+function renderQ(idx) {
+  if(idx!==undefined) cur=idx;
+  const q = QUESTIONS[cur];
+  const screen = document.getElementById('quizScreen');
+  const L = ['A','B','C','D'];
+  const diffLbl = {easy:'Débutant',medium:'Intermédiaire',hard:'Expert'}[q.diff];
+  const diffCls = {easy:'d-easy',medium:'d-medium',hard:'d-hard'}[q.diff];
+
+  const opts = q.opts.map((o,i)=>{
+    let cls='';
+    if(answered[cur]!==null){
+      if(i===q.ok) cls='correct';
+      else if(i===userAns[cur]&&i!==q.ok) cls='wrong';
+    }
+    return `<button class="opt-btn ${cls}" onclick="pick(${i})" ${answered[cur]!==null?'disabled':''}>
+      <span class="opt-letter">${L[i]}</span><span>${o}</span>
+    </button>`;
+  }).join('');
+
+  const exp = answered[cur]!==null ? buildExp(q, userAns[cur]) : '';
+
+  screen.innerHTML = `
+    <div class="q-card">
+      <div class="q-meta">
+        <span class="q-num">Q${cur+1}/50</span>
+        <span class="q-tag ${q.tag}">${q.cat}</span>
+        <span class="diff-badge ${diffCls}">${diffLbl}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid">${opts}</div>
+      ${exp}
+      <div class="nav-bar">
+        ${cur>0?`<button class="btn-nav bn-secondary" onclick="goQ(${cur-1})"><i class="bi bi-arrow-left"></i> Préc.</button>`:''}
+        ${answered[cur]!==null&&cur<49?`<button class="btn-nav bn-primary" onclick="nextQ()">Suivant <i class="bi bi-arrow-right"></i></button>`:''}
+        ${answered[cur]!==null&&cur===49?`<button class="btn-nav bn-primary" onclick="showResults()"><i class="bi bi-trophy-fill"></i> Résultats</button>`:''}
+      </div>
+    </div>`;
+  updateProg();
+}
+
+function buildExp(q, ui) {
+  const ok = ui===q.ok;
+  return `<div class="exp-panel">
+    <div class="exp-header ${ok?'exp-ok':'exp-ko'}">
+      <i class="bi bi-${ok?'check-circle-fill':'x-circle-fill'}"></i>
+      ${ok?'Parfait ! Bonne réponse.':`Incorrect — bonne réponse : <strong>${['A','B','C','D'][q.ok]}</strong>`}
+    </div>
+    <div class="exp-body">
+      <div class="exp-section">
+        <div class="exp-lbl"><i class="bi bi-lightbulb-fill" style="color:var(--accent4)"></i> Explication</div>
+        <div class="exp-txt">${q.exp}</div>
+      </div>
+      <div class="exp-section">
+        <div class="exp-lbl"><i class="bi bi-stars" style="color:var(--accent2)"></i> Tip Pratique</div>
+        <div class="tip-box"><p>${q.tip}</p></div>
+      </div>
+      <div class="exp-section">
+        <div class="exp-lbl"><i class="bi bi-journal-bookmark-fill" style="color:var(--accent4)"></i> REX Terrain</div>
+        <div class="rex-box"><p>${q.rex}</p></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function pick(i) {
+  if(answered[cur]!==null) return;
+  const q=QUESTIONS[cur];
+  userAns[cur]=i;
+  if(i===q.ok){ answered[cur]='ok'; score++; streak++; bestStreak=Math.max(bestStreak,streak); }
+  else         { answered[cur]='ko'; wrong++;  streak=0; }
+  document.getElementById('scOk').textContent=score+' ✓';
+  document.getElementById('scKo').textContent=wrong+' ✗';
+  document.getElementById('scStreak').textContent=streak;
+  updateProg();
+  renderQ();
+}
+
+function nextQ() { if(cur<49){cur++;renderQ();} else showResults(); }
+function goQ(i)  { cur=i; renderQ(); }
+
+function updateProg() {
+  const done=answered.filter(a=>a!==null).length;
+  const p=Math.round(done/50*100);
+  document.getElementById('progLbl').textContent=`${done} / 50`;
+  document.getElementById('progPct').textContent=`${p}%`;
+  document.getElementById('progFill').style.width=p+'%';
+}
+
+function showResults() {
+  mode='results';
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.remove('hidden');
+
+  const pct=Math.round(score/50*100);
+  let grade, gradeColor;
+  if(pct>=90){grade='Architecte Expert 🏆';gradeColor='var(--correct)';}
+  else if(pct>=80){grade='Excellent Niveau Senior 🎯';gradeColor='var(--accent2)';}
+  else if(pct>=70){grade='Bon Niveau Intermédiaire 📈';gradeColor='var(--accent4)';}
+  else if(pct>=60){grade='Niveau à consolider 📚';gradeColor='var(--accent4)';}
+  else{grade='À retravailler 🔄';gradeColor='var(--accent)';}
+
+  // Cat breakdown
+  const catStats={};
+  CATS.forEach(c=>catStats[c]={t:0,ok:0});
+  QUESTIONS.forEach((q,i)=>{
+    catStats[q.cat].t++;
+    if(answered[i]==='ok') catStats[q.cat].ok++;
+  });
+
+  const bdHTML=Object.entries(catStats).map(([c,s])=>{
+    const p=Math.round(s.ok/s.t*100);
+    return `<div class="bd-row">
+      <div class="bd-label">${c}</div>
+      <div class="bd-bar-wrap"><div class="bd-bar-fill" style="width:${p}%"></div></div>
+      <div class="bd-pct">${p}%</div>
+    </div>`;
+  }).join('');
+
+  const dotsHTML=answered.map((a,i)=>{
+    const cls=a==='ok'?'ok':a==='ko'?'ko':'';
+    return `<div class="r-dot ${cls}" onclick="startReview(${i})" title="Q${i+1}">${i+1}</div>`;
+  }).join('');
+
+  const deg=pct*3.6;
+  document.getElementById('resultsScreen').innerHTML=`
+    <div class="results-card">
+      <div class="results-ring-wrap">
+        <div class="results-ring" style="--ang:${deg}deg">
+          <div class="ring-inner">
+            <span class="ring-pct" style="color:${gradeColor}">${pct}%</span>
+            <span class="ring-lbl">Score</span>
+          </div>
+        </div>
+      </div>
+      <div class="res-title">${grade}</div>
+      <div class="res-sub">${score}/50 correctes · Meilleure série : ${bestStreak} ⚡ · Objectif : ${score>=GOAL?'✅ Atteint !':'❌ Non atteint ('+GOAL+'/50 requis)'}</div>
+      <div class="stats-row">
+        <div class="stat-box"><span class="stat-val" style="color:var(--correct)">${score}</span><span class="stat-lbl">Correctes</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:var(--wrong)">${wrong}</span><span class="stat-lbl">Incorrectes</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:var(--accent4)">${bestStreak}</span><span class="stat-lbl">Meilleure série</span></div>
+      </div>
+      <div class="breakdown">
+        <div class="bd-title">Performance par Catégorie</div>
+        ${bdHTML}
+      </div>
+      <div class="breakdown">
+        <div class="bd-title">Réviser question par question</div>
+        <div class="review-map">${dotsHTML}</div>
+      </div>
+      <div class="d-flex gap-3 justify-content-center flex-wrap mt-3">
+        <button class="btn-nav bn-secondary" onclick="resetQuiz()"><i class="bi bi-arrow-clockwise"></i> Recommencer</button>
+        <button class="btn-nav bn-blue" onclick="startReview(0)"><i class="bi bi-book"></i> Tout réviser</button>
+      </div>
+    </div>`;
+
+  // Show popup after short delay
+  setTimeout(()=>showPopup(pct,score), 700);
+}
+
+function showPopup(pct, sc) {
+  if(sc >= GOAL) {
+    // SUCCESS
+    const stars = pct>=90?'⭐⭐⭐⭐⭐':pct>=85?'⭐⭐⭐⭐½':pct>=80?'⭐⭐⭐⭐':'⭐⭐⭐';
+    document.getElementById('popupStars').textContent=stars;
+    document.getElementById('popupScore').textContent=sc+'/50 — '+pct+'%';
+    document.getElementById('popupMsg').textContent=
+      pct>=90 ? 'Score exceptionnel ! Vous avez une maîtrise experte de tous les patterns. Félicitations !'
+               : 'Vous avez atteint l\'objectif de 80% ! Vous maîtrisez les patterns professionnels. Continuez sur cette lancée !';
+    spawnConfetti();
+    document.getElementById('successPopup').classList.remove('hidden');
+  } else {
+    // FAIL — build revision plan
+    const catStats={};
+    CATS.forEach(c=>catStats[c]={t:0,ok:0});
+    QUESTIONS.forEach((q,i)=>{ catStats[q.cat].t++; if(answered[i]==='ok') catStats[q.cat].ok++; });
+    const weak=Object.entries(catStats).filter(([,s])=>Math.round(s.ok/s.t*100)<60).map(([c])=>c);
+    const plan=weak.length?weak.map(c=>`• Revoir : <strong>${c}</strong>`).join('<br>')
+      :'• Globalement proche de l\'objectif — concentrez-vous sur les questions manquées.';
+    document.getElementById('failScore').textContent=sc+'/50 — '+pct+'%';
+    document.getElementById('failMsg').textContent=`Il vous manquait ${GOAL-sc} question${GOAL-sc>1?'s':''} pour atteindre l'objectif de 80%. Utilisez les explications détaillées et le mode révision !`;
+    document.getElementById('revisionPlan').innerHTML=plan;
+    document.getElementById('failPopup').classList.remove('hidden');
+  }
+}
+
+function spawnConfetti() {
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#c84b2f','#2a6bbf','#1a8a5a','#b5620a','#7c3d8c','#c44f87','#f4a261','#e76f51'];
+  for(let i=0;i<40;i++){
+    const c=document.createElement('div');
+    c.className='confetti-piece';
+    c.style.cssText=`
+      left:${Math.random()*100}%;
+      top:${Math.random()*-20-10}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-delay:${Math.random()*1.5}s;
+      animation-duration:${2+Math.random()*1.5}s;
+      transform:rotate(${Math.random()*360}deg);
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+    `;
+    box.appendChild(c);
+  }
+}
+
+function closePopup() {
+  document.getElementById('successPopup').classList.add('hidden');
+  document.getElementById('failPopup').classList.add('hidden');
+}
+
+function closeAndReview() {
+  closePopup();
+  startReview(0);
+}
+
+function startReview(startIdx) {
+  mode='review';
+  cur=startIdx;
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('reviewScreen').classList.remove('hidden');
+  renderReview();
+}
+
+function renderReview() {
+  const q=QUESTIONS[cur];
+  const screen=document.getElementById('reviewScreen');
+  const L=['A','B','C','D'];
+  const diffLbl={easy:'Débutant',medium:'Intermédiaire',hard:'Expert'}[q.diff];
+  const diffCls={easy:'d-easy',medium:'d-medium',hard:'d-hard'}[q.diff];
+
+  const opts=q.opts.map((o,i)=>{
+    const cls=i===q.ok?'correct':(i===userAns[cur]&&i!==q.ok?'wrong':'');
+    return `<button class="opt-btn ${cls}" disabled>
+      <span class="opt-letter">${L[i]}</span><span>${o}</span>
+    </button>`;
+  }).join('');
+
+  const dotsHTML=QUESTIONS.map((_,i)=>{
+    const cls=answered[i]==='ok'?'ok':answered[i]==='ko'?'ko':'';
+    const active=i===cur?'active':'';
+    return `<div class="r-dot ${cls} ${active}" onclick="jumpReview(${i})">${i+1}</div>`;
+  }).join('');
+
+  const statusLabel = answered[cur]==='ok'
+    ? '<span style="color:var(--correct);font-size:.78rem;font-weight:700">✓ Correct</span>'
+    : answered[cur]==='ko'
+    ? '<span style="color:var(--wrong);font-size:.78rem;font-weight:700">✗ Incorrect</span>'
+    : '<span style="color:var(--ink4);font-size:.78rem">— Non répondu</span>';
+
+  screen.innerHTML=`
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'Fira Code',monospace;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink4);margin-bottom:.6rem">Navigation rapide</div>
+      <div class="review-map">${dotsHTML}</div>
+    </div>
+    <div class="q-card">
+      <div class="q-meta">
+        <span class="q-num">Q${cur+1}/50</span>
+        <span class="q-tag ${q.tag}">${q.cat}</span>
+        <span class="diff-badge ${diffCls}">${diffLbl}</span>
+        ${statusLabel}
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid">${opts}</div>
+      ${buildExp(q, userAns[cur]!==null?userAns[cur]:q.ok)}
+      <div class="nav-bar">
+        ${cur>0?`<button class="btn-nav bn-secondary" onclick="jumpReview(${cur-1})"><i class="bi bi-arrow-left"></i> Préc.</button>`:''}
+        <button class="btn-nav bn-secondary" onclick="backRes()"><i class="bi bi-grid-3x3-gap"></i> Bilan</button>
+        ${cur<49?`<button class="btn-nav bn-primary" onclick="jumpReview(${cur+1})">Suiv. <i class="bi bi-arrow-right"></i></button>`:''}
+      </div>
+    </div>`;
+}
+
+function jumpReview(i) { cur=i; renderReview(); }
+function backRes() {
+  document.getElementById('reviewScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.remove('hidden');
+}
+
+function resetQuiz() {
+  cur=0;score=0;wrong=0;streak=0;bestStreak=0;
+  answered=new Array(50).fill(null);
+  userAns=new Array(50).fill(null);
+  mode='quiz';
+  closePopup();
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('reviewScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  document.getElementById('scOk').textContent='0 ✓';
+  document.getElementById('scKo').textContent='0 ✗';
+  document.getElementById('scStreak').textContent='0';
+  renderQ(0);
+}
+</script>
+</body>
+</html>

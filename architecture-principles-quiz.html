@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArchiPrincipes — Quiz Learn Mode Pro</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f1ec;
+  --surface: #ffffff;
+  --surface2: #f9f7f3;
+  --surface3: #eeeae2;
+  --border: #e0dbd0;
+  --border2: #ccc7ba;
+  --ink: #1a1714;
+  --ink2: #3d3830;
+  --ink3: #6b6459;
+  --ink4: #9c9489;
+  --accent: #c84b2f;
+  --accent2: #2a6bbf;
+  --accent3: #1a8a5a;
+  --accent4: #b5620a;
+  --correct: #1a8a5a;
+  --wrong: #c84b2f;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(26,23,20,0.08);
+  --shadow-lg: 0 8px 32px rgba(26,23,20,0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8bfaa' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── HEADER ── */
+.quiz-header {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 1.2rem 0;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow);
+}
+.logo-mark {
+  font-family: 'Fraunces', serif; font-weight: 700;
+  font-size: 1.5rem; color: var(--ink); letter-spacing: -0.02em; line-height: 1;
+}
+.logo-mark em { font-style: italic; color: var(--accent); }
+
+.header-badge {
+  font-family: 'Fira Code', monospace; font-size: 0.65rem; font-weight: 600;
+  padding: 0.25em 0.7em; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.hb-learn { background: #fff3cd; color: var(--accent4); border: 1px solid #f5d78a; }
+.hb-qs    { background: #e8f0fb; color: var(--accent2); border: 1px solid #b3cdf5; }
+.hb-goal  { background: #e6f5ed; color: var(--accent3); border: 1px solid #8dd3b0; }
+
+/* ── SCORE ROW ── */
+.score-row { display: flex; align-items: center; gap: 1.2rem; }
+.sc-item {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-family: 'Fira Code', monospace; font-size: 0.78rem; font-weight: 600; color: var(--ink2);
+}
+.sc-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ── PROGRESS ── */
+.prog-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--ink4); }
+.progress-track {
+  background: var(--surface3); border-radius: 100px; height: 7px;
+  overflow: hidden; border: 1px solid var(--border);
+}
+.progress-bar-fill {
+  height: 100%; border-radius: 100px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent4) 50%, var(--accent3) 100%);
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── MAIN WRAP ── */
+.quiz-main { max-width: 860px; margin: 0 auto; padding: 2rem 1rem 5rem; }
+
+/* ── INTRO ── */
+.intro-wrap { max-width: 860px; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+
+.intro-eyebrow {
+  font-family: 'Fira Code', monospace; font-size: 0.72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent);
+  margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.intro-headline {
+  font-family: 'Fraunces', serif; font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.1;
+  letter-spacing: -0.03em; color: var(--ink); margin-bottom: 1rem;
+}
+.intro-headline em { font-style: italic; color: var(--accent2); }
+.intro-sub {
+  font-size: 1rem; color: var(--ink3); line-height: 1.65;
+  max-width: 640px; margin-bottom: 2rem;
+}
+
+/* ── COVERAGE GRID ── */
+.coverage-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0.85rem; margin: 1.5rem 0 2rem;
+}
+.cov-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 1rem 1.1rem;
+  transition: box-shadow .2s, border-color .2s;
+}
+.cov-card:hover { box-shadow: var(--shadow); border-color: var(--border2); }
+.cov-icon { font-size: 1.3rem; margin-bottom: 0.4rem; display: block; }
+.cov-title { font-weight: 700; font-size: 0.88rem; color: var(--ink); margin-bottom: 0.3rem; }
+.cov-list { font-size: 0.75rem; color: var(--ink3); line-height: 1.55; }
+
+/* ── PRINCIPLE PILLS ROW ── */
+.pills-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 1.5rem 0; }
+.ppill {
+  font-family: 'Fira Code', monospace; font-size: 0.68rem; font-weight: 700;
+  padding: 0.3em 0.8em; border-radius: 100px;
+}
+.pp1 { background: #fdecea; color: #c84b2f; border: 1px solid #f5b5ab; }
+.pp2 { background: #e8f0fb; color: #2a6bbf; border: 1px solid #b3cdf5; }
+.pp3 { background: #e6f5ed; color: #1a8a5a; border: 1px solid #8dd3b0; }
+.pp4 { background: #fff3cd; color: #b5620a; border: 1px solid #f5d78a; }
+.pp5 { background: #f3e8ff; color: #7c3d8c; border: 1px solid #d8b4fe; }
+.pp6 { background: #fce7f3; color: #c44f87; border: 1px solid #f9a8d4; }
+
+/* ── GOAL BANNER ── */
+.goal-banner {
+  background: linear-gradient(135deg, #fff8e6 0%, #fff 100%);
+  border: 1.5px solid #f5d78a; border-left: 4px solid var(--accent4);
+  border-radius: 10px; padding: 1rem 1.3rem;
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+.goal-icon { font-size: 1.8rem; }
+.goal-text strong { font-weight: 700; color: var(--ink); font-size: 0.95rem; }
+.goal-text p { font-size: 0.82rem; color: var(--ink3); margin: 0; margin-top: 0.15rem; }
+
+/* ── START BUTTON ── */
+.btn-start {
+  font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.05rem;
+  padding: 0.85rem 2.8rem; background: var(--accent); color: #fff;
+  border: none; border-radius: 10px; cursor: pointer;
+  transition: all .25s; display: flex; align-items: center; gap: 0.6rem;
+  box-shadow: 0 4px 14px rgba(200,75,47,0.25);
+}
+.btn-start:hover { background: #b03a22; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,75,47,0.3); }
+
+/* ── QUESTION CARD ── */
+.q-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 2rem 2.2rem;
+  margin-bottom: 1.2rem; box-shadow: var(--shadow);
+  animation: slideUp .35s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.q-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.q-num {
+  font-family: 'Fira Code', monospace; font-size: 0.68rem; font-weight: 600;
+  color: var(--ink4); background: var(--surface2); border: 1px solid var(--border);
+  padding: 0.2em 0.6em; border-radius: 5px;
+}
+.q-tag {
+  font-family: 'Fira Code', monospace; font-size: 0.67rem; font-weight: 600;
+  padding: 0.22em 0.7em; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.diff-badge { font-size: 0.67rem; font-weight: 600; padding: 0.2em 0.6em; border-radius: 100px; }
+.d-easy   { background: #e6f5ed; color: var(--correct); border: 1px solid #8dd3b0; }
+.d-medium { background: #fff3cd; color: var(--accent4); border: 1px solid #f5d78a; }
+.d-hard   { background: #fdecea; color: var(--wrong);   border: 1px solid #f5b5ab; }
+
+.q-text { font-size: 1.05rem; line-height: 1.7; color: var(--ink); margin-bottom: 1.6rem; }
+.q-text code {
+  font-family: 'Fira Code', monospace; background: var(--surface2);
+  border: 1px solid var(--border); padding: 0.12em 0.45em;
+  border-radius: 5px; font-size: 0.88em; color: var(--accent2);
+}
+
+/* ── OPTIONS ── */
+.options-grid { display: grid; gap: 0.6rem; }
+.opt-btn {
+  background: var(--surface2); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 0.85rem 1.1rem;
+  color: var(--ink); cursor: pointer; transition: all .22s;
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  text-align: left; width: 100%; font-size: 0.93rem; line-height: 1.5;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--accent2); background: #eef3fc; transform: translateX(3px);
+}
+.opt-letter {
+  font-family: 'Fira Code', monospace; font-size: 0.68rem; font-weight: 700;
+  width: 22px; height: 22px; min-width: 22px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface); border: 1.5px solid var(--border);
+  color: var(--ink4); margin-top: 1px; transition: all .22s;
+}
+.opt-btn:hover:not(:disabled) .opt-letter {
+  background: var(--accent2); border-color: var(--accent2); color: #fff;
+}
+.opt-btn.correct { background: #e6f5ed; border-color: var(--correct); animation: popCorrect .4s ease; }
+.opt-btn.correct .opt-letter { background: var(--correct); border-color: var(--correct); color: #fff; }
+.opt-btn.wrong { background: #fdecea; border-color: var(--wrong); animation: shakeWrong .4s ease; }
+.opt-btn.wrong .opt-letter { background: var(--wrong); border-color: var(--wrong); color: #fff; }
+
+@keyframes popCorrect  { 0%{transform:scale(1)} 40%{transform:scale(1.015)} 100%{transform:scale(1)} }
+@keyframes shakeWrong  { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+/* ── EXPLANATION ── */
+.exp-panel { margin-top: 1.2rem; border-radius: 12px; overflow: hidden; animation: fadeIn .35s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+
+.exp-header {
+  padding: 0.8rem 1.2rem; display: flex; align-items: center; gap: 0.55rem;
+  font-weight: 700; font-size: 0.85rem;
+}
+.exp-ok { background: #d4edda; color: #155724; border: 1.5px solid #b8dacc; border-bottom: none; border-radius: 12px 12px 0 0; }
+.exp-ko { background: #fdecea; color: #842029; border: 1.5px solid #f5b5ab; border-bottom: none; border-radius: 12px 12px 0 0; }
+
+.exp-body {
+  background: var(--surface); border: 1.5px solid var(--border); border-top: none;
+  border-radius: 0 0 12px 12px; padding: 1.3rem 1.5rem;
+}
+.exp-section { margin-bottom: 1.1rem; }
+.exp-section:last-child { margin-bottom: 0; }
+.exp-lbl {
+  font-family: 'Fira Code', monospace; font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink4);
+  margin-bottom: 0.45rem; display: flex; align-items: center; gap: 0.35rem;
+}
+.exp-txt { font-size: 0.88rem; line-height: 1.65; color: var(--ink2); }
+.exp-txt code {
+  font-family: 'Fira Code', monospace; background: #eef3fc;
+  border: 1px solid #c5d8f7; padding: .1em .4em; border-radius: 4px;
+  font-size: .85em; color: var(--accent2);
+}
+.tip-box {
+  background: #eff6ff; border: 1.5px solid #bfdbfe; border-left: 3px solid var(--accent2);
+  border-radius: 8px; padding: .75rem 1rem; margin-top: .5rem;
+}
+.tip-box p { font-size: .86rem; line-height: 1.6; color: #1e40af; margin: 0; }
+.rex-box {
+  background: #fffbeb; border: 1.5px solid #fde68a; border-left: 3px solid var(--accent4);
+  border-radius: 8px; padding: .75rem 1rem; margin-top: .5rem;
+}
+.rex-box p { font-size: .86rem; line-height: 1.6; color: #92400e; margin: 0; }
+
+/* ── NAV BUTTONS ── */
+.nav-bar { display: flex; gap: .7rem; margin-top: 1.5rem; justify-content: flex-end; flex-wrap: wrap; }
+.btn-nav {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: .86rem;
+  padding: .6rem 1.3rem; border-radius: 9px; border: none; cursor: pointer;
+  transition: all .22s; display: flex; align-items: center; gap: .45rem;
+}
+.bn-primary   { background: var(--accent); color: #fff; box-shadow: 0 3px 10px rgba(200,75,47,.2); }
+.bn-primary:hover { background: #b03a22; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(200,75,47,.28); }
+.bn-secondary { background: var(--surface2); color: var(--ink3); border: 1.5px solid var(--border); }
+.bn-secondary:hover { background: var(--surface3); color: var(--ink); }
+.bn-blue  { background: var(--accent2); color: #fff; }
+.bn-blue:hover { background: #1a56a0; transform: translateY(-1px); }
+
+/* ── RESULTS ── */
+.results-wrap { max-width: 800px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+.results-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 18px; padding: 2.5rem 2.2rem;
+  box-shadow: var(--shadow-lg); animation: slideUp .45s ease;
+}
+.results-ring-wrap { position: relative; width: 150px; height: 150px; margin: 0 auto 1.5rem; }
+.results-ring {
+  width: 150px; height: 150px; border-radius: 50%;
+  background: conic-gradient(var(--accent3) var(--ang), var(--surface3) var(--ang));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 6px var(--surface), 0 8px 30px rgba(26,138,90,.15);
+}
+.results-ring::before {
+  content: ''; position: absolute; width: 116px; height: 116px;
+  border-radius: 50%; background: var(--surface); top: 17px; left: 17px;
+}
+.ring-inner { position: relative; z-index: 1; text-align: center; }
+.ring-pct {
+  font-family: 'Fraunces', serif; font-weight: 700; font-size: 2rem;
+  line-height: 1; display: block;
+}
+.ring-lbl { font-size: .65rem; color: var(--ink4); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+
+.res-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.7rem; letter-spacing: -.03em; text-align: center; color: var(--ink); }
+.res-sub   { text-align: center; color: var(--ink3); font-size: .9rem; margin: .3rem 0 1.5rem; }
+
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: .9rem; margin: 1.5rem 0; }
+.stat-box  { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; padding: 1rem .8rem; text-align: center; }
+.stat-val  { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.6rem; line-height: 1.1; display: block; }
+.stat-lbl  { font-size: .7rem; color: var(--ink4); text-transform: uppercase; letter-spacing: .05em; margin-top: .2rem; }
+
+.breakdown { margin: 1.8rem 0; }
+.bd-title  { font-family: 'Fira Code', monospace; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--ink4); margin-bottom: .9rem; }
+.bd-row    { display: flex; align-items: center; gap: .8rem; margin-bottom: .6rem; }
+.bd-label  { font-size: .73rem; width: 130px; min-width: 130px; color: var(--ink2); font-weight: 600; }
+.bd-bar-wrap { flex: 1; background: var(--surface3); border-radius: 100px; height: 7px; overflow: hidden; border: 1px solid var(--border); }
+.bd-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+.bd-pct    { font-family: 'Fira Code', monospace; font-size: .68rem; color: var(--ink4); width: 33px; text-align: right; }
+
+/* ── REVIEW DOTS ── */
+.review-map { display: flex; flex-wrap: wrap; gap: .4rem; margin: 1.2rem 0; }
+.r-dot {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: 1.5px solid var(--border); background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fira Code', monospace; font-size: .62rem; font-weight: 600;
+  cursor: pointer; transition: all .18s; color: var(--ink4);
+}
+.r-dot:hover { transform: scale(1.1); }
+.r-dot.ok     { background: #d4edda; border-color: var(--correct); color: var(--correct); }
+.r-dot.ko     { background: #fdecea; border-color: var(--wrong);   color: var(--wrong); }
+.r-dot.active { box-shadow: 0 0 0 2px var(--accent2); }
+
+/* ── PRINCIPLE TAG COLORS ── */
+.tc-srp   { background: #fdecea; color: #c84b2f; border: 1px solid #f5b5ab; }
+.tc-ocp   { background: #e6f5ed; color: #1a8a5a; border: 1px solid #8dd3b0; }
+.tc-lsp   { background: #fff3cd; color: #b5620a; border: 1px solid #f5d78a; }
+.tc-isp   { background: #e6f5ed; color: #177a52; border: 1px solid #6ecfa0; }
+.tc-dip   { background: #f3e8ff; color: #7c3d8c; border: 1px solid #d8b4fe; }
+.tc-kiss  { background: #e8f0fb; color: #2a6bbf; border: 1px solid #b3cdf5; }
+.tc-yagni { background: #fff3cd; color: #b5620a; border: 1px solid #f5d78a; }
+.tc-dry   { background: #fdecea; color: #b03030; border: 1px solid #f5b5ab; }
+.tc-soc   { background: #e8f4fb; color: #1a6b8a; border: 1px solid #8dd0f5; }
+.tc-pola  { background: #f3e8ff; color: #6b3da0; border: 1px solid #c4a0f0; }
+.tc-comp  { background: #fce7f3; color: #c44f87; border: 1px solid #f9a8d4; }
+.tc-solid { background: #e8f0fb; color: #1a50a0; border: 1px solid #90b8f5; }
+
+/* ── POPUPS ── */
+.popup-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(26,23,20,.55); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
+  animation: fadeOverlay .4s ease;
+}
+@keyframes fadeOverlay { from{opacity:0} to{opacity:1} }
+.popup-overlay.hidden { display: none; }
+
+.popup-card {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 20px; padding: 2.8rem 2.5rem;
+  max-width: 480px; width: 100%; text-align: center;
+  box-shadow: 0 24px 64px rgba(26,23,20,.25);
+  animation: popIn .5s cubic-bezier(.34,1.56,.64,1);
+  position: relative; overflow: hidden;
+}
+@keyframes popIn {
+  from { transform: scale(.8) translateY(20px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+.popup-trophy { font-size: 4rem; margin-bottom: 1rem; display: block; animation: bounce 1s ease .3s; }
+@keyframes bounce {
+  0%,100%{transform:translateY(0)} 40%{transform:translateY(-16px)} 70%{transform:translateY(-8px)}
+}
+.popup-title  { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.8rem; letter-spacing: -.03em; color: var(--ink); margin-bottom: .5rem; }
+.popup-score  { font-family: 'Fira Code', monospace; font-size: 2.6rem; font-weight: 600; color: var(--accent3); line-height: 1; margin: .5rem 0; display: block; }
+.popup-stars  { font-size: 1.5rem; letter-spacing: .2rem; margin-bottom: 1rem; }
+.popup-msg    { font-size: .95rem; color: var(--ink3); line-height: 1.6; margin: 1rem 0 1.8rem; }
+.popup-fail .popup-score { color: var(--accent4); }
+.popup-fail .popup-title { color: var(--accent); }
+
+.confetti-row { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: 20px; }
+.confetti-piece {
+  position: absolute; width: 8px; height: 8px; border-radius: 2px;
+  animation: confettiFall 2.5s ease-in forwards;
+}
+@keyframes confettiFall {
+  0%  { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100%{ transform: translateY(340px) rotate(720deg); opacity: 0; }
+}
+
+.hidden { display: none !important; }
+
+@media (max-width: 600px) {
+  .q-card       { padding: 1.3rem 1.1rem; }
+  .exp-body     { padding: 1rem; }
+  .stats-row    { grid-template-columns: repeat(2,1fr); }
+  .results-card { padding: 1.8rem 1.2rem; }
+  .popup-card   { padding: 2rem 1.5rem; }
+  .coverage-grid{ grid-template-columns: 1fr 1fr; }
+}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ════ HEADER ════ -->
+<header class="quiz-header" id="mainHeader">
+  <div class="container-fluid px-3 px-md-4">
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-2">
+      <div class="d-flex align-items-center gap-3">
+        <div class="logo-mark">Archi<em>Principes</em></div>
+        <div class="d-flex gap-2 flex-wrap">
+          <span class="header-badge hb-learn">Learn Mode</span>
+          <span class="header-badge hb-qs">50 Questions</span>
+          <span class="header-badge hb-goal d-none" id="goalBadge">Objectif 80%</span>
+        </div>
+      </div>
+      <div class="score-row d-none" id="scoreRow">
+        <div class="sc-item"><span class="sc-dot" style="background:var(--correct)"></span><span id="scOk">0 ✓</span></div>
+        <div class="sc-item"><span class="sc-dot" style="background:var(--wrong)"></span><span id="scKo">0 ✗</span></div>
+        <div class="sc-item" style="color:var(--accent4)"><i class="bi bi-lightning-fill"></i><span id="scStreak">0</span></div>
+      </div>
+    </div>
+    <div class="d-none" id="progArea">
+      <div class="d-flex justify-content-between mb-1">
+        <span class="prog-label" id="progLbl">0 / 50</span>
+        <span class="prog-label" id="progPct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar-fill" id="progFill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ════ INTRO ════ -->
+<div id="introScreen" class="intro-wrap">
+  <div class="intro-eyebrow"><i class="bi bi-layers-fill"></i> Quiz Professionnel — Principes d'Architecture</div>
+  <h1 class="intro-headline">Top 12 Principes<br><em>d'Architecture Logicielle</em></h1>
+  <p class="intro-sub">
+    Testez votre maîtrise des principes fondamentaux qui gouvernent la conception de logiciels robustes, maintenables et évolutifs. 50 questions cas pratiques avec explications détaillées, tips et retours d'expérience terrain.
+  </p>
+
+  <!-- GOAL BANNER -->
+  <div class="goal-banner">
+    <span class="goal-icon">🎯</span>
+    <div class="goal-text">
+      <strong>Objectif à atteindre : 80% de bonnes réponses (40/50)</strong>
+      <p>Une popup de félicitations vous attend si vous atteignez cet objectif. En dessous, un plan de révision personnalisé par principe vous sera proposé.</p>
+    </div>
+  </div>
+
+  <!-- PRINCIPLES PILLS -->
+  <div class="mb-2" style="font-family:'Fira Code',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink4)">
+    📚 Principes couverts dans ce quiz
+  </div>
+  <div class="pills-row">
+    <span class="ppill pp1">SRP</span>
+    <span class="ppill pp1">OCP</span>
+    <span class="ppill pp1">LSP</span>
+    <span class="ppill pp1">ISP</span>
+    <span class="ppill pp1">DIP</span>
+    <span class="ppill pp2">KISS</span>
+    <span class="ppill pp4">YAGNI</span>
+    <span class="ppill pp1">DRY</span>
+    <span class="ppill pp3">SoC</span>
+    <span class="ppill pp5">PoLA</span>
+    <span class="ppill pp6">Composition</span>
+    <span class="ppill pp4">Tell Don't Ask</span>
+    <span class="ppill pp3">CoC</span>
+    <span class="ppill pp5">Hollywood</span>
+    <span class="ppill pp2">Fail-Fast</span>
+    <span class="ppill pp3">Robustness</span>
+  </div>
+
+  <!-- COVERAGE CARDS -->
+  <div class="mt-3 mb-2" style="font-family:'Fira Code',monospace;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink4)">
+    🗂️ Sujets couverts
+  </div>
+  <div class="coverage-grid">
+    <div class="cov-card">
+      <span class="cov-icon">🏛️</span>
+      <div class="cov-title">Principes SOLID</div>
+      <div class="cov-list">SRP, OCP, LSP, ISP, DIP — les 5 fondations de la conception orientée objet robuste, avec cas pratiques et anti-patterns</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">✂️</span>
+      <div class="cov-title">Simplicité & Pragmatisme</div>
+      <div class="cov-list">KISS, YAGNI, DRY — éviter la sur-ingénierie, gérer la dette technique, trouver le bon niveau d'abstraction</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">🔬</span>
+      <div class="cov-title">Séparation & Cohésion</div>
+      <div class="cov-list">SoC, SRP avancé, Layered Architecture — séparer les préoccupations à tous les niveaux (classe, module, service)</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">🤝</span>
+      <div class="cov-title">Comportement & Contrats</div>
+      <div class="cov-list">PoLA, Tell Don't Ask, Command-Query Separation — concevoir des interfaces prévisibles et des objets riches en comportement</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">🧱</span>
+      <div class="cov-title">Composition & Extensibilité</div>
+      <div class="cov-list">Composition over Inheritance, Hollywood Principle, IoC, Convention over Configuration — architecture extensible sans héritage fragile</div>
+    </div>
+    <div class="cov-card">
+      <span class="cov-icon">⚡</span>
+      <div class="cov-title">Résilience & Robustesse</div>
+      <div class="cov-list">Fail-Fast, Postel's Law, préconditions, gestion d'erreurs — concevoir des systèmes qui détectent et signalent les problèmes rapidement</div>
+    </div>
+  </div>
+
+  <!-- FEATURES ROW -->
+  <div class="coverage-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin-top:1rem;margin-bottom:2rem">
+    <div class="cov-card" style="text-align:center;padding:.9rem .8rem">
+      <span class="cov-icon">🎯</span>
+      <div class="cov-title" style="font-size:.82rem">50 cas pratiques</div>
+    </div>
+    <div class="cov-card" style="text-align:center;padding:.9rem .8rem">
+      <span class="cov-icon">💡</span>
+      <div class="cov-title" style="font-size:.82rem">Explications détaillées</div>
+    </div>
+    <div class="cov-card" style="text-align:center;padding:.9rem .8rem">
+      <span class="cov-icon">🔥</span>
+      <div class="cov-title" style="font-size:.82rem">Tips & Best Practices</div>
+    </div>
+    <div class="cov-card" style="text-align:center;padding:.9rem .8rem">
+      <span class="cov-icon">📋</span>
+      <div class="cov-title" style="font-size:.82rem">REX terrain inclus</div>
+    </div>
+    <div class="cov-card" style="text-align:center;padding:.9rem .8rem">
+      <span class="cov-icon">📊</span>
+      <div class="cov-title" style="font-size:.82rem">Bilan par principe</div>
+    </div>
+    <div class="cov-card" style="text-align:center;padding:.9rem .8rem">
+      <span class="cov-icon">🔁</span>
+      <div class="cov-title" style="font-size:.82rem">Mode révision</div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-3 flex-wrap align-items-center">
+    <button class="btn-start" onclick="startQuiz()">
+      <i class="bi bi-play-fill"></i> Démarrer le Quiz
+    </button>
+    <div style="font-size:.8rem;color:var(--ink4)">⏱ Durée estimée : 30-40 min</div>
+  </div>
+</div>
+
+<!-- ════ QUIZ ════ -->
+<div id="quizScreen" class="quiz-main hidden"></div>
+
+<!-- ════ RESULTS ════ -->
+<div id="resultsScreen" class="results-wrap hidden"></div>
+
+<!-- ════ REVIEW ════ -->
+<div id="reviewScreen" class="quiz-main hidden"></div>
+
+<!-- ════ SUCCESS POPUP ════ -->
+<div class="popup-overlay hidden" id="successPopup">
+  <div class="popup-card">
+    <div class="confetti-row" id="confettiBox"></div>
+    <span class="popup-trophy">🏆</span>
+    <div class="popup-stars" id="popupStars">⭐⭐⭐⭐⭐</div>
+    <div class="popup-title">Félicitations !</div>
+    <span class="popup-score" id="popupScore">--</span>
+    <p class="popup-msg" id="popupMsg">Objectif 80% atteint ! Vous maîtrisez les principes d'architecture logicielle.</p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <button class="btn-nav bn-secondary" onclick="closePopup()"><i class="bi bi-eye-fill"></i> Voir le bilan</button>
+      <button class="btn-nav bn-blue" onclick="closeAndReview()"><i class="bi bi-book-fill"></i> Mode révision</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ FAIL POPUP ════ -->
+<div class="popup-overlay hidden" id="failPopup">
+  <div class="popup-card popup-fail">
+    <span class="popup-trophy">📚</span>
+    <div class="popup-title">Pas encore !</div>
+    <span class="popup-score" id="failScore">--</span>
+    <p class="popup-msg" id="failMsg">L'objectif de 80% n'est pas encore atteint. Les explications détaillées et le mode révision vous aideront !</p>
+    <div style="background:#fff8e6;border:1.5px solid #f5d78a;border-radius:10px;padding:.9rem 1rem;margin:1rem 0;font-size:.83rem;color:#92400e;text-align:left;">
+      <strong>💡 Principes à retravailler :</strong>
+      <div id="revisionPlan" style="margin-top:.5rem;line-height:1.9;"></div>
+    </div>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <button class="btn-nav bn-secondary" onclick="closePopup()"><i class="bi bi-bar-chart-fill"></i> Voir le bilan</button>
+      <button class="btn-nav bn-primary" onclick="resetQuiz()"><i class="bi bi-arrow-clockwise"></i> Réessayer</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const GOAL = 40; // 80% of 50
+
+// ── TAG CSS MAPPING ──
+const TAG_MAP = {
+  SRP:'tc-srp', OCP:'tc-ocp', LSP:'tc-lsp', ISP:'tc-isp', DIP:'tc-dip',
+  KISS:'tc-kiss', YAGNI:'tc-yagni', DRY:'tc-dry', SoC:'tc-soc',
+  PoLA:'tc-pola', Composition:'tc-comp', TDA:'tc-lsp', CoC:'tc-isp',
+  Hollywood:'tc-dip', FailFast:'tc-srp', Robustness:'tc-ocp', SOLID:'tc-solid'
+};
+
+const QUESTIONS = [
+  {id:1, p:"SRP", diff:"easy",
+   q:"Une classe <code>UserManager</code> gère l'authentification, envoie des emails et génère des rapports PDF. Quel principe est violé en priorité ?",
+   opts:["Open/Closed Principle","Single Responsibility Principle","KISS","DRY"],
+   ok:1,
+   exp:"Le <strong>Single Responsibility Principle (SRP)</strong> stipule qu'une classe ne doit avoir qu'une seule raison de changer. Ici, UserManager a trois raisons de changer : la logique d'auth, le service email et la génération PDF.",
+   tip:"Posez-vous la question : <em>« Combien d'acteurs métier différents peuvent demander une modification de cette classe ? »</em> Si la réponse est > 1, SRP est violé.",
+   rex:"REX terrain : Dans une startup, une classe God Object avait accumulé 2000 lignes en 18 mois. Sa décomposition en 7 classes cohésives a réduit le temps de review de 60% et éliminé 3 bugs de régression par sprint."
+  },
+  {id:2, p:"OCP", diff:"medium",
+   q:"Vous devez ajouter un nouveau moyen de paiement à votre système. Quelle approche respecte l'Open/Closed Principle ?",
+   opts:["Modifier la classe PaymentProcessor avec un nouveau if/else","Créer une interface IPaymentMethod et implémenter une nouvelle classe","Dupliquer la classe PaymentProcessor pour le nouveau moyen","Ajouter un paramètre boolean à la méthode pay()"],
+   ok:1,
+   exp:"L'<strong>Open/Closed Principle</strong> : les entités logicielles doivent être <em>ouvertes à l'extension</em> mais <em>fermées à la modification</em>. Créer une interface et de nouvelles implémentations étend le comportement sans toucher au code existant.",
+   tip:"Le patron Strategy et les interfaces sont vos meilleurs alliés pour respecter OCP. Chaque nouveau comportement = nouvelle implémentation, jamais une modification.",
+   rex:"REX terrain : Une fintech avait 47 if/else dans son moteur de calcul. Après refactoring OCP avec le pattern Strategy, ajouter un nouveau type de prêt est passé de 2 jours à 2 heures, sans risque de régression."
+  },
+  {id:3, p:"LSP", diff:"hard",
+   q:"La classe <code>Square</code> hérite de <code>Rectangle</code>. Quand on appelle <code>setWidth(5)</code> sur un Square, sa hauteur change aussi (car un carré a tous les côtés égaux). Quel problème illustre cette situation ?",
+   opts:["Une violation du DRY car le code de dimension est dupliqué","Une violation du LSP : Square ne peut pas remplacer Rectangle sans altérer le comportement","Une violation du KISS car la hiérarchie est trop complexe","Une violation du YAGNI car Square n'est pas nécessaire"],
+   ok:1,
+   exp:"Le <strong>Liskov Substitution Principle</strong> : tout objet d'une classe dérivée doit pouvoir remplacer un objet de la classe parente sans modifier le comportement attendu. Un code qui utilise Rectangle s'attend à ce que setWidth ne change pas la hauteur — Square viole cette attente.",
+   tip:"Si votre sous-classe doit <em>surcharger ou neutraliser</em> un comportement de la classe parente, c'est un signal fort de violation LSP. Préférez la composition à l'héritage dans ce cas.",
+   rex:"REX terrain : Un projet e-commerce avait Product → DigitalProduct avec une méthode ship() levant une exception. Le LSP était violé. Après refactoring (interfaces séparées IShippable et IDownloadable), les bugs de nil pointer en production ont disparu."
+  },
+  {id:4, p:"ISP", diff:"medium",
+   q:"Une interface <code>IWorker</code> possède les méthodes <code>work()</code>, <code>eat()</code> et <code>sleep()</code>. Un robot doit implémenter <code>IWorker</code> mais n'a pas besoin de manger ni dormir. Quel principe est violé ?",
+   opts:["SRP","OCP","Interface Segregation Principle","DIP"],
+   ok:2,
+   exp:"L'<strong>Interface Segregation Principle</strong> préconise de ne pas forcer un client à dépendre d'interfaces qu'il n'utilise pas. La solution est de séparer : <code>IWorkable</code> avec work(), <code>IFeedable</code> avec eat(), <code>ISleepable</code> avec sleep().",
+   tip:"Règle d'or : une interface doit être cohésive autour d'un seul comportement client. Si votre implémentation contient des méthodes vides ou levant UnsupportedOperationException, ISP est violé.",
+   rex:"REX terrain : Un SDK IoT avec une interface IDevice de 23 méthodes forçait 40% des devices à implémenter des méthodes vides. La décomposition en 5 interfaces ciblées a réduit le code de stub de 70%."
+  },
+  {id:5, p:"DIP", diff:"medium",
+   q:"Un module haut niveau <code>OrderService</code> instancie directement <code>new MySQLRepository()</code>. Quelle est la meilleure correction ?",
+   opts:["Renommer MySQLRepository en Repository","Injecter une interface IOrderRepository dans le constructeur d'OrderService","Utiliser un singleton pour MySQLRepository","Déplacer l'instanciation dans une méthode static"],
+   ok:1,
+   exp:"Le <strong>Dependency Inversion Principle</strong> : les modules de haut niveau ne doivent pas dépendre des modules de bas niveau. Les deux doivent dépendre d'abstractions. Injecter une interface permet d'interchanger les implémentations (MySQL, PostgreSQL, mock) sans modifier OrderService.",
+   tip:"L'injection de dépendances (DI) est la mise en œuvre du DIP. Tout <code>new</code> dans un service métier est suspect — préférez l'injection via constructeur.",
+   rex:"REX terrain : Lors d'une migration MySQL → MongoDB, une équipe a refactorisé 120 services en 2 semaines grâce au DIP déjà en place. Sans DIP, l'estimation était de 6 mois."
+  },
+  {id:6, p:"SRP", diff:"hard",
+   q:"Un module <code>ReportGenerator</code> récupère des données via SQL, les formate en HTML et les envoie par email. Combien de responsabilités distinctes possède-t-il et quelle est la bonne décomposition ?",
+   opts:["1 responsabilité (générer un rapport) — pas de problème","2 responsabilités — séparer data + présentation","3 responsabilités — DataFetcher, ReportFormatter, EmailSender","4 responsabilités — ajouter aussi un Logger"],
+   ok:2,
+   exp:"Il y a bien <strong>3 responsabilités</strong> avec 3 axes de changement distincts : (1) la source de données peut changer (SQL → API), (2) le format peut changer (HTML → PDF), (3) le canal d'envoi peut changer (email → Slack). Chaque classe ne doit avoir qu'une seule raison de changer.",
+   tip:"Listez les 'acteurs' qui peuvent vous demander de modifier votre classe : DBA, équipe front, équipe communication = 3 acteurs = 3 classes.",
+   rex:"REX terrain : Un système de reporting bancaire avec un God Object de 3000 lignes. Sa décomposition SRP a réduit le temps de build (tests unitaires) de 8 min à 45 sec et permis des tests parallèles indépendants."
+  },
+  {id:7, p:"KISS", diff:"easy",
+   q:"Pour vérifier si un nombre est pair, un développeur écrit : <code>return ((n % 2) == 0) ? true : false;</code>. Quel principe est violé ?",
+   opts:["DRY","YAGNI","KISS — Keep It Simple, Stupid","SRP"],
+   ok:2,
+   exp:"<strong>KISS</strong> : la solution la plus simple est <code>return n % 2 == 0;</code>. L'opérateur ternaire avec true/false est redondant car l'expression booléenne est déjà la réponse. La complexité inutile nuit à la lisibilité et à la maintenance.",
+   tip:"Avant chaque ligne de code, demandez-vous : <em>« Y a-t-il une version plus simple qui fait exactement la même chose ? »</em> Si oui, écrivez la version simple.",
+   rex:"REX terrain : Un code review dans une banque a révélé une méthode de 80 lignes avec 5 niveaux d'imbrication pour une validation qu'on peut exprimer en 3 conditions. La simplification a éliminé 2 bugs cachés dans la logique imbriquée."
+  },
+  {id:8, p:"KISS", diff:"medium",
+   q:"Un développeur crée un framework maison pour gérer les configurations avant d'avoir un seul utilisateur réel. L'équipe passe 3 semaines dessus. Quel(s) principe(s) sont violés ?",
+   opts:["KISS uniquement","YAGNI uniquement","KISS et YAGNI — complexité prématurée et fonctionnalité inutile","DRY — le code de config existe déjà ailleurs"],
+   ok:2,
+   exp:"<strong>KISS ET YAGNI</strong> sont tous deux violés. KISS : un simple fichier .env ou une bibliothèque existante suffit. YAGNI : personne n'a demandé ce framework. La <em>sur-ingénierie</em> (over-engineering) est l'ennemi numéro un de la productivité.",
+   tip:"Règle des 3 fois (Rule of Three) : n'abstraire ou généraliser qu'à partir du 3ème cas d'usage similaire. Avant : codez le cas simple.",
+   rex:"REX terrain : Une startup a perdu 2 mois sur un 'bus événementiel maison'. Après abandon et adoption de Redis Pub/Sub, le feature time-to-market est passé de 3 semaines à 4 jours par sprint."
+  },
+  {id:9, p:"KISS", diff:"hard",
+   q:"Votre équipe débat : utiliser un pattern State Machine complet pour gérer 3 états (actif, inactif, suspendu) ou une simple variable d'enum + switch. Quelle approche KISS recommanderiez-vous ?",
+   opts:["State Machine complète — mieux pour l'évolutivité future","Enum + switch — KISS, puis refactorer si les états deviennent complexes","Les deux — dupliquer pour avoir un backup","Aucun des deux — utiliser un int 0/1/2"],
+   ok:1,
+   exp:"KISS préconise de commencer <strong>simple</strong> (enum + switch), puis de refactorer vers un pattern State Machine si la logique devient effectivement complexe (> 5 états, transitions avec règles complexes). Le sur-engineering préventif coûte plus qu'il ne rapporte.",
+   tip:"YAGNI + KISS = n'implémentez la solution complexe que quand la douleur est réelle. Utilisez des métriques : si votre switch dépasse 7 cas avec de la logique dans chaque branche, envisagez le refactoring.",
+   rex:"REX terrain : Un SaaS B2B avait implémenté une State Machine à 3 états dès le début. 18 mois plus tard, les états n'avaient pas évolué — 40h de développement gaspillées vs 2h pour le simple enum."
+  },
+  {id:10, p:"YAGNI", diff:"easy",
+   q:"Un développeur ajoute une méthode <code>exportToXML()</code> à une classe car « on en aura peut-être besoin un jour ». Quel principe est violé ?",
+   opts:["DRY","YAGNI — You Aren't Gonna Need It","LSP","KISS"],
+   ok:1,
+   exp:"<strong>YAGNI</strong> (You Aren't Gonna Need It) : n'implémentez pas de fonctionnalités spéculatives. Cette méthode non requise aujourd'hui doit être testée, maintenue et documentée inutilement. Elle peut aussi induire des collègues en erreur sur l'usage prévu.",
+   tip:"Statistiques : ~64% des fonctionnalités 'pour plus tard' ne sont jamais utilisées (étude Standish Group). Chaque ligne de code est une dette de maintenance.",
+   rex:"REX terrain : Un audit de code dans une ESN a révélé 23% de code mort (méthodes jamais appelées). Sa suppression a réduit la complexité cyclomatique globale de 31% et accéléré la compréhension des nouveaux développeurs."
+  },
+  {id:11, p:"YAGNI", diff:"medium",
+   q:"L'équipe veut concevoir un système multi-tenant dès le jour 1, alors que le produit n'a encore qu'un seul client et aucun second en vue. Quelle est la meilleure approche YAGNI ?",
+   opts:["Implémenter le multi-tenant complet dès maintenant pour éviter le refactoring","Coder pour un seul tenant, concevoir l'architecture pour faciliter l'extension future si nécessaire","Ignorer la question — on verra quand ça arrivera","Acheter un SaaS multi-tenant du marché"],
+   ok:1,
+   exp:"YAGNI ne signifie pas ignorer l'avenir mais <strong>ne pas surcharger le présent</strong>. La bonne approche : code simple pour le cas actuel, mais avec des abstractions et interfaces propres qui <em>faciliteront</em> l'extension. C'est le principe d'architecture évolutive.",
+   tip:"Différence clé : YAGNI interdit d'<em>implémenter</em> des fonctionnalités futures. Il n'interdit pas de <em>concevoir proprement</em> pour qu'elles soient faciles à ajouter.",
+   rex:"REX terrain : Une scale-up a implémenté le multi-tenant au sprint 1. Quand les vrais besoins multi-tenant sont arrivés (sprint 45), les hypothèses initiales étaient toutes fausses. Résultat : refactoring complet de toute façon."
+  },
+  {id:12, p:"YAGNI", diff:"hard",
+   q:"Vous développez une API REST. YAGNI suggère de commencer avec HTTP, mais un architecte insiste pour implémenter gRPC + REST + GraphQL simultanément 'pour couvrir tous les cas'. Quel argument YAGNI est le plus solide ?",
+   opts:["YAGNI interdit tout ce qui n'est pas demandé — supprimer gRPC et GraphQL","Implémenter les 3 si c'est dans la spec, mais seulement sur demande réelle des clients","gRPC est toujours meilleur, donc implémenter uniquement gRPC","Attendre 6 mois et voir ce que les clients demandent"],
+   ok:1,
+   exp:"YAGNI est guidé par la <strong>valeur démontrée</strong>, pas par le dogmatisme. Si aucun client n'a demandé GraphQL ou gRPC, les implémenter est du sur-engineering. Commencer par REST (standard, simple), puis ajouter les autres protocoles si et quand des clients réels les demandent.",
+   tip:"YAGNI s'applique même aux décisions d'architecture. L'architecture over-engineered a un coût : complexité de déploiement, formation, maintenance, et surface d'attaque sécurité plus large.",
+   rex:"REX terrain : Une API a démarré REST uniquement. 2 ans et 50 clients plus tard, 2 clients ont demandé gRPC pour des cas de streaming temps réel. L'ajout a pris 1 semaine au lieu des 3 mois initialement anticipés."
+  },
+  {id:13, p:"DRY", diff:"easy",
+   q:"La même règle de validation d'email est copiée-collée dans 4 formulaires différents. Si la règle change, il faut modifier 4 endroits. Quel principe est violé ?",
+   opts:["KISS","SRP","DRY — Don't Repeat Yourself","OCP"],
+   ok:2,
+   exp:"<strong>DRY (Don't Repeat Yourself)</strong> : <em>« Every piece of knowledge must have a single, unambiguous, authoritative representation within a system »</em>. La validation email doit être dans une fonction/classe partagée appelée depuis les 4 formulaires.",
+   tip:"DRY s'applique à la <em>connaissance</em>, pas seulement au code. Duplications de logique métier, de configuration, de documentation — toutes sont des violations DRY.",
+   rex:"REX terrain : Un bug de validation email en production avait été corrigé dans 2 sur 7 endroits où la logique était dupliquée. Le bug a resurgi 3 fois avant que l'équipe réalise l'étendue de la duplication."
+  },
+  {id:14, p:"DRY", diff:"medium",
+   q:"Pour éviter la duplication, un développeur crée une classe utilitaire <code>Utils</code> avec 150 méthodes sans rapport entre elles. Quel problème crée-t-il ?",
+   opts:["Aucun problème — DRY est bien respecté","Il viole SRP en créant un fourre-tout, même si DRY est respecté","Il viole YAGNI car Utils n'était pas demandé","Il viole OCP car Utils sera modifié souvent"],
+   ok:1,
+   exp:"Appliquer DRY en créant un God Utility Object <strong>viole SRP</strong>. DRY et SRP doivent être équilibrés : regroupez les abstractions communes par cohésion métier (<code>EmailValidator</code>, <code>DateUtils</code>, <code>CurrencyFormatter</code>), pas dans un fourre-tout.",
+   tip:"DRY mal appliqué peut créer des couplages pernicieux. Une duplication localisée peut être préférable à une mauvaise abstraction qui couple des modules non liés (principe d'AHA : Avoid Hasty Abstractions).",
+   rex:"REX terrain : Une classe CommonHelper de 400 méthodes chez un opérateur télécom. Toute modification générait des effets de bord inattendus. Après décomposition par domaine, le coverage de tests est passé de 12% à 78%."
+  },
+  {id:15, p:"DRY", diff:"hard",
+   q:"Deux modules indépendants (facturation et CRM) ont un calcul de TVA identique. Faut-il les faire partager une lib commune ou garder la duplication ?",
+   opts:["Toujours partager — DRY absolu, zéro duplication","Évaluer le couplage : si les règles TVA peuvent diverger par domaine, accepter la duplication locale","Copier-coller et documenter que c'est intentionnel","Supprimer l'un des modules et en faire un seul"],
+   ok:1,
+   exp:"DRY versus couplage inter-domaine : si facturation et CRM appartiennent à des <strong>bounded contexts</strong> différents (DDD), leurs règles TVA peuvent diverger. Un couplage forcé via lib commune peut être pire que la duplication intentionnelle.",
+   tip:"Règle : DRY est absolu <em>au sein</em> d'un même domaine. Entre domaines, évaluez le couplage vs la duplication. La notion de WET (Write Everything Twice) accepte la duplication quand l'abstraction n'est pas encore claire.",
+   rex:"REX terrain : Une lib partagée de calcul fiscal entre 3 BU d'un groupe. Quand la BU Luxembourg a eu des règles TVA différentes, chaque évolution nécessitait une négociation inter-équipes. Séparer les implémentations par BU a accéléré les livraisons de 40%."
+  },
+  {id:16, p:"SoC", diff:"easy",
+   q:"Dans une application web, du code SQL se trouve directement dans les templates HTML. Quel principe est violé ?",
+   opts:["DRY — le SQL est peut-être dupliqué","Separation of Concerns — mélange de présentation et persistance","KISS — le SQL complique les templates","YAGNI — le SQL n'est pas nécessaire dans la vue"],
+   ok:1,
+   exp:"<strong>Separation of Concerns (SoC)</strong> : chaque partie du système doit avoir une seule préoccupation. Les templates gèrent la présentation, les repositories gèrent la persistance. Mélanger les deux crée un couplage fort et rend les tests unitaires impossibles.",
+   tip:"SoC est le fondement de toutes les architectures en couches (MVC, Clean Architecture, Hexagonale). Chaque couche ne doit communiquer qu'avec ses voisines immédiates.",
+   rex:"REX terrain : Une app PHP legacy avec SQL dans les vues rendait les tests impossibles et la migration de base de données un cauchemar. La séparation en couches MVC a permis d'atteindre 65% de couverture de tests en 3 sprints."
+  },
+  {id:17, p:"SoC", diff:"medium",
+   q:"L'architecture hexagonale (Ports & Adapters) est un exemple de quel principe fondamental appliqué à l'architecture globale ?",
+   opts:["DRY — pas de duplication entre les couches","Separation of Concerns — domaine métier isolé des détails techniques","YAGNI — ne coder que les adapters nécessaires","LSP — les adapters sont substituables"],
+   ok:1,
+   exp:"L'architecture hexagonale est une application directe du <strong>SoC</strong> à l'échelle architecturale : le domaine métier (cœur) est complètement isolé des détails d'infrastructure (DB, API, UI). Les ports définissent les interfaces, les adapters implémentent les détails techniques.",
+   tip:"Règle de dépendance de Clean Architecture : les dépendances pointent toujours vers l'intérieur (vers le domaine). Jamais le domaine ne dépend d'un framework ou d'une DB.",
+   rex:"REX terrain : Une banque a migré son core banking d'Oracle à PostgreSQL en 4 semaines grâce à l'architecture hexagonale. Sans SoC, la même migration avait pris 18 mois chez un concurrent avec architecture monolithique couplée."
+  },
+  {id:18, p:"SoC", diff:"hard",
+   q:"Un microservice 'Commandes' accède directement à la base de données du microservice 'Inventaire' pour des raisons de performance. Quel(s) principe(s) sont violés ?",
+   opts:["Uniquement DRY — la logique d'inventaire est dans deux services","SoC et encapsulation — chaque service doit posséder ses données et exposer une API","KISS — il serait plus simple d'avoir un seul service","YAGNI — le microservice Inventaire est superflu"],
+   ok:1,
+   exp:"Accès direct à la BDD d'un autre service viole <strong>SoC et l'encapsulation</strong> : chaque microservice doit être le seul propriétaire de ses données. Ce pattern (Shared Database anti-pattern) crée un couplage fort qui annule les bénéfices des microservices.",
+   tip:"En microservices, la règle est : <em>une base de données par service</em>. La communication passe par les APIs exposées ou les événements. La performance se gère par le cache ou le pattern CQRS.",
+   rex:"REX terrain : Un retailer avait 3 services partageant la même table SQL. Une migration de schéma a cassé les 3 services simultanément en production. Après séparation des bases, les déploiements indépendants ont réduit les incidents de 85%."
+  },
+  {id:19, p:"PoLA", diff:"easy",
+   q:"Une méthode nommée <code>getUser()</code> modifie en réalité l'état de la base de données en incrémentant un compteur. Quel principe est violé ?",
+   opts:["DRY — la modification est faite ailleurs aussi","Principle of Least Astonishment — le comportement est surprenant","KISS — la méthode fait trop de choses","YAGNI — l'incrément n'est pas nécessaire"],
+   ok:1,
+   exp:"Le <strong>Principle of Least Astonishment (PoLA)</strong> : le comportement d'un composant doit correspondre aux attentes raisonnables de l'utilisateur. Un getter qui modifie l'état est une surprise majeure. Les getters doivent être des opérations de lecture pure (Command-Query Separation).",
+   tip:"CQS (Command-Query Separation) est la mise en œuvre du PoLA : séparez les méthodes qui <em>retournent</em> une valeur (Query) de celles qui <em>modifient</em> l'état (Command). Un getter ne doit jamais avoir d'effets de bord.",
+   rex:"REX terrain : Un bug critique en production causé par un appel à isValid() qui, en réalité, persistait un log en BDD. En charge, les timeouts de BDD causaient des échecs de validation. Ce pattern a coûté 12h de debug à 3 ingénieurs."
+  },
+  {id:20, p:"PoLA", diff:"medium",
+   q:"Une API retourne un code HTTP 200 avec un body <code>{ \"success\": false, \"error\": \"Not found\" }</code> au lieu d'un 404. Quel principe est violé ?",
+   opts:["KISS — réponse trop complexe","PoLA — comportement inattendu, viole les conventions HTTP","DRY — le code d'erreur est dupliqué","OCP — l'API ne peut pas être étendue"],
+   ok:1,
+   exp:"Retourner 200 pour une erreur viole <strong>PoLA</strong> car tout développeur s'attend à ce que les codes HTTP standards (404, 500, 400) indiquent l'état de la réponse. Cette approche force les clients à parser le body pour détecter une erreur, cassant toute logique de retry/circuit-breaker standard.",
+   tip:"Respectez les conventions et standards de votre domaine. En HTTP : utilisez correctement les status codes. Le PoLA s'applique aussi aux conventions de nommage et aux patterns de l'écosystème.",
+   rex:"REX terrain : Une API interne retournait toujours 200. Quand l'équipe a intégré un outil de monitoring standard (qui se basait sur les status codes), 100% des erreurs étaient invisibles. Temps de détection d'incidents : de 2h à 15 min après correction."
+  },
+  {id:21, p:"PoLA", diff:"hard",
+   q:"Une fonction <code>calculateTax(amount, country)</code> modifie silencieusement le paramètre <code>amount</code> passé par référence. Quel principe est violé et pourquoi est-ce dangereux ?",
+   opts:["DRY — amount est calculé deux fois","PoLA — effets de bord cachés sur les paramètres d'entrée, comportement inattendu","SRP — la fonction fait calcul ET modification","LSP — la signature ne correspond pas au comportement"],
+   ok:1,
+   exp:"Modifier silencieusement un paramètre d'entrée viole <strong>PoLA</strong> (et le principe d'immutabilité). L'appelant s'attend à ce que ses variables ne soient pas altérées. Ce pattern dit 'action à distance' est l'une des causes les plus fréquentes de bugs difficiles à tracer.",
+   tip:"Règle d'immutabilité : traitez les paramètres d'entrée comme des valeurs en lecture seule. Retournez un nouveau résultat plutôt que de modifier l'input. Dans les langages fonctionnels, c'est garanti par design.",
+   rex:"REX terrain : Un service de facturation modifiait le DTO Order passé en paramètre (ajout de frais de service). Lors de la sérialisation parallèle, des montants incorrects étaient enregistrés. Bug découvert après 3 mois en production via une anomalie comptable."
+  },
+  {id:22, p:"Composition", diff:"medium",
+   q:"Vous avez <code>Bird → Eagle</code> et <code>Bird → Penguin</code>. Bird a une méthode <code>fly()</code>. Penguin ne peut pas voler. Quelle approche préférer ?",
+   opts:["Lever une exception dans Penguin.fly()","Supprimer fly() de Bird et créer une interface IFlyable implémentée par Eagle","Créer une sous-classe FlyingBird entre Bird et Eagle","Garder l'héritage et documenter que Penguin.fly() ne fait rien"],
+   ok:1,
+   exp:"<strong>Composition over Inheritance</strong> : séparez les capacités via des interfaces (<code>IFlyable</code>, <code>ISwimmable</code>). Eagle implémente IFlyable, Penguin implémente ISwimmable. Bird ne définit que les comportements communs à TOUS les oiseaux. Cette approche respecte aussi LSP.",
+   tip:"Règle : 'Is-a' justifie l'héritage, 'Has-a' ou 'Can-do' justifient la composition. Un pingouin EST un oiseau (héritage OK pour Bird) mais NE PEUT PAS voler (composition avec IFlyable pour Eagle uniquement).",
+   rex:"REX terrain : Une hiérarchie de 6 niveaux dans un moteur de jeu. Chaque modification en bas cascadait vers le haut. Après refactoring par composition (composants Movement, Health, Render), la flexibilité de design a été multipliée par 10."
+  },
+  {id:23, p:"Composition", diff:"hard",
+   q:"Dans un contexte d'héritage multiple impossible (Java/C#), comment permettre à une classe d'avoir plusieurs comportements (ex: Loggable, Cacheable, Auditable) ?",
+   opts:["Créer une classe AbstractBase avec tout le comportement","Utiliser des interfaces avec méthodes default (Java 8+) ou Mixins/Traits via composition","Dupliquer le comportement dans chaque classe","Utiliser des annotations uniquement, sans code"],
+   ok:1,
+   exp:"La <strong>composition</strong> via interfaces avec méthodes default (Java), traits (Scala/PHP), mixins (Ruby/TypeScript) ou Decorator pattern permet d'ajouter des comportements croisés sans héritage multiple. C'est la base du pattern Decorator et des aspects (AOP).",
+   tip:"Pattern Decorator = composition en action. Wrappez un objet dans un autre qui ajoute un comportement. Ex : LoggingService wrapping UserService wrapping CachedUserService — chaque wrapper ajoute une préoccupation (SoC + Composition).",
+   rex:"REX terrain : Un framework maison gérait logging + cache + auth via héritage (classe AbstractAuditedService). Toute nouvelle combinaison nécessitait une nouvelle classe. Après refactoring vers des Decorators, 3 comportements composables ont remplacé 12 classes hiérarchiques."
+  },
+  {id:24, p:"TDA", diff:"medium",
+   q:"Le code suivant : <code>if (user.getAge() >= 18) { user.grantAccess(); }</code> — quelle amélioration OO est recommandée ?",
+   opts:["Mettre la condition dans une méthode static de User","Déplacer la logique dans User : <code>user.requestAccess();</code> et laisser User décider","Créer une classe AgeChecker séparée","Utiliser un lambda pour externaliser la condition"],
+   ok:1,
+   exp:"<strong>Tell Don't Ask</strong> : au lieu de <em>demander</em> l'état d'un objet pour prendre une décision externe, <em>dites</em> à l'objet de faire l'action et laissez-le décider lui-même. <code>user.requestAccess()</code> encapsule la règle métier dans l'objet concerné, où elle appartient logiquement.",
+   tip:"Si vous avez des getters suivis de logique conditionnelle, c'est un signe de TDA violation. Chaque fois que vous pensez 'if object.getX() then object.doY()', transformez ça en 'object.doYIfX()'.",
+   rex:"REX terrain : Toute la logique de calcul de remise était dans des services externes qui inspectaient les propriétés d'Order. Chaque nouveau type de remise nécessitait de modifier 3 services. Après TDA refactoring, order.calculateDiscount() centralisait tout — 1 seul endroit à modifier."
+  },
+  {id:25, p:"TDA", diff:"hard",
+   q:"Quel est le principal risque d'un design qui viole systématiquement Tell Don't Ask (accesseurs + logique externe omniprésents) ?",
+   opts:["Performance dégradée à cause des appels de getters","Anemic Domain Model : les objets métier n'ont aucun comportement, juste des données","Violation de YAGNI car trop de getters sont créés","Couplage trop faible entre les classes"],
+   ok:1,
+   exp:"Le <strong>Anemic Domain Model</strong> (Martin Fowler) est l'anti-pattern résultant d'un TDA systématiquement violé. Les classes métier deviennent de simples structures de données (DTOs), et toute la logique se retrouve dans des Services procéduraux. L'OO perd sa raison d'être.",
+   tip:"Test du Domain Model : vos classes métier ont-elles des méthodes qui expriment le comportement (et pas seulement des getters/setters) ? Si votre classe Order n'a que des getters, vous avez un Anemic Domain Model.",
+   rex:"REX terrain : Un projet DDD découvert avoir 0 méthode métier dans ses entités (uniquement getters/setters). Toute la logique était dans 40 'Services'. L'enrichissement du modèle (ajout de comportements dans les entités) a réduit la duplication de 45% et simplifié les tests."
+  },
+  {id:26, p:"CoC", diff:"easy",
+   q:"Rails (Ruby on Rails) génère automatiquement des routes pour un contrôleur nommé <code>UsersController</code> sans configuration XML. Quel principe illustre cela ?",
+   opts:["YAGNI — pas de configuration inutile","Convention over Configuration — les noms standards remplacent la configuration explicite","DRY — pas de duplication de configuration","KISS — moins de configuration = plus simple"],
+   ok:1,
+   exp:"<strong>Convention over Configuration (CoC)</strong> : en suivant des conventions de nommage et de structure, le framework déduit automatiquement le comportement souhaité. L'équipe n'écrit de configuration que pour les cas qui dévient de la convention.",
+   tip:"CoC réduit la charge cognitive et la configuration boilerplate. Le prix : il faut connaître les conventions. Le bénéfice : une nouvelle recrue qui connaît Rails comprend instantanément la structure de tout projet Rails.",
+   rex:"REX terrain : Migration d'un projet Spring XML-config (800 lignes de XML) vers Spring Boot (CoC). La configuration est passée à 50 lignes d'annotations. Le temps de démarrage d'un nouveau projet est passé de 2 jours à 2 heures."
+  },
+  {id:27, p:"CoC", diff:"medium",
+   q:"Votre équipe passe 30% de son temps à configurer des fichiers XML pour chaque nouveau module. Quel principe vous aiderait à réduire ce coût ?",
+   opts:["YAGNI — supprimer les modules inutiles","Convention over Configuration — définir des conventions de nommage et structure automatisées","SRP — chaque fichier XML ne configure qu'une chose","DRY — générer le XML depuis une source unique"],
+   ok:1,
+   exp:"CoC s'attaque directement au problème de <strong>configuration excessive</strong>. En établissant des conventions (nommage de classes, structure de packages, fichiers de ressources), le framework ou les outils de build peuvent inférer la configuration automatiquement.",
+   tip:"Approche pratique : inventoriez vos configurations répétitives, identifiez les patterns communs, et créez des conventions ou templates qui les remplacent. Les annotations (Spring, JPA) sont une implémentation de CoC.",
+   rex:"REX terrain : Un projet Java EE avec 400 fichiers XML de configuration (EJB, Persistence, DataSource). Migration vers CDI/JPA annotations : 400 fichiers XML → 0, 15% d'amélioration de la productivité mesurée sur 6 mois."
+  },
+  {id:28, p:"Hollywood", diff:"medium",
+   q:"Le principe Hollywood stipule : « Ne nous appelez pas, nous vous appellerons ». À quel pattern de conception ce principe correspond-il directement ?",
+   opts:["Singleton — une seule instance appelée par tous","Inversion of Control (IoC) / Dependency Injection","Factory Method — le factory appelle les constructeurs","Adapter — le framework adapte les appels"],
+   ok:1,
+   exp:"Le <strong>Hollywood Principle</strong> est la formulation originale de l'<strong>Inversion of Control</strong> : c'est le framework (Hollywood) qui appelle votre code (l'acteur), pas l'inverse. Spring, React (hooks), les callbacks d'event loop sont tous des implémentations de ce principe.",
+   tip:"IoC containers (Spring, Angular DI) appliquent Hollywood : vous déclarez ce dont vous avez besoin, le container vous l'injecte au moment opportun. Vous ne contrôlez plus le flux, le framework si.",
+   rex:"REX terrain : Une migration d'un code procédural vers Spring IoC a permis à l'équipe de passer de builds de 40 min (tests d'intégration lourds) à 8 min (mocks injectés) grâce au contrôle inversé des dépendances."
+  },
+  {id:29, p:"Hollywood", diff:"hard",
+   q:"Dans React, vous définissez des hooks (<code>useEffect</code>, <code>useState</code>) et React décide <em>quand</em> les exécuter. Quel principe explique ce design ?",
+   opts:["SRP — chaque hook a une responsabilité","Hollywood Principle / IoC — React contrôle le cycle de vie, pas le développeur","YAGNI — useEffect évite le code inutile","DRY — réutilisation des hooks entre composants"],
+   ok:1,
+   exp:"React illustre parfaitement le <strong>Hollywood Principle</strong> : vous déclarez des effets, des états, des callbacks — mais React décide du <em>timing</em> d'exécution (après le rendu, sur changement de dépendances, au démontage). L'IoC du lifecycle est central dans tous les frameworks modernes.",
+   tip:"Event listeners, lifecycle hooks, callbacks de framework — tous sont des manifestations du Hollywood Principle. Vous 'vous inscrivez' pour être appelé, le framework orchestre les appels.",
+   rex:"REX terrain : Une équipe React avait des appels directs à l'API dans les constructeurs de classes (avant hooks). Les race conditions causaient 1-2 incidents/semaine. Après migration vers useEffect (IoC du fetch), les race conditions ont disparu."
+  },
+  {id:30, p:"FailFast", diff:"easy",
+   q:"Une méthode accepte silencieusement des paramètres null et retourne un résultat vide au lieu de lever une exception. Quel principe architectural est violé ?",
+   opts:["DRY — la vérification null est manquante partout","Fail-Fast — les erreurs doivent être signalées immédiatement","KISS — gérer les null est complexe","PoLA — le comportement silencieux est inattendu"],
+   ok:1,
+   exp:"<strong>Fail-Fast</strong> : un système doit détecter et signaler les erreurs <em>le plus tôt possible</em>, au point où elles se produisent, plutôt que de les propager silencieusement. Valider les préconditions en entrée de méthode est un exemple classique.",
+   tip:"Guard clauses au début des méthodes, assertions, Preconditions (Guava) sont des implémentations de Fail-Fast. Une NullPointerException cryptique à la ligne 847 est infiniment pire qu'une IllegalArgumentException claire à la ligne 3.",
+   rex:"REX terrain : Un service de paiement acceptait des montants négatifs sans validation. Le bug n'était détecté qu'en rapprochement bancaire, 24h plus tard. Après ajout de Fail-Fast sur les préconditions : détection immédiate, 0 transaction invalide en production depuis 18 mois."
+  },
+  {id:31, p:"FailFast", diff:"medium",
+   q:"Dans un système distribué, un service détecte qu'il ne peut pas se connecter à sa base de données. Il devrait :",
+   opts:["Retourner des données vides et logger en arrière-plan","Échouer immédiatement avec une erreur 503 et exposer des health checks","Retenter indéfiniment jusqu'à la reconnexion","Cacher les données en mémoire sans notifier"],
+   ok:1,
+   exp:"<strong>Fail-Fast en microservices</strong> : un service qui ne peut pas remplir son rôle doit le signaler immédiatement (503 Service Unavailable). Les health checks (/health, /ready) permettent à l'orchestrateur (Kubernetes) de rediriger le trafic. Retourner des données vides silencieusement = données corrompues en aval.",
+   tip:"Circuit Breaker pattern (Hystrix, Resilience4j) combine Fail-Fast et résilience : après N échecs, le circuit s'ouvre (fail-fast), évitant la cascade de défaillances.",
+   rex:"REX terrain : Un service e-commerce retournait un panier vide en cas d'erreur de BDD. Les utilisateurs plaçaient des commandes vides. Après Fail-Fast avec health checks, l'ELB détectait les instances défaillantes en < 30 sec et redirigait le trafic automatiquement."
+  },
+  {id:32, p:"FailFast", diff:"hard",
+   q:"Le principe Fail-Fast peut sembler en contradiction avec la résilience. Comment les réconcilier dans un microservice ?",
+   opts:["Choisir l'un ou l'autre selon le contexte — ils sont incompatibles","Fail-Fast sur les erreurs de programmation (bugs), tolérance aux pannes sur les erreurs d'infrastructure (réseau, BDD)","Appliquer Fail-Fast uniquement en développement, résilience en production","Fail-Fast = résilience — ce sont les mêmes principes"],
+   ok:1,
+   exp:"<strong>Les deux sont complémentaires</strong> : Fail-Fast s'applique aux erreurs de <em>programmation</em> (preconditions invalides, contrats cassés) — signalez immédiatement. La résilience s'applique aux erreurs <em>d'infrastructure</em> (timeout réseau, indisponibilité temporaire) — retry, circuit breaker, fallback.",
+   tip:"Taxonomy des erreurs : (1) Bugs de code → Fail-Fast. (2) Erreurs transitoires → retry avec backoff exponentiel. (3) Service indisponible → Circuit Breaker + fallback. (4) Données invalides → validation à la frontière, Fail-Fast.",
+   rex:"REX terrain : Un service financier avait une tolérance aux fautes pour TOUT, y compris les erreurs de validation métier. Des transactions avec des règles métier violées passaient silencieusement. Résultat : 47 transactions incorrectes avant détection. Séparation Fail-Fast (validation) vs résilience (infra) a résolu le problème."
+  },
+  {id:33, p:"Robustness", diff:"medium",
+   q:"La Loi de Robustesse de Postel stipule : 'Soyez conservateur dans ce que vous envoyez, libéral dans ce que vous acceptez'. Dans le contexte d'une API REST, cela signifie :",
+   opts:["Accepter n'importe quelle donnée sans validation","Valider strictement les inputs, mais être tolérant sur l'ordre et les champs optionnels inconnus","Envoyer toujours le maximum de données, même inutiles","Refuser tout payload ne correspondant pas exactement au schéma"],
+   ok:1,
+   exp:"La <strong>Loi de Robustesse</strong> pour les APIs : acceptez les champs supplémentaires inconnus (forward compatibility), les ordres différents, les types coercibles. En revanche, vos réponses doivent être rigoureusement conformes aux spécifications pour ne pas 'surprendre' les clients.",
+   tip:"Tolerable Ignorance Pattern : ignorez les champs inconnus dans les payloads entrants (utile lors des migrations d'API). Consumer-Driven Contracts (Pact) formalisent ce qui est contractuellement requis vs optionnel.",
+   rex:"REX terrain : Une API Mobile refusait les requêtes avec des champs supplémentaires (ajoutés par une nouvelle version app). Résultat : crash de l'ancienne app après un rollout partiel. Après adoption du principe de Robustesse, les 2 versions app cohabitaient sans incident."
+  },
+  {id:34, p:"Robustness", diff:"hard",
+   q:"La Loi de Robustesse est parfois critiquée comme dangereuse en sécurité. Pourquoi, et comment la réconcilier avec les bonnes pratiques de sécurité ?",
+   opts:["Elle n'a aucune implication sécurité — elles sont indépendantes","Accepter des données malformées peut ouvrir des vecteurs d'injection — valider ET normaliser les inputs","La sécurité prime toujours — rejeter tout ce qui n'est pas conforme au schéma exact","La Robustesse s'applique uniquement aux APIs internes"],
+   ok:1,
+   exp:"La critique est légitime : 'être libéral dans ce qu'on accepte' peut encourager la permissivité dangereuse (injection SQL, XSS). La réconciliation : <strong>valider et normaliser</strong> les inputs, puis être tolérant sur la structure (champs inconnus ignorés). Ne jamais tolérer des valeurs dangereuses, même si la structure est permissive.",
+   tip:"Sécurité + Robustesse : la whitelist de validation (accepter les valeurs connues sûres) est compatible avec la tolérance structurelle (ignorer les champs inconnus). Ce sont deux dimensions orthogonales.",
+   rex:"REX terrain : Une API trop permissive acceptait des propriétés JSON supplémentaires et les persistait. Une injection de propriété 'admin:true' a provoqué une élévation de privilèges. Correction : ignorer les champs inconnus APRÈS validation de sécurité sur les champs reconnus."
+  },
+  {id:35, p:"OCP", diff:"medium",
+   q:"Une classe <code>Animal</code> a une méthode <code>makeSound()</code> implémentée avec <code>if(type=='dog') return 'woof'; else if(type=='cat') return 'meow'...</code>. Quel pattern OCP recommanderiez-vous ?",
+   opts:["Strategy Pattern : chaque animal est une classe avec sa propre implémentation de makeSound()","Ajouter un enum pour tous les types d'animaux","Utiliser une Map<String, String> pour les sons","Créer une classe AnimalFactory"],
+   ok:0,
+   exp:"Le <strong>pattern Strategy</strong> applique OCP : créer une classe abstraite/interface <code>Animal</code> avec <code>abstract makeSound()</code>, puis des classes concrètes <code>Dog</code>, <code>Cat</code>, etc. Chaque nouvel animal est une nouvelle classe, sans modification d'Animal.",
+   tip:"Règle de détection : chaque if/else ou switch sur un type est un candidat au refactoring OCP via polymorphisme. Plus le switch grandit, plus le besoin est urgent.",
+   rex:"REX terrain : Un moteur de règles métier avec 340 conditions if/else. Refactoring vers le pattern Strategy : 340 conditions → 40 classes de règles. Ajout d'une nouvelle règle : 0 modification de code existant."
+  },
+  {id:36, p:"DRY", diff:"medium",
+   q:"Vous avez des tests unitaires qui setup la même configuration dans 15 classes de test. Quelle approche DRY est recommandée ?",
+   opts:["Copier les setups dans chaque test pour plus de clarté","Créer une classe de base ou un test fixture partagé avec la configuration commune","Ignorer la duplication dans les tests — DRY ne s'applique pas aux tests","Supprimer 14 tests et n'en garder qu'un"],
+   ok:1,
+   exp:"DRY s'applique aussi aux tests. Les <strong>Test Fixtures</strong>, classes de base de test, factories de test (Object Mother pattern, Test Data Builder) centralisent le setup. Une modification de configuration impacte UN seul endroit.",
+   tip:"Attention au over-DRY dans les tests : un certain niveau de verbosité est acceptable si ça rend les tests plus lisibles et indépendants. Règle : éviter la duplication de <em>logique</em> de setup.",
+   rex:"REX terrain : 200 tests unitaires avec le même setup complexe de 50 lignes. Quand le schéma de BDD a changé, 200 tests étaient cassés. Après extraction d'un TestDataFactory partagé : 1 seul endroit à mettre à jour, correction en 30 min au lieu de 4h."
+  },
+  {id:37, p:"KISS", diff:"hard",
+   q:"Un développeur propose d'utiliser une blockchain décentralisée pour stocker les préférences utilisateur d'une app mobile avec 500 utilisateurs. Quel(s) principe(s) sont violés ?",
+   opts:["YAGNI uniquement — la blockchain est pour plus tard","KISS et YAGNI — complexité non justifiée par les besoins actuels","DRY — les préférences sont dupliquées sur chaque nœud","SRP — la blockchain fait trop de choses"],
+   ok:1,
+   exp:"<strong>KISS et YAGNI</strong> sont violés simultanément. Une simple table SQL ou un store NoSQL (Redis, DynamoDB) répond au besoin. La blockchain ajoute une complexité d'infrastructure, de latence et de maintenance sans bénéfice à cette échelle.",
+   tip:"Chaque technologie doit justifier sa complexité par des bénéfices mesurables. Pour chaque outil, demandez : 'Quel problème concret résout-il que les solutions simples ne résolvent pas ?' Si la réponse est vague, c'est KISS/YAGNI violation.",
+   rex:"REX terrain : Une startup a construit son backend sur Kubernetes + service mesh + Event Sourcing + CQRS avec 3 utilisateurs. 18 mois de dette opérationnelle. Après migration vers une architecture simple (monolithe modulaire), la vélocité a doublé et les incidents ont chuté de 90%."
+  },
+  {id:38, p:"SOLID", diff:"medium",
+   q:"Vous avez une interface <code>IAnimalShelter</code> avec <code>addAnimal(Animal a)</code> et <code>getAnimal() : Animal</code>. Une implémentation <code>DogShelter</code> veut surcharger <code>getAnimal()</code> pour retourner <code>Dog</code>. Est-ce valide selon LSP ?",
+   opts:["Non — LSP interdit de changer le type de retour","Oui — la covariance du type de retour est permise par LSP (Dog est un Animal)","Non — il faudrait créer une interface IDogShelter séparée","Oui mais uniquement avec un cast explicite"],
+   ok:1,
+   exp:"La <strong>covariance du type de retour</strong> est permise par LSP : si Dog est-un Animal, retourner Dog là où Animal est attendu ne rompt pas le contrat. Les langages modernes (Java, Kotlin, C#) supportent la covariance de type de retour.",
+   tip:"Règle LSP pour les types : covariance en retour (sous-type OK), contravariance en paramètre (super-type OK). Ces règles garantissent la substituabilité. Retourner Dog quand Animal est attendu est toujours safe.",
+   rex:"REX terrain : Architecture de plugins où chaque plugin retourne un type spécialisé via covariance. L'orchestrateur travaillait avec l'interface générique — code générique découplé des spécificités. 15 plugins ajoutés sans modifier l'orchestrateur central."
+  },
+  {id:39, p:"DIP", diff:"hard",
+   q:"Dans Clean Architecture, pourquoi les dépendances pointent-elles toujours vers le domaine, et jamais le domaine vers l'infrastructure ?",
+   opts:["Pour des raisons de performance — le domaine est au cœur du CPU","DIP appliqué à l'architecture : le domaine définit les abstractions, l'infra les implémente","Car l'infra change plus souvent — c'est du YAGNI architectural","Pour respecter SRP — le domaine n'a pas la responsabilité de l'infra"],
+   ok:1,
+   exp:"Clean Architecture applique <strong>DIP à l'échelle architecturale</strong> : le domaine (haut niveau) définit des interfaces (<code>UserRepository</code>, <code>EmailSender</code>). L'infrastructure (bas niveau) implémente ces interfaces. Les dépendances pointent vers l'abstraction (domaine), jamais l'inverse.",
+   tip:"La règle de dépendance de Clean Architecture = DIP systématisé. Corollaire : si votre entité métier importe une classe Spring ou JPA, la règle est violée. Les entités ne doivent dépendre que d'autres entités et d'interfaces pures.",
+   rex:"REX terrain : Équipe capable de tester 100% de sa logique métier sans démarrer un seul serveur grâce au DIP architectural. Mocks injectés à la place des vraies implémentations. Feedback loop de test : 10 sec au lieu de 10 min."
+  },
+  {id:40, p:"SoC", diff:"medium",
+   q:"Le pattern CQRS (Command Query Responsibility Segregation) est une application de quel principe fondamental ?",
+   opts:["DRY — éviter de dupliquer les modèles de données","Separation of Concerns — séparer les préoccupations d'écriture et de lecture","YAGNI — ne créer les queries que si nécessaire","LSP — les commands et queries sont substituables"],
+   ok:1,
+   exp:"<strong>CQRS applique SoC</strong> à l'échelle des modèles de données : le modèle d'écriture (optimisé pour les invariants métier et la cohérence) est séparé du modèle de lecture (optimisé pour les queries et la performance). Chaque côté peut évoluer indépendamment.",
+   tip:"CQRS n'est pas toujours nécessaire. Appliquez YAGNI : utilisez CQRS quand les optimisations lecture/écriture divergent réellement. Pour du CRUD simple, c'est over-engineering.",
+   rex:"REX terrain : Plateforme d'e-commerce avec 10M produits. Le modèle unifié causait des requêtes de liste produits de 2+ sec. Après CQRS : écriture via DDD aggregates, lecture via projections Elasticsearch. Temps de réponse : 2000ms → 45ms."
+  },
+  {id:41, p:"ISP", diff:"hard",
+   q:"Votre base de code a une interface <code>ILogger</code> avec 8 méthodes (logDebug, logInfo, logWarning, logError, logFatal, logMetric, logAudit, logSecurity). Un service n'a besoin que de logError. Quel refactoring ISP recommandez-vous ?",
+   opts:["Créer 8 interfaces séparées, une par méthode","Identifier les groupes cohésifs : IAppLogger (debug/info/warn/error), IMetricLogger, IAuditLogger, ISecurityLogger","Garder l'interface unique — ISP ne s'applique pas aux loggers","Supprimer 7 méthodes et n'en garder qu'une"],
+   ok:1,
+   exp:"ISP recommande des interfaces <strong>cohésives par cas d'usage client</strong>, pas une interface par méthode. Regrouper par préoccupation : <code>IAppLogger</code> pour les niveaux standard, <code>IMetricLogger</code> pour les métriques, <code>IAuditLogger</code> pour l'audit réglementaire.",
+   tip:"L'ISP n'est pas 'une interface = une méthode' mais 'une interface = un client cohérent'. Guidez-vous par les personas d'utilisation : qui va utiliser cette interface et quels comportements ont-ils besoin ensemble ?",
+   rex:"REX terrain : SDK de monitoring avec 1 interface de 25 méthodes. 80% des clients n'utilisaient que 3 méthodes mais devaient dépendre de toute l'interface. Après segmentation en 5 interfaces par cas d'usage, les bundles JS ont réduit de 35%."
+  },
+  {id:42, p:"DRY", diff:"hard",
+   q:"Le terme 'WET' (Write Everything Twice) est parfois défendu comme alternative à DRY. Dans quel contexte peut-il être approprié ?",
+   opts:["Jamais — WET est toujours anti-pattern","Quand l'abstraction prématurée coûterait plus qu'elle ne rapporte (domaines différents, incertitude métier)","Dans les tests uniquement","En prototypage uniquement, jamais en production"],
+   ok:1,
+   exp:"<strong>WET est défendable</strong> quand la bonne abstraction n'est pas encore claire. Deux duplications dans des bounded contexts différents peuvent rester séparées intentionnellement (règle des 3 fois). La mauvaise abstraction est pire que la duplication.",
+   tip:"Sandi Metz : 'duplication is far cheaper than the wrong abstraction'. Attendez d'avoir 3 occurrences et de comprendre le pattern commun avant d'abstraire.",
+   rex:"REX terrain : Abstraction prématurée d'une 'CommonOrderProcessor' partagée entre e-commerce et B2B. Les deux domaines avaient des règles si différentes que la classe commune accumulait 47 flags booléens. Séparation en 2 classes indépendantes : code 70% plus simple dans chaque domaine."
+  },
+  {id:43, p:"SOLID", diff:"medium",
+   q:"En TDD (Test Driven Development), écrire le test en premier puis le code minimal pour le passer est une application implicite de quel principe ?",
+   opts:["YAGNI — n'écrire que le code que le test exige","KISS — les tests forcent à garder le code simple","YAGNI et KISS simultanément","DIP — les tests sont une forme d'injection de dépendances"],
+   ok:2,
+   exp:"TDD applique simultanément <strong>YAGNI et KISS</strong> : YAGNI car on n'écrit que le code nécessaire pour passer le test actuel (pas de code spéculatif). KISS car le code minimal pour passer un test est par définition simple. Red-Green-Refactor = YAGNI + KISS + DRY.",
+   tip:"TDD est une pratique d'ingénierie qui encode plusieurs principes architecturaux : YAGNI (code minimal), KISS (simplicité forcée), DRY (refactoring), et même DIP (les tests dépendent d'abstractions mockables).",
+   rex:"REX terrain : Équipe adoptant TDD : réduction de 40% du code de production (YAGNI appliqué), 60% de réduction des bugs en production, et temps de refactoring divisé par 3 grâce à la suite de tests comme filet de sécurité."
+  },
+  {id:44, p:"SoC", diff:"hard",
+   q:"Dans une application React, quel anti-pattern viole le plus sévèrement SoC ?",
+   opts:["Utiliser des hooks personnalisés","Mettre la logique API, la gestion d'état, la validation métier et le rendu dans un seul composant de 500 lignes","Séparer les composants en fichiers distincts","Utiliser Redux pour la gestion d'état globale"],
+   ok:1,
+   exp:"Un composant qui mélange <strong>fetch API + état + logique métier + validation + rendu</strong> viole massivement SoC. Solution : custom hooks pour la logique (useUserData, useValidation), services pour les appels API, composants purs pour le rendu, context/Redux pour l'état partagé.",
+   tip:"Décomposition React selon SoC : (1) Composants = affichage, (2) Hooks = logique, (3) Services = APIs/side effects, (4) Stores = état partagé. Chaque couche a une seule préoccupation.",
+   rex:"REX terrain : Composant 'Dashboard' de 800 lignes. Refactoring en 12 hooks + 8 composants purs : testabilité 0% → 75%, temps de chargement réduit de 40% via memoization possible."
+  },
+  {id:45, p:"SOLID", diff:"medium",
+   q:"Un système de plugins doit permettre d'ajouter de nouvelles fonctionnalités sans modifier le core. Quelle combinaison de principes SOLID guide cette architecture ?",
+   opts:["SRP uniquement — chaque plugin a une responsabilité","OCP + DIP : core fermé à la modification, ouvert à l'extension via abstractions injectées","LSP + ISP : les plugins sont substituables et ont des interfaces minimales","Tous les 5 principes SOLID simultanément"],
+   ok:1,
+   exp:"<strong>OCP + DIP</strong> sont les principes centraux d'une architecture plugin. OCP : le core ne change pas, les plugins l'étendent. DIP : le core dépend d'une interface IPlugin, jamais des implémentations concrètes.",
+   tip:"Architecture plugin = manifestation concrète d'OCP+DIP. VSCode, IntelliJ, Webpack utilisent tous ce pattern. Le core publie des interfaces (points d'extension), les plugins les implémentent.",
+   rex:"REX terrain : IDE de code review avec système de plugins : 40 plugins écrits par des équipes tierces en 12 mois, zéro modification du core après la v1.0. Chaque plugin = 1 interface implémentée + 1 ligne d'enregistrement."
+  },
+  {id:46, p:"PoLA", diff:"medium",
+   q:"Une méthode s'appelle <code>deleteUser(userId)</code> mais, en plus de supprimer l'utilisateur, elle archive ses données dans une autre table, envoie un email de confirmation, et notifie une API externe. Quel principe est violé ?",
+   opts:["SRP uniquement — trop de responsabilités","PoLA + SRP — comportement non évident ET trop de responsabilités","YAGNI — toutes ces actions n'ont peut-être pas été demandées","DRY — ces actions sont probablement dupliquées ailleurs"],
+   ok:1,
+   exp:"<strong>PoLA ET SRP</strong> sont violés : PoLA car le nom suggère une simple suppression alors que 3 effets de bord se produisent (surprise !). SRP car la méthode orchestre 3 préoccupations : persistance, communication, intégration. Solution : événement DomainEvent 'UserDeleted' + handlers séparés.",
+   tip:"Pattern Event-Driven : <code>deleteUser()</code> supprime ET publie <code>UserDeletedEvent</code>. Des handlers distincts (<code>ArchiveDataHandler</code>, <code>SendConfirmationHandler</code>, <code>NotifyExternalHandler</code>) réagissent à l'événement. SRP + PoLA + extensibilité.",
+   rex:"REX terrain : méthode cancelOrder() qui annulait, remboursait, notifiait, et réintégrait le stock. Quand le workflow de remboursement a changé, des tests de notification ont cassé. Après Event-Driven refactoring : chaque concern indépendant, testable séparément."
+  },
+  {id:47, p:"Composition", diff:"hard",
+   q:"Le pattern Decorator applique quel(s) principe(s) architecturaux ?",
+   opts:["DRY — réutilisation du comportement sans duplication","Composition over Inheritance + OCP : ajoute des comportements par wrapping sans modifier les classes existantes","SRP + KISS : chaque décorateur fait une chose simplement","Toutes les réponses sont partiellement correctes"],
+   ok:3,
+   exp:"Le Decorator est une <strong>synthèse de multiples principes</strong> : Composition > Inheritance (wrapping plutôt qu'héritage), OCP (ajouter des comportements sans modifier), SRP (chaque décorateur = une préoccupation), DRY (réutilisation du comportement). C'est l'exemple parfait de comment les principes se renforcent mutuellement.",
+   tip:"Cas d'usage Decorator : InputStream/OutputStream Java, Middleware Express.js, décorateurs Python (@login_required), Higher-Order Components React. Chaque fois qu'on 'enveloppe' pour ajouter un comportement — c'est du Decorator.",
+   rex:"REX terrain : Système d'autorisation avec 5 niveaux de vérification (auth, role, rate-limit, audit, ip-whitelist). Chaque vérification = un Decorator. Ajout de ip-whitelist : 0 modification des Decorators existants."
+  },
+  {id:48, p:"SOLID", diff:"hard",
+   q:"Quelle est la différence fondamentale entre SRP (Single Responsibility) et SoC (Separation of Concerns) ?",
+   opts:["Ce sont exactement le même principe avec des noms différents","SRP est au niveau classe/module (une raison de changer), SoC est au niveau architectural (préoccupations orthogonales séparées à tous niveaux)","SRP s'applique aux méthodes, SoC aux classes","SRP est pour la POO, SoC pour la programmation fonctionnelle"],
+   ok:1,
+   exp:"<strong>SRP et SoC sont complémentaires mais distincts</strong>. SRP (Robert Martin) = grain fin, niveau classe : une seule raison de changer, un seul acteur. SoC (Edsger Dijkstra) = grain architectural, multi-niveaux : séparer les préoccupations orthogonales (présentation, logique, persistance) à tous les niveaux de l'architecture.",
+   tip:"Analogie : SoC est la stratégie globale (séparer les étages d'un immeuble), SRP est la tactique locale (chaque pièce a un usage défini). SoC à l'architecture vous donne les couches ; SRP à la conception vous donne des classes cohésives dans chaque couche.",
+   rex:"REX terrain : Application MVC (SoC macro) dont les contrôleurs grossissaient sans limite. SRP appliqué aux contrôleurs : extract service layer, extract form objects, extract query objects. SoC + SRP = architecture structurellement saine à tous les niveaux."
+  },
+  {id:49, p:"SOLID", diff:"hard",
+   q:"Dans un microservice, un Event Handler reçoit un DomainEvent et effectue 4 actions différentes en réponse. Quel principe est violé et comment le corriger ?",
+   opts:["DRY — les actions sont peut-être dupliquées dans d'autres handlers","SRP — un handler devrait répondre à un événement avec une seule action","KISS — 4 actions c'est trop complexe","YAGNI — certaines actions ne sont peut-être pas nécessaires"],
+   ok:1,
+   exp:"<strong>SRP appliqué aux Event Handlers</strong> : chaque handler ne devrait effectuer qu'une action atomique. Créez 4 handlers distincts. Avantages : testabilité indépendante, déployabilité indépendante, possibilité de retry individuel sur échec.",
+   tip:"En Event-Driven Architecture, les handlers doivent être idempotents ET avoir une seule responsabilité. Si un handler fait A+B+C et que C échoue, doit-on rejouer A et B ? Avec des handlers séparés, seul C est rejoué.",
+   rex:"REX terrain : Handler 'OrderPlacedHandler' qui envoyait email + débitait stock + créait facture + notifiait transporteur. Si la notif transporteur échouait, l'email était renvoyé en boucle. Après séparation en 4 handlers : chaque retry ciblé, + 99.9% de fiabilité."
+  },
+  {id:50, p:"SOLID", diff:"hard",
+   q:"Synthèse finale : un système bien architecturé selon les 12 principes peut encore avoir de la dette technique. Quel énoncé est le plus juste ?",
+   opts:["Un système respectant tous les principes n'a aucune dette technique par définition","Les principes guident les décisions mais la dette technique est inévitable et doit être gérée intentionnellement","La dette technique ne concerne que le code, pas l'architecture","Appliquer tous les principes simultanément évite tout problème futur"],
+   ok:1,
+   exp:"Les principes architecturaux sont des <strong>guides, pas des garanties</strong>. La dette technique intentionnelle (Ward Cunningham) est parfois un choix délibéré (go-to-market rapide). Les principes aident à : (1) prendre des décisions conscientes, (2) minimiser la dette non intentionnelle, (3) rembourser la dette plus facilement quand elle existe.",
+   tip:"Quadrant de la dette technique (Martin Fowler) : Reckless/Inadvertent (mauvaise), Reckless/Deliberate (dangereuse), Prudent/Inadvertent (apprentissage), Prudent/Deliberate (acceptable avec remboursement planifié). Les principes vous aident à rester dans le quadrant Prudent.",
+   rex:"REX terrain : Scale-up ayant accepté délibérément de la dette sur l'architecture de reporting (YAGNI : pas de CQRS avant d'en avoir besoin). 18 mois plus tard, avec 10x les données, la dette a été remboursée avec les connaissances acquises. Décision Prudent/Deliberate validée."
+  }
+];
+
+// ── STATE ──
+let cur=0, score=0, wrong=0, streak=0, bestStreak=0;
+let answered = new Array(50).fill(null);
+let userAns   = new Array(50).fill(null);
+let mode = 'quiz';
+
+function startQuiz() {
+  document.getElementById('introScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  document.getElementById('scoreRow').classList.remove('d-none');
+  document.getElementById('progArea').classList.remove('d-none');
+  document.getElementById('goalBadge').classList.remove('d-none');
+  renderQ();
+}
+
+function tagCss(p) { return TAG_MAP[p] || 'tc-solid'; }
+
+function renderQ(idx) {
+  if(idx !== undefined) cur = idx;
+  const q = QUESTIONS[cur];
+  const L = ['A','B','C','D'];
+  const diffLbl = {easy:'Débutant', medium:'Intermédiaire', hard:'Expert'}[q.diff];
+  const diffCls = {easy:'d-easy', medium:'d-medium', hard:'d-hard'}[q.diff];
+
+  const opts = q.opts.map((o,i) => {
+    let cls = '';
+    if(answered[cur] !== null) {
+      if(i === q.ok) cls = 'correct';
+      else if(i === userAns[cur] && i !== q.ok) cls = 'wrong';
+    }
+    return `<button class="opt-btn ${cls}" onclick="pick(${i})" ${answered[cur]!==null?'disabled':''}>
+      <span class="opt-letter">${L[i]}</span><span>${o}</span>
+    </button>`;
+  }).join('');
+
+  const exp = answered[cur] !== null ? buildExp(q, userAns[cur]) : '';
+
+  document.getElementById('quizScreen').innerHTML = `
+    <div class="q-card">
+      <div class="q-meta">
+        <span class="q-num">Q${cur+1}/50</span>
+        <span class="q-tag ${tagCss(q.p)}">${q.p}</span>
+        <span class="diff-badge ${diffCls}">${diffLbl}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid">${opts}</div>
+      ${exp}
+      <div class="nav-bar">
+        ${cur>0 ? `<button class="btn-nav bn-secondary" onclick="goQ(${cur-1})"><i class="bi bi-arrow-left"></i> Préc.</button>` : ''}
+        ${answered[cur]!==null && cur<49 ? `<button class="btn-nav bn-primary" onclick="nextQ()">Suivant <i class="bi bi-arrow-right"></i></button>` : ''}
+        ${answered[cur]!==null && cur===49 ? `<button class="btn-nav bn-primary" onclick="showResults()"><i class="bi bi-trophy-fill"></i> Résultats</button>` : ''}
+      </div>
+    </div>`;
+  updateProg();
+}
+
+function buildExp(q, ui) {
+  const ok = ui === q.ok;
+  return `<div class="exp-panel">
+    <div class="exp-header ${ok ? 'exp-ok' : 'exp-ko'}">
+      <i class="bi bi-${ok ? 'check-circle-fill' : 'x-circle-fill'}"></i>
+      ${ok ? 'Parfait ! Bonne réponse.' : `Incorrect — bonne réponse : <strong>${['A','B','C','D'][q.ok]}</strong>`}
+    </div>
+    <div class="exp-body">
+      <div class="exp-section">
+        <div class="exp-lbl"><i class="bi bi-lightbulb-fill" style="color:var(--accent4)"></i> Explication</div>
+        <div class="exp-txt">${q.exp}</div>
+      </div>
+      <div class="exp-section">
+        <div class="exp-lbl"><i class="bi bi-stars" style="color:var(--accent2)"></i> Tip Pratique</div>
+        <div class="tip-box"><p>${q.tip}</p></div>
+      </div>
+      <div class="exp-section">
+        <div class="exp-lbl"><i class="bi bi-journal-bookmark-fill" style="color:var(--accent4)"></i> REX Terrain</div>
+        <div class="rex-box"><p>${q.rex}</p></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function pick(i) {
+  if(answered[cur] !== null) return;
+  const q = QUESTIONS[cur];
+  userAns[cur] = i;
+  if(i === q.ok) { answered[cur]='ok'; score++; streak++; bestStreak=Math.max(bestStreak,streak); }
+  else           { answered[cur]='ko'; wrong++; streak=0; }
+  document.getElementById('scOk').textContent = score+' ✓';
+  document.getElementById('scKo').textContent = wrong+' ✗';
+  document.getElementById('scStreak').textContent = streak;
+  updateProg();
+  renderQ();
+}
+
+function nextQ() { if(cur<49){cur++;renderQ();} else showResults(); }
+function goQ(i)  { cur=i; renderQ(); }
+
+function updateProg() {
+  const done = answered.filter(a=>a!==null).length;
+  const p = Math.round(done/50*100);
+  document.getElementById('progLbl').textContent = `${done} / 50`;
+  document.getElementById('progPct').textContent = `${p}%`;
+  document.getElementById('progFill').style.width = p+'%';
+}
+
+function showResults() {
+  mode = 'results';
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.remove('hidden');
+
+  const pct = Math.round(score/50*100);
+  let grade, gradeColor;
+  if(pct>=90){ grade='Architecte Expert 🏆'; gradeColor='var(--accent3)'; }
+  else if(pct>=80){ grade='Excellent Niveau Senior 🎯'; gradeColor='var(--accent2)'; }
+  else if(pct>=70){ grade='Bon Niveau Intermédiaire 📈'; gradeColor='var(--accent4)'; }
+  else if(pct>=60){ grade='Niveau à consolider 📚'; gradeColor='var(--accent4)'; }
+  else { grade='À retravailler 🔄'; gradeColor='var(--accent)'; }
+
+  // Breakdown by principle
+  const pStats = {};
+  QUESTIONS.forEach((q,i) => {
+    if(!pStats[q.p]) pStats[q.p] = {t:0, ok:0};
+    pStats[q.p].t++;
+    if(answered[i]==='ok') pStats[q.p].ok++;
+  });
+
+  const bdHTML = Object.entries(pStats).map(([p,s]) => {
+    const pp = Math.round(s.ok/s.t*100);
+    return `<div class="bd-row">
+      <div class="bd-label">${p}</div>
+      <div class="bd-bar-wrap"><div class="bd-bar-fill" style="width:${pp}%"></div></div>
+      <div class="bd-pct">${pp}%</div>
+    </div>`;
+  }).join('');
+
+  const dotsHTML = answered.map((a,i) => {
+    const cls = a==='ok'?'ok':a==='ko'?'ko':'';
+    return `<div class="r-dot ${cls}" onclick="startReview(${i})" title="Q${i+1}">${i+1}</div>`;
+  }).join('');
+
+  const deg = pct * 3.6;
+  document.getElementById('resultsScreen').innerHTML = `
+    <div class="results-card">
+      <div class="results-ring-wrap">
+        <div class="results-ring" style="--ang:${deg}deg">
+          <div class="ring-inner">
+            <span class="ring-pct" style="color:${gradeColor}">${pct}%</span>
+            <span class="ring-lbl">Score</span>
+          </div>
+        </div>
+      </div>
+      <div class="res-title">${grade}</div>
+      <div class="res-sub">${score}/50 correctes · Meilleure série : ${bestStreak} ⚡ · Objectif : ${score>=GOAL?'✅ Atteint !':'❌ Non atteint ('+GOAL+'/50 requis)'}</div>
+      <div class="stats-row">
+        <div class="stat-box"><span class="stat-val" style="color:var(--correct)">${score}</span><span class="stat-lbl">Correctes</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:var(--wrong)">${wrong}</span><span class="stat-lbl">Incorrectes</span></div>
+        <div class="stat-box"><span class="stat-val" style="color:var(--accent4)">${bestStreak}</span><span class="stat-lbl">Meilleure série</span></div>
+      </div>
+      <div class="breakdown">
+        <div class="bd-title">Performance par Principe</div>
+        ${bdHTML}
+      </div>
+      <div class="breakdown">
+        <div class="bd-title">Réviser question par question</div>
+        <div class="review-map">${dotsHTML}</div>
+      </div>
+      <div class="d-flex gap-3 justify-content-center flex-wrap mt-3">
+        <button class="btn-nav bn-secondary" onclick="resetQuiz()"><i class="bi bi-arrow-clockwise"></i> Recommencer</button>
+        <button class="btn-nav bn-blue" onclick="startReview(0)"><i class="bi bi-book"></i> Tout réviser</button>
+      </div>
+    </div>`;
+
+  setTimeout(() => showPopup(pct, score), 700);
+}
+
+function showPopup(pct, sc) {
+  if(sc >= GOAL) {
+    const stars = pct>=90?'⭐⭐⭐⭐⭐':pct>=85?'⭐⭐⭐⭐½':pct>=80?'⭐⭐⭐⭐':'⭐⭐⭐';
+    document.getElementById('popupStars').textContent = stars;
+    document.getElementById('popupScore').textContent = sc+'/50 — '+pct+'%';
+    document.getElementById('popupMsg').textContent = pct>=90
+      ? 'Score exceptionnel ! Vous avez une maîtrise experte de tous les principes d\'architecture. Félicitations !'
+      : 'Objectif 80% atteint ! Vous maîtrisez les principes d\'architecture logicielle. Continuez sur cette lancée !';
+    spawnConfetti();
+    document.getElementById('successPopup').classList.remove('hidden');
+  } else {
+    const pStats = {};
+    QUESTIONS.forEach((q,i) => {
+      if(!pStats[q.p]) pStats[q.p] = {t:0, ok:0};
+      pStats[q.p].t++;
+      if(answered[i]==='ok') pStats[q.p].ok++;
+    });
+    const weak = Object.entries(pStats).filter(([,s]) => Math.round(s.ok/s.t*100)<60).map(([p])=>p);
+    const plan = weak.length
+      ? weak.map(p => `• Revoir : <strong>${p}</strong>`).join('<br>')
+      : '• Globalement proche — concentrez-vous sur les questions manquées.';
+    document.getElementById('failScore').textContent = sc+'/50 — '+pct+'%';
+    document.getElementById('failMsg').textContent = `Il vous manque ${GOAL-sc} question${GOAL-sc>1?'s':''} pour atteindre l'objectif de 80%. Utilisez les explications détaillées et le mode révision !`;
+    document.getElementById('revisionPlan').innerHTML = plan;
+    document.getElementById('failPopup').classList.remove('hidden');
+  }
+}
+
+function spawnConfetti() {
+  const box = document.getElementById('confettiBox');
+  box.innerHTML = '';
+  const colors = ['#c84b2f','#2a6bbf','#1a8a5a','#b5620a','#7c3d8c','#c44f87','#f4a261','#e76f51'];
+  for(let i=0; i<42; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*-20-10}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*1.5}s;animation-duration:${2+Math.random()*1.5}s;transform:rotate(${Math.random()*360}deg);border-radius:${Math.random()>.5?'50%':'2px'};`;
+    box.appendChild(c);
+  }
+}
+
+function closePopup() {
+  document.getElementById('successPopup').classList.add('hidden');
+  document.getElementById('failPopup').classList.add('hidden');
+}
+function closeAndReview() { closePopup(); startReview(0); }
+
+function startReview(startIdx) {
+  mode = 'review';
+  cur = startIdx;
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.add('hidden');
+  document.getElementById('reviewScreen').classList.remove('hidden');
+  renderReview();
+}
+
+function renderReview() {
+  const q = QUESTIONS[cur];
+  const L = ['A','B','C','D'];
+  const diffLbl = {easy:'Débutant', medium:'Intermédiaire', hard:'Expert'}[q.diff];
+  const diffCls = {easy:'d-easy', medium:'d-medium', hard:'d-hard'}[q.diff];
+
+  const opts = q.opts.map((o,i) => {
+    const cls = i===q.ok?'correct':(i===userAns[cur]&&i!==q.ok?'wrong':'');
+    return `<button class="opt-btn ${cls}" disabled><span class="opt-letter">${L[i]}</span><span>${o}</span></button>`;
+  }).join('');
+
+  const dotsHTML = QUESTIONS.map((_,i) => {
+    const cls = answered[i]==='ok'?'ok':answered[i]==='ko'?'ko':'';
+    return `<div class="r-dot ${cls} ${i===cur?'active':''}" onclick="jumpReview(${i})">${i+1}</div>`;
+  }).join('');
+
+  const statusLabel = answered[cur]==='ok'
+    ? '<span style="color:var(--correct);font-size:.78rem;font-weight:700">✓ Correct</span>'
+    : answered[cur]==='ko'
+    ? '<span style="color:var(--wrong);font-size:.78rem;font-weight:700">✗ Incorrect</span>'
+    : '<span style="color:var(--ink4);font-size:.78rem">— Non répondu</span>';
+
+  document.getElementById('reviewScreen').innerHTML = `
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'Fira Code',monospace;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink4);margin-bottom:.6rem">Navigation rapide</div>
+      <div class="review-map">${dotsHTML}</div>
+    </div>
+    <div class="q-card">
+      <div class="q-meta">
+        <span class="q-num">Q${cur+1}/50</span>
+        <span class="q-tag ${tagCss(q.p)}">${q.p}</span>
+        <span class="diff-badge ${diffCls}">${diffLbl}</span>
+        ${statusLabel}
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid">${opts}</div>
+      ${buildExp(q, userAns[cur]!==null?userAns[cur]:q.ok)}
+      <div class="nav-bar">
+        ${cur>0?`<button class="btn-nav bn-secondary" onclick="jumpReview(${cur-1})"><i class="bi bi-arrow-left"></i> Préc.</button>`:''}
+        <button class="btn-nav bn-secondary" onclick="backRes()"><i class="bi bi-grid-3x3-gap"></i> Bilan</button>
+        ${cur<49?`<button class="btn-nav bn-primary" onclick="jumpReview(${cur+1})">Suiv. <i class="bi bi-arrow-right"></i></button>`:''}
+      </div>
+    </div>`;
+}
+
+function jumpReview(i) { cur=i; renderReview(); }
+function backRes() {
+  document.getElementById('reviewScreen').classList.add('hidden');
+  document.getElementById('resultsScreen').classList.remove('hidden');
+}
+
+function resetQuiz() {
+  cur=0; score=0; wrong=0; streak=0; bestStreak=0;
+  answered=new Array(50).fill(null); userAns=new Array(50).fill(null);
+  mode='quiz';
+  closePopup();
+  document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('reviewScreen').classList.add('hidden');
+  document.getElementById('quizScreen').classList.remove('hidden');
+  document.getElementById('scOk').textContent='0 ✓';
+  document.getElementById('scKo').textContent='0 ✗';
+  document.getElementById('scStreak').textContent='0';
+  renderQ(0);
+}
+</script>
+</body>
+</html>
